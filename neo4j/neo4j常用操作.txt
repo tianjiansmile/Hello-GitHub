@@ -1,0 +1,190 @@
+知识图谱+ Neo4j实战
+https://blog.csdn.net/m0_37565948/article/details/81133041
+
+关于反欺诈社交网络的应用场景的头脑风暴 www.360doc.com/content/18/0320/18/53608338_738782902.shtml
+     1，不一致性校验
+		小白在借款时填写的基础信息中家人为A，小黑在借款时填写的基础信息中也有家人A
+		假设小白已经在社交网络中出现了，作为新进件的小黑增量到社交网络时可以进行一个
+		一致性验证，评估小白，A，小黑这个三角关系的是否正确。，如果正确那么小黑小白应该存在亲戚关系，
+		如果不一致，这种存在欺诈风险的链接预测结果可以纳入不一致性验证名单
+		当然这种场景也可以引申到其他信息的验证上面去，
+		
+	2， 数据噪声
+	    1 基础数据本身就有错误存在
+		简单的纠正办法就是做离线的不一致性验证
+		
+		2 数据冗余
+		数据的冗余主要表现在，比如张三李四王五，三个人其实是隶属于同一公司，
+		但是录入数据是不等的，比如花旗，花旗集团，花旗金融，花旗银行，如果逻辑上
+		属于同一公司，那么需要对数据做融合
+		
+	3 客户画像
+     一个金融机构对自身客户的全面了解，是对客户开展更加贴心的个性化服务的前提，
+	 也是很多金融科技创新得以推进的基础性工作。利用知识图谱进行客户画像，
+	 其实就是把客户画像的必备要素条理化、标准化、结构化、动态化的过程。
+	 证券公司、基金公司、期货公司、信托公司、银行，都有这方面的需求。
+
+Neo4j常用操作
+
+启动Neo4j
+进入其bin目录， 输入 neo4j.bat console
+
+访问 http://localhost:7474/browser/
+
+1创建节点  CREATE (ee:Person { name: "Emil", from: "Sweden", klout: 99 })
+    CREATE 创建数据的子句
+    () 圆括符表示一个节点
+    ee:Person 变量为 'ee' 和标签为 'Person' 的新节点
+    {} 花括符为节点添加属性
+	
+2 match 查找节点 MATCH (ee:Person) WHERE ee.name = "Emil" RETURN ee
+    MATCH 指定节点和关系模式的子句
+    (ee:Person) 一个单节点模式, 标签为 'Person', 其匹配将赋予变量 'ee'
+    WHERE 约束结果的子句
+    ee.name = "Emil" 将 name 属性与值 "Emil" 进行比较
+    RETURN 用于请求特定结果的子句
+	
+3 创建多个节点和关系
+    CREATE (js:Person { name: "Johan", from: "Sweden", learn: "surfing" }),
+           (ir:Person { name: "Ian", from: "England", title: "author" }),
+           (rvb:Person { name: "Rik", from: "Belgium", pet: "Orval" }),
+           (ally:Person { name: "Allison", from: "California", hobby: "surfing" }),
+           (ee)-[:KNOWS {since: 2001}]->(js),(ee)-[:KNOWS {rating: 5}]->(ir),
+           (js)-[:KNOWS]->(ir),(js)-[:KNOWS]->(rvb),
+           (ir)-[:KNOWS]->(js),(ir)-[:KNOWS]->(ally),
+           (rvb)-[:KNOWS]->(ally)
+
+4 模式匹配 一个可以用来查找 Emil 的朋友的模式: 
+    MATCH (ee:Person)-[:KNOWS]-(friends)        # 用变量名和标签共同来确定一个节点 ee:Person，匹配类型：KNOWS， friends代表当前节点指向的节点集合变量
+          WHERE ee.name = "Emil" RETURN ee, friends   # 用属性来查询
+		  
+  模式匹配可用于做推荐. Johan 正在学习冲浪, 因此他也许希望查找一个已经冲浪的新朋友: 
+  MATCH (js:Person)-[:KNOWS]-()-[:KNOWS]-(surfer)      # surfer 目标变量
+        WHERE js.name = "Johan" AND surfer.hobby = "surfing"
+        RETURN DISTINCT surfer
+		()空的圆括符忽略这些节点
+		DISTINCT因为多于一条路径将匹配该模式
+		冲浪者将包含 Allison, 他是一位冲浪的朋友的朋友
+		
+5 查询计划  在查询前面加上 EXPLAIN  或  PROFILE以了解您的查询是如何工作的:
+   EXPLAIN MATCH (js:Person)-[:KNOWS]-()-[:KNOWS]-(surfer)
+                 WHERE js.name = "Johan" AND surfer.hobby = "surfing"
+                 RETURN DISTINCT surfer
+				 
+6 列出 Tom Hanks 的所有电影...
+   match (tom:Person {name:"Tom Hanks"})-[:ACTED_IN]->(tomMovie) return tom,tomMovie
+   
+7 谁导演的 "Cloud Atlas"? 
+  match (theMovie {title:"Cloud Atlas"})<-[:DIRECTED]-(director) return director.name
+  
+8 Tom Hanks 的合作演员是... 
+  match (tom:Person {name:"Tom Hanks"})-[:ACTED_IN]-(movie)<-[:ACTED_IN]-(actor) return actor.name
+  
+9 人们与 "Cloud Atlas" 有何关系... relatedTo 任何一种关系
+match (p:Person)-[relatedTo]-(:Movie {title:"Cloud Atlas"}) return p.name, Type(relatedTo), relatedTo
+
+10 从 Kevin Bacon 起, 电影和导演最多 4 跳 培根路径, 到 Meg Ryan 任意关系的最短路径
+  MATCH p=shortestPath(
+  (bacon:Person {name:"Kevin Bacon"})-[*]-(meg:Person {name:"Meg Ryan"})
+   )
+   RETURN p
+   
+电影图推荐
+11 让我们为 Tom Hanks 推荐新的合作演员. 一个基本的推荐方法是: 经过一个直接邻居查找那些连接.经过通过与TomHanks有合作关系的演员去寻找
+	match (tom:Person {name:"Tom Hanks"})-[:ACTED_IN]->(m)<-[:ACTED_IN]-(actors),
+	(actors)-[:ACTED_IN]->(m2)<-[:ACTED_IN]-(ccActors) where not (tom)-[:ACTED_IN]->(m2) 
+	return ccActors.name as Recommended, count(*) as Strength order by Strength desc
+	
+12 查找将有可能让Tom Hanks 介绍给 Tom Cruise 的人
+	match (tom:Person{name:"Tom Hanks"})-[:ACTED_IN]->(m)<-[:ACTED_IN]-(actors),
+	(actors)-[:ACTED_IN]->(m2)<-[ACTED_IN]-(tc:Person{name:"Tom Cruise"}) return tom,m,actors,m2,tc
+	
+电影图清理
+13 完成实验后, 您可以移除电影数据集. 
+  MATCH (a:Person),(m:Movie) OPTIONAL MATCH (a)-[r1]-(), (m)-[r2]-() DELETE a,r1,m,r2
+   验证电影图已经已经消失了
+   MATCH (n) RETURN n
+   
+Northwind 图 用一个经典数据集, 将关系数据库转换成图数据库
+	这里的Northwind 图 演示如何从一个关系数据库迁移到 Neo4j. 这个转化是迭代和慎重的, 强调从关系表到图的节点及关系的概念转变.
+	本指南将告诉您如何:
+		1 加载: 从外部 CSV 文件创建数据
+		导入产品数据
+		LOAD CSV WITH HEADERS FROM "http://data.neo4j.com/northwind/products.csv" AS row
+		CREATE (n:Product)
+		SET n = row,
+		  n.unitPrice = toFloat(row.unitPrice),
+		  n.unitsInStock = toInt(row.unitsInStock), n.unitsOnOrder = toInt(row.unitsOnOrder),
+		  n.reorderLevel = toInt(row.reorderLevel), n.discontinued = (row.discontinued <> "0")
+		 
+		 导入产品分类数据
+		 LOAD CSV WITH HEADERS FROM "http://data.neo4j.com/northwind/categories.csv" AS row
+		CREATE (n:Category)
+		SET n = row
+		
+		导入供应商数据
+		LOAD CSV WITH HEADERS FROM "http://data.neo4j.com/northwind/suppliers.csv" AS row
+		CREATE (n:Supplier)
+		SET n = row
+		
+		产品包含到供应商和分类的外键
+		
+		  
+		2 索引: 基于标签索引节点
+		
+		创建索引
+
+		CREATE INDEX ON :Product(productID)
+
+		CREATE INDEX ON :Category(categoryID)
+
+		CREATE INDEX ON :Supplier(supplierID)
+		
+		3 关连: 将外键引用变换为数据关系
+		创建数据关系
+		MATCH (p:Product),(c:Category)
+		WHERE p.categoryID = c.categoryID
+		CREATE (p)-[:PART_OF]->(c)
+		
+		MATCH (p:Product),(s:Supplier)
+		WHERE p.supplierID = s.supplierID
+		CREATE (s)-[:SUPPLIES]->(p)
+				
+		4 提升: 将连接记录变换为关系
+		使用模式查询 列出由每个供应商提供的产品目录. 
+		MATCH (s:Supplier)-->(:Product)-->(c:Category)
+		RETURN s.companyName as Company, collect(distinct c.categoryName) as Categories
+		查找产品的供应商.
+		MATCH (c:Category {categoryName:"Produce"})<--(:Product)<--(s:Supplier)
+		RETURN DISTINCT s.companyName as ProduceSuppliers
+		
+		客户订单
+		加载并索引记录
+
+		LOAD CSV WITH HEADERS FROM "http://data.neo4j.com/northwind/customers.csv" AS row
+		CREATE (n:Customer)
+		SET n = row
+
+		LOAD CSV WITH HEADERS FROM "http://data.neo4j.com/northwind/orders.csv" AS row
+		CREATE (n:Order)
+		SET n = row
+
+		CREATE INDEX ON :Customer(customerID)
+
+		CREATE INDEX ON :Order(orderID)
+
+		创建数据关系
+
+		MATCH (c:Customer),(o:Order)
+		WHERE c.customerID = o.customerID
+		CREATE (c)-[:PURCHASED]->(o)
+
+		5查询
+		产品 "Tofu" 的供应商
+		match (prd:Product{productName:"Tofu"})<-[:SUPPLIES]-(sup) return prd, sup
+		
+		找到"Tofu" 的供应商旗下所供应的其他商品
+		match (prd:Product{productName:"Tofu"})<-[:SUPPLIES]-(sup), (sup)-[:SUPPLIES]->(allprd) return prd, sup,allprd
+		
+		
+
