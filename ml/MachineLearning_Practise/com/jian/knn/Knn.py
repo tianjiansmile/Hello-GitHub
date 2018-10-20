@@ -10,6 +10,7 @@
 from numpy import *
 import matplotlib.pyplot as plt
 import operator
+from mpl_toolkits.mplot3d import Axes3D
 
 def createDataSet():
 
@@ -43,6 +44,16 @@ def file2matrix(filename):
 
     return returnMat,classLabelVector
 
+#  画出3D图像
+def draw3DMap(matr,classVector):
+    fig = plt.figure()
+    ax = Axes3D(fig)
+    #  分别设置三个坐标轴代表的数据，把数据的类别 1 2 3 映射到散点数据点的大小size，和 数据点的颜色
+    # 我们把第三维的数据加上去以后，发现第三维的数据和数据类别标签之间并没有特别明显的关系，不如第一个特征和第二个特征明显
+    ax.scatter(matr[:, 0], matr[:, 1], matr[:, 2], matr[:, 0], 15.0 * array(classVector), 15.0 * array(classVector), depthshade=True)
+    plt.show()
+
+
 # 3 创建散点图分析数据
 #  数据说明
 # 第一列是飞行里程数
@@ -68,6 +79,7 @@ def drowMap(matr,classVector):
     # 最大的圈圈是黄色来表示的，看的出来
     # 游戏时间占比再5%--10% 行程数在2000--5000范围内的用户对这个女士更有吸引力
     ax.scatter(matr[:, 0], matr[:, 1], 15.0 * array(classVector), 15.0 * array(classVector))
+    # ax.scatter(matr[:, 1], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector))
 
     # ax.scatter(matr[:, 0], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector))
     plt.show()
@@ -220,13 +232,13 @@ if __name__ == '__main__':
     # print matr,labels
 
     # 画出散点图
-    # drowMap(matr,labels)
-
+    drowMap(matr,labels)
+    draw3DMap(matr, labels)
     # 对数据进行归一化
     normalMatro,ranges,minvals = autoNorm(matr)
     # print normalMatro,ranges,minvals
 
     # 测试算法
-    datingClassTest()
+    # datingClassTest()
 
 
