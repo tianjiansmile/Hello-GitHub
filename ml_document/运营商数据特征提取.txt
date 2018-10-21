@@ -1,0 +1,34 @@
+{"describe":"[]","limit":"1000","result":"APPROVE","returncode":"0","returninfo":"success","score":"690"}
+
+{"describe":"[]","limit":"0","result":"DENY","returncode":"0","returninfo":"success","score":"530"}
+
+特征提取：
+（main_service）主要服务商通话总次数                         main_service_count
+通信服务机构通话次数                                         uncom_count
+银行通话次数                                                  bank_count
+特种服务通话次数                                              special_count
+铁路航空通话次数                                              airplan_count
+contact_region 联系地区总数                                  contact_region_count
+user_info_check-check_black_info                             phone_gray_score
+
+behavior_check 通话行为监测得分总数                          behavior_check_score
+contact_each_other 互通过电话的号码数量                      contact_each_other_result
+contact_110 与110电话通话情况                                contact_110_result
+contact_lawyer 与律师电话通话情况                            contact_lawyer_result
+contact_court 与法院电话通话情况                             contact_court_result
+contact_loan 与贷款类号码联系情况                            contact_loan_result
+
+evidence联系列表：
+contact_bank 与银行类号码联系情况                            contact_bank_result
+contact_credit_card 与信用卡类号码联系情况                   contact_credit_card_result
+contact_night：夜间活动情况                                  contact_night_result
+
+开发过程：
+ 1数据准备
+    1 下载测试数据到本地
+	2 批量解析数据到内存
+	3 提取全部数据特征，并写入特征文件
+ 2数据清理和格式化
+ 
+ 3 特征工程和特征选择
+	
