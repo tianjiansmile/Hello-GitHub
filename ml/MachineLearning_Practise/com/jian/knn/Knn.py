@@ -92,7 +92,7 @@ def autoNorm(dataset):
     # 找出dataset每一列的最小值，注意这个计算包括以下的计算基本都是矩阵计算，
     # 这里是找对每一列最小值，并生成一个矩阵
     minvals = dataset.min(0)
-    print minvals
+    print (minvals)
 
     maxvals = dataset.max(0)
 
@@ -160,7 +160,7 @@ def predict(test,train,lables,k=3):
     minkey = max(classCount,key=classCount.get)
 
     if len(classCount) == 3:
-        print classCount, minkey
+        print (classCount, minkey)
 
 
     return minkey
@@ -206,12 +206,12 @@ def datingClassTest():
         # normalMatr[numTestVecs:m,:] 取numTestVecs到m行的数据
         classifierResult = predict(normalMatr[i,:],normalMatr[numTestVecs:m,:], datingLables[numTestVecs:m])
 
-        print "Test is: %d, Real is：%d" % (classifierResult,datingLables[i])
+        print ("Test is: %d, Real is：%d" % (classifierResult,datingLables[i]))
         if classifierResult != datingLables[i]:
             errorCount += 1.0
 
 
-    print  errorCount/numTestVecs
+    print  (errorCount/numTestVecs)
 
 
 
