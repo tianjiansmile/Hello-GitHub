@@ -1,14 +1,23 @@
 # -*- coding: UTF-8 -*-
-# from numpy import *
-# import matplotlib.pyplot as plt
+from numpy import *
+import matplotlib.pyplot as plt
 import json
+import os
+import sys
+import operator
+from mpl_toolkits.mplot3d import Axes3D
 
 # 主要用于提取用户变量
 class variable_person:
 
     def __init__(self,filepath,filename):
         with open(filepath+filename, 'r',encoding = 'utf-8') as load_f:
-            self.json_data = json.load(load_f)
+            data = json.load(load_f)
+
+        if data != None:
+            data_json = json.dumps(data)
+            self.json_data = json.loads(data_json, strict=False)  # json全量数据
+            self.setBasicDate()
 
 
     def setBasicDate(self):
@@ -155,30 +164,278 @@ class variable_person:
         self.varls.append(contact_night_result)
 
 
-    def type_check(self,data):
-        if isinstance(data,dict):
-            return 'dict'
-        elif isinstance(data,list):
-            return 'list'
-        elif isinstance(data,str):
-            return 'str'
-        elif isinstance(data,int):
-            return 'int'
+    def type_check(self,item):
+        data_type = 'list'
+        if type(item).__name__ == 'list':
+            data_type = 'list'
+        elif type(item).__name__ == 'dict':
+            data_type = 'dict'
+        elif type(item).__name__ == 'str':
+            data_type = 'str'
+        elif type(item).__name__ == 'int':
+            data_type = 'int'
         else:
-            return 'undefined'
+            # item_name = self.namestr(item, locals())
+            # print('data undefined')
+            data_type = 'undefined'
+
+        return data_type
+
+# 提取原始数据到文件
+def loop_file(carr_path,list):
+    with open('D:/Develop/test/carrier/report_var/report_var_new.txt', 'w') as rf:
+        pre = ['54','12','42','0','0','65','68','15']
+        for risk in list:
+            try:
+                judge = variable_person(carr_path, risk[0] + '.json')
+
+                rid = risk[0]
+                score = risk[1]
+                risk_status = risk[2]
+                varl = judge.varls
+                varl.append(score)
+                varl.append(risk_status)
+                # 写入所有变量
+                print(risk[0], varl)
+                val_line = ''
+                for i in range(len(varl)):
+                    if i < len(varl)-1:
+                        val_line += str(varl[i]) + ','
+                    else:
+                        val_line += str(varl[i])
+
+                print(val_line)
+                if not operator.eq(pre[:7],judge.varls[:7]):
+                    rf.write(val_line+'\n')
+
+                pre = judge.varls
+
+
+
+
+            except Exception as e:
+                print("解析json出错...%", risk[0])
+                # logging.exception("解析json出错...%", filename)
+                # raise TypeError('bad json') from e
+            continue
+
+# 提取数据结果到文件
+def read_risk_data(risk_path):
+    list = []
+    with open(risk_path, 'r') as f:
+        for line in f.readlines():
+            # 去掉换行符
+            line = line.strip('\n')
+            temp = line.split(',')
+            rid = temp[0]
+            score = temp[1]
+            risk_status = temp[2]
+            score = score.lstrip()
+            risk_status = risk_status.lstrip()
+
+            list.append((rid, score,risk_status))
+
+    return list
+
+# 对数据进行清洗转换
+def data_handler(file):
+    with open(file, 'r') as f:
+        tran_val = 0
+        # 矩阵行数
+        array_lines = f.readlines()
+        number_lines = len(array_lines)
+        # 初始化一个特征矩阵,先取三个典型特征看看
+        data_matr = zeros((number_lines,3))
+        # 结果向量
+        classLabelVector = []
+
+        index = 0
+        for line in array_lines:
+            # 去掉换行符
+            line = line.strip('\n')
+            temp = line.split(',')
+            # 完成转换
+            temp_tran = val_tranform(temp)
+            print(temp_tran)
+
+            # 先取phone_gray_score 6，behavior_check_score 7，contact_loan 12 做一个简单的数据分析
+            data_matr, classLabelVector = val_filter(temp_tran,data_matr,classLabelVector,index)
+
+            index += 1
+
+
+    return data_matr,classLabelVector
+
+# 特征数据转换补全
+def val_tranform(temp):
+    # 8-15位置的数据特征是文本数据，需要转换为数值
+    contact_each_other = temp[8]
+    tran_val = contact_each_other_trans(contact_each_other, 1)
+    if tran_val == -1:
+        tran_val = 2
+    temp[8] = tran_val
+
+    contact_110 = temp[9]
+    tran_val = contact_each_other_trans(contact_110, 2)
+    if tran_val == -1:
+        tran_val = 0
+    temp[9] = tran_val
+    contact_lawyer = temp[10]
+    tran_val = contact_each_other_trans(contact_lawyer, 2)
+    if tran_val == -1:
+        tran_val = 0
+    temp[10] = tran_val
+    contact_court = temp[11]
+    tran_val = contact_each_other_trans(contact_court, 2)
+    if tran_val == -1:
+        tran_val = 0
+    temp[11] = tran_val
+
+    contact_loan = temp[12]
+    tran_val = contact_each_other_trans(contact_loan, 3)
+    if tran_val == -1:
+        tran_val = 1
+    temp[12] = tran_val
+    contact_bank = temp[13]
+    tran_val = contact_each_other_trans(contact_bank, 3)
+    if tran_val == -1:
+        tran_val = 1
+    temp[13] = tran_val
+    contact_credit_card = temp[14]
+    tran_val = contact_each_other_trans(contact_credit_card, 3)
+    if tran_val == -1:
+        tran_val = 1
+    temp[14] = tran_val
+
+    contact_night = temp[15]
+    tran_val = contact_each_other_trans(contact_night, 4)
+    if tran_val == -1:
+        tran_val = 1
+    temp[15] = tran_val
+
+    return temp
+
+
+# 对缺失类数据进行补充，原则是取数量最多的数据作为缺失数据的值， parm:-1  return:整数
+# contact_each_other_trans '1':96  '2':1188  '3':140     lost_tran:2
+# contact_110   0:1186 2:113 3:14                        lost_tran:0
+# contact_lawyer 1301 12 0                                lost_tran:0
+# contact_court  1312 1 0                                lost_tran:0
+
+# contact_loan   1:793 2:141 3:88                         lost_tran:1
+# contact_bank   721 261 148                              lost_tran:1
+# contact_credit_card 748 212 119                         lost_tran:1
+# contact_night  1270 42 1                                lost_tran:1
+def lost_value_tran(val,num):
+    pass
+
+#  phone_gray_score 6，behavior_check_score 7，contact_loan 12 做一个简单的数据分析
+def val_filter(temp_tran,data_matr,classLabelVector,index):
+    data_matr[index, 0] = int(temp_tran[6])
+    data_matr[index, 1] = int(temp_tran[7])
+    data_matr[index, 2] = int(temp_tran[12])
+    result = temp_tran[17]
+    if result == 'N':
+        classLabelVector.append(1)
+    elif result == 'Y':
+        classLabelVector.append(5)
+
+    print(temp_tran[6], temp_tran[7], temp_tran[12], temp_tran[17])
+
+    return data_matr, classLabelVector
+
+
+# 对文本类数据进行数据转换 ,parm:文本数据  return:整数
+def contact_each_other_trans(val,num):
+    val = val.rstrip()
+    tran_val = 0
+    contact_each_other_list = {'数量正常（10 - 100）':2,'数量正常(10-100)':2,'数量众多（100以上，不含100）':3,'数量众多(100以上，不含100)':3,
+                    '数量稀少(10以内，不含10)':1,'数量稀少（10以内，不含10）':1,
+                               '0':-1}
+
+    contact_lay_list = {'无通话记录':0,'偶尔通话（三次以内，包括三次）':2,'多次通话（三次以上）':3,
+                        '0':-1}
+
+    contact_loan_list = {'很少被联系（有该号码记录，且不符合上述情况）':1,
+                         '偶尔被联系（联系次数在5次以上，包含5次，且主动呼叫占比 20% - 50%之间，包含20%）':2,
+                         '0':-1,
+                         '无该类号码记录':0,'经常被联系（联系次数在5次以上，包含5次，且主动呼叫占比大于50%，包含50%）':3}
+
+    contact_night_list = {'0':-1,'很少夜间活动（低于20%)':1,'偶尔夜间活动（20% - 50%， 包含20%）':2,'频繁夜间活动（夜间通话比例大于50%，包含50%）':3}
+
+    if num == 1:
+        if contact_each_other_list.get(val)!=None:
+            tran_val = contact_each_other_list.get(val)
+        else:
+            print('no value')
+    elif num == 2:
+        if contact_lay_list.get(val)!=None:
+            tran_val = contact_lay_list.get(val)
+        else:
+            print('no value')
+    elif num == 3:
+        if contact_loan_list.get(val)!=None:
+            tran_val = contact_loan_list.get(val)
+        else:
+            print('no value')
+    elif num == 4:
+        if contact_night_list.get(val)!=None:
+            tran_val = contact_night_list.get(val)
+        else:
+            print('no value')
+
+    return tran_val
+
+def drowMap(matr,classVector):
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+
+    # 这里将喜欢不喜欢这一向量数据映射到了点的颜色上，用来区分不同情况
+    # 最大的圈圈是黄色来表示的，看的出来
+    # phone_gray_score 6，behavior_check_score 7，contact_loan 12
+    ax.scatter(matr[:, 0], matr[:, 2], 20.0 * array(classVector), 20.0 * array(classVector))
+    # ax.scatter(matr[:, 1], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector))
+
+    # ax.scatter(matr[:, 0], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector))
+    plt.show()
+
+#  画出3D图像
+def draw3DMap(matr,classVector):
+    fig = plt.figure()
+    ax = Axes3D(fig)
+    #  分别设置三个坐标轴代表的数据，把数据的类别 1 2 3 映射到散点数据点的大小size，和 数据点的颜色
+    # 我们把第三维的数据加上去以后，发现第三维的数据和数据类别标签之间并没有特别明显的关系，不如第一个特征和第二个特征明显
+    ax.scatter(matr[:, 0], matr[:, 1], matr[:, 2], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector), depthshade=True)
+    plt.show()
+
+# 根据特征画出折线图
+def drawLineMap(matr):
+    x = linspace(0, len(matr), len(matr))
+    # 绘制y=2x+1函数的图像
+    y1 = matr[:, 0]
+    y2 = matr[:, 1]
+    plt.title('Result Analysis')
+    plt.plot(x, y1, color='green', label='order')
+    plt.plot(x, y2, color='skyblue', label='repay')
+
+    plt.xlabel('date ')
+    plt.ylabel('data different')
+    plt.show()
+    # python 一个折线图绘制多个曲线
 
 if __name__ == '__main__':
-    path = 'D:/spark/report/'
-    order_list = ['13659439086195589125','13659439145922478087','13659439154646630417','13659439166726225923','13659439169410580480',
-                  '13659439215715696654','13659439221084405760','13659439224439848964','13659439231150735361','13659439241217064963','13659439252625571847'
-                  ,'13659439257323192324','13659439263362990080','13659439271416053764','13659439272087142402','13659439274100408341',
-                  '13659439274771496969','13659439290877624328','13659439292219801600','13659439298259599375','13659439299601776647',
-                  '13659439300943953936','13659439302957219859','13659439308997017616','13659439318392258569','13659439358657576965',
-                  '13659439421739909132','13659439443214745604','13659439455294341121','13659439455294341139','13659439475427000322',
-                  '13659439512336875529','13659439561326346244','13659439566695055367']
-    for order in order_list:
-        judge = variable_person(path,order+'.txt')
-        judge.setBasicDate()
+    carr_path = 'D:/Develop/test/carrier/carr_data/'
+    risk_path = 'D:/Develop/test/carrier/risk_score/risk_data_new.txt'
+    report_path = 'D:/Develop/test/carrier/report_var/report_var_new.txt'
+    # list = read_risk_data(risk_path)
+    # print(list)
+    # loop_file(carr_path,list)
 
-        print(order,judge.varls)
-        # print(len(order_list))
+    data_matr, classLabelVector = data_handler(report_path)
+    # # 画出散点图
+    # print(data_matr)
+    # print(classLabelVector)
+    # drowMap(data_matr, classLabelVector)
+    #
+    draw3DMap(data_matr, classLabelVector)
+

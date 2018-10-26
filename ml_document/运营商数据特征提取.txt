@@ -3,25 +3,75 @@
 {"describe":"[]","limit":"0","result":"DENY","returncode":"0","returninfo":"success","score":"530"}
 
 特征提取：
-（main_service）主要服务商通话总次数                         main_service_count
-通信服务机构通话次数                                         uncom_count
-银行通话次数                                                  bank_count
-特种服务通话次数                                              special_count
-铁路航空通话次数                                              airplan_count
-contact_region 联系地区总数                                  contact_region_count
-user_info_check-check_black_info                             phone_gray_score
+（main_service）主要服务商通话总次数                         main_service_count             0
+通信服务机构通话次数                                         uncom_count                    1
+银行通话次数                                                  bank_count                    2
+特种服务通话次数                                              special_count                 3
+铁路航空通话次数                                              airplan_count                 4
+contact_region 联系地区总数                                  contact_region_count           5
+user_info_check-check_black_info                             phone_gray_score               6
 
-behavior_check 通话行为监测得分总数                          behavior_check_score
-contact_each_other 互通过电话的号码数量                      contact_each_other_result
-contact_110 与110电话通话情况                                contact_110_result
-contact_lawyer 与律师电话通话情况                            contact_lawyer_result
-contact_court 与法院电话通话情况                             contact_court_result
-contact_loan 与贷款类号码联系情况                            contact_loan_result
+behavior_check 通话行为监测得分总数                          behavior_check_score           7
+contact_each_other 互通过电话的号码数量                      contact_each_other_result      8
+contact_110 与110电话通话情况                                contact_110_result             9
+contact_lawyer 与律师电话通话情况                            contact_lawyer_result          10
+contact_court 与法院电话通话情况                             contact_court_result           11
+contact_loan 与贷款类号码联系情况                            contact_loan_result            12
 
 evidence联系列表：
-contact_bank 与银行类号码联系情况                            contact_bank_result
-contact_credit_card 与信用卡类号码联系情况                   contact_credit_card_result
-contact_night：夜间活动情况                                  contact_night_result
+contact_bank 与银行类号码联系情况                            contact_bank_result            13
+contact_credit_card 与信用卡类号码联系情况                   contact_credit_card_result     14
+contact_night：夜间活动情况                                  contact_night_result           15
+
+loanStatus	String	是否放款	N:未放款  Y:已放款
+
+
+contact_each_other 
+{'数量正常（10 - 100）': 1, 
+ '数量正常(10-100)': 1, 
+'数量众多（100以上，不含100）': 1,
+'数量众多(100以上，不含100)': 1, 
+ '数量稀少(10以内，不含10)': 1}
+ '数量稀少（10以内，不含10）': 1,
+ '0': 1, 
+
+contact_110 
+{'无通话记录': 1, 
+'偶尔通话（三次以内，包括三次）': 1, 
+'多次通话（三次以上）': 1}
+'0': 1, 
+contact_lawyer 
+{'无通话记录': 1,
+'偶尔通话（三次以内，包括三次）': 1}
+ '0': 1, 
+contact_court 
+{'无通话记录': 1, '0': 1, 
+'偶尔通话（三次以内，包括三次）': 1}
+
+contact_loan 
+{'很少被联系（有该号码记录，且不符合上述情况）': 1,
+ '偶尔被联系（联系次数在5次以上，包含5次，且主动呼叫占比 20% - 50%之间，包含20%）': 1, 
+ '无该类号码记录': 1, 
+ '经常被联系（联系次数在5次以上，包含5次，且主动呼叫占比大于50%，包含50%）': 1, 
+ '0': 1}
+contact_bank 
+{'偶尔被联系（联系次数在5次以上，包含5次，且主动呼叫占比 20% - 50%之间，包含20%）': 1, 
+'很少被联系（有该号码记录，且不符合上述情况）': 1, 
+'无该类号码记录': 1, 
+'经常被联系（联系次数在5次以上，包含5次，且主动呼叫占比大于50%，包含50%）': 1, 
+'0': 1}
+contact_credit_card 
+{'偶尔被联系（联系次数在5次以上，包含5次，且主动呼叫占比 20% - 50%之间，包含20%）': 1,
+'很少被联系（有该号码记录，且不符合上述情况）': 1, 
+'无该类号码记录': 1, 
+'经常被联系（联系次数在5次以上，包含5次，且主动呼叫占比大于50%，包含50%）': 1, 
+'0': 1}
+
+contact_night 
+{'很少夜间活动（低于20%)': 1,
+ '0': 1, 
+'偶尔夜间活动（20% - 50%， 包含20%）': 1, 
+'频繁夜间活动（夜间通话比例大于50%，包含50%）': 1}
 
 开发过程：
  1数据准备
@@ -29,6 +79,8 @@ contact_night：夜间活动情况                                  contact_nigh
 	2 批量解析数据到内存
 	3 提取全部数据特征，并写入特征文件
  2数据清理和格式化
+    1 对通话行为数据转义处理
+	  将文本数据转换为数字，缺失值取统计类最大值
  
  3 特征工程和特征选择
 	

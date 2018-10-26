@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="c4fc27fd-bacb-449b-bbb7-0af963c91b94" name="Default" comment="" />
+    <list default="true" id="c4fc27fd-bacb-449b-bbb7-0af963c91b94" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/MachineLearning_Practise.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MachineLearning_Practise.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/com/carrier/person_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/com/carrier/person_analysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com/jian/Logistic/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/com/jian/Logistic/logRegres.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/com/jian/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../python_code/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../python_code/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ml_document/数据头脑风暴.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../ml_document/数据头脑风暴.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ml_document/运营商数据特征提取.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../ml_document/运营商数据特征提取.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../neo4j/neo4j常用操作.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../neo4j/neo4j常用操作.txt" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
-    <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -37,13 +50,43 @@
     <expand />
     <select />
   </component>
+  <component name="FUSProjectUsageTrigger">
+    <session id="-1198925175">
+      <usages-collector id="statistics.lifecycle.project">
+        <counts>
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.opened" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="py" value="5" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="Python" value="5" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="py" value="2406" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
+          <entry key="Python" value="2406" />
+        </counts>
+      </usages-collector>
+    </session>
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Knn.py" pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/com/jian/knn/Knn.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-450">
-              <caret line="20" column="30" selection-start-line="20" selection-start-column="30" selection-end-line="20" selection-end-column="30" />
+            <state relative-caret-position="151">
+              <caret line="235" column="27" selection-start-line="235" selection-start-column="4" selection-end-line="235" selection-end-column="27" />
               <folding>
                 <element signature="e#173#192#0" expanded="true" />
               </folding>
@@ -51,49 +94,26 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="pca.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/com/jian/pca/pca.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-972">
-              <caret selection-end-line="2" selection-end-column="31" />
-              <folding>
-                <element signature="e#24#43#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="person_analysis.py" pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/com/carrier/person_analysis.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="5" column="5" selection-start-line="5" selection-start-column="5" selection-end-line="5" selection-end-column="5" />
+            <state relative-caret-position="187">
+              <caret line="433" column="22" selection-start-line="433" selection-start-column="22" selection-end-line="433" selection-end-column="22" />
               <folding>
-                <element signature="e#615#1980#0" />
-                <element signature="e#2082#2365#0" />
-                <element signature="e#3318#5491#0" />
+                <element signature="e#24#43#0" expanded="true" />
+                <element signature="e#942#2319#0" />
+                <element signature="e#2382#2745#0" />
+                <element signature="e#2805#3495#0" />
+                <element signature="e#3551#3618#0" />
+                <element signature="e#3681#5934#0" />
+                <element signature="e#6163#6746#0" />
+                <element signature="e#6684#7105#0" />
+                <element signature="e#10472#11774#0" />
+                <element signature="e#9384#9533#0" />
+                <marker date="1540519847987" expanded="true" signature="10480:10483" ph="..." />
+                <marker date="1540519847987" expanded="true" signature="11265:11653" ph="..." />
+                <marker date="1540519847987" expanded="true" signature="11768:14354" ph="..." />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="logRegres.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/com/jian/Logistic/logRegres.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="331">
-              <caret line="154" selection-start-line="154" selection-end-line="155" selection-end-column="26" />
-              <folding>
-                <element signature="e#25#44#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="adaboost.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/com/jian/boosting/adaboost.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2412">
-              <caret line="135" column="7" selection-start-line="135" selection-start-column="7" selection-end-line="135" selection-end-column="7" />
             </state>
           </provider>
         </entry>
@@ -107,6 +127,9 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
@@ -117,8 +140,9 @@
         <option value="$PROJECT_DIR$/com/test/comparyData1.py" />
         <option value="$PROJECT_DIR$/com/jian/boosting/adaboost.py" />
         <option value="$PROJECT_DIR$/com/jian/pca/pca.py" />
-        <option value="$PROJECT_DIR$/com/carrier/person_analysis.py" />
         <option value="$PROJECT_DIR$/com/jian/knn/Knn.py" />
+        <option value="$PROJECT_DIR$/com/carrier/data_download.py" />
+        <option value="$PROJECT_DIR$/com/carrier/person_analysis.py" />
       </list>
     </option>
   </component>
@@ -131,11 +155,12 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="952" />
-    <option name="width" value="977" />
-    <option name="height" value="1038" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="x" value="-11" />
+    <option name="width" value="1378" />
+    <option name="height" value="744" />
   </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
@@ -157,7 +182,27 @@
               <item name="MachineLearning_Practise" type="b2602c69:ProjectViewProjectNode" />
               <item name="MachineLearning_Practise" type="462c0819:PsiDirectoryNode" />
               <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
+              <item name="carrier" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MachineLearning_Practise" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MachineLearning_Practise" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="jian" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MachineLearning_Practise" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MachineLearning_Practise" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="jian" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="MachineLearning_Practise" type="b2602c69:ProjectViewProjectNode" />
+              <item name="MachineLearning_Practise" type="462c0819:PsiDirectoryNode" />
+              <item name="com" type="462c0819:PsiDirectoryNode" />
+              <item name="jian" type="462c0819:PsiDirectoryNode" />
+              <item name="knn" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -168,13 +213,14 @@
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../python_code" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\github\Hello-GitHub\ml\MachineLearning_Practise\com\jian\knn" />
       <recent name="D:\development\MachineLearning_Practise\com\jian\pca" />
       <recent name="D:\development\MachineLearning_Practise\com\jian\data" />
       <recent name="D:\development\MachineLearning_Practise\com\test" />
@@ -211,6 +257,9 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <configuration name="adaboost" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="MachineLearning_Practise" />
@@ -230,8 +279,11 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
-    <configuration name="comparyData1" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration name="data_download" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="MachineLearning_Practise" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -239,16 +291,18 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/com/test" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/com/carrier" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/com/test/comparyData1.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/com/carrier/data_download.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <configuration name="pca" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="MachineLearning_Practise" />
@@ -268,6 +322,9 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <configuration name="person_analysis" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="MachineLearning_Practise" />
@@ -287,21 +344,24 @@
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Python.comparyData1" />
       <item itemvalue="Python.adaboost" />
       <item itemvalue="Python.Knn" />
       <item itemvalue="Python.pca" />
       <item itemvalue="Python.person_analysis" />
+      <item itemvalue="Python.data_download" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.person_analysis" />
+        <item itemvalue="Python.data_download" />
         <item itemvalue="Python.Knn" />
         <item itemvalue="Python.pca" />
         <item itemvalue="Python.adaboost" />
-        <item itemvalue="Python.comparyData1" />
       </list>
     </recent_temporary>
   </component>
@@ -319,29 +379,30 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
+    <editor active="true" />
     <layout>
-      <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Version Control" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Python Console" order="7" weight="0.32909605" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32062146" />
-      <window_info anchor="bottom" id="Terminal" order="7" weight="0.32909605" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.12399464" />
-      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="right" id="Database" order="3" weight="0.32908848" />
-      <window_info anchor="right" id="SciView" order="3" weight="0.3558981" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15252976" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.4039548" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32909605" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.31914893" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.40261865" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="8" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Terminal" order="9" weight="0.32909605" />
+      <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
+      <window_info anchor="bottom" id="Version Control" order="11" />
+      <window_info anchor="bottom" id="Python Console" order="12" weight="0.32909605" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32909605" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="SciView" order="3" weight="0.3558981" />
+      <window_info anchor="right" id="Database" order="4" weight="0.32908848" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -364,328 +425,35 @@
           <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="17" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/com/jian/Logistic/logRegres.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1062">
-          <caret line="60" column="35" selection-start-line="60" selection-start-column="35" selection-end-line="60" selection-end-column="35" />
-          <folding>
-            <element signature="e#25#44#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/boosting/adaboost.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2412">
-          <caret line="135" column="7" selection-start-line="135" selection-start-column="7" selection-end-line="135" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/knn/Knn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="11" column="15" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/Logistic/logRegres.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1062">
-          <caret line="60" column="35" selection-start-line="60" selection-start-column="35" selection-end-line="60" selection-end-column="35" />
-          <folding>
-            <element signature="e#25#44#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/numpy/core/fromnumeric.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30276">
-          <caret line="1693" selection-start-line="1693" selection-end-line="1693" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/numpy/matrixlib/defmatrix.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1206">
-          <caret line="67" selection-start-line="67" selection-end-line="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/boosting/adaboost.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1908">
-          <caret line="107" column="24" lean-forward="true" selection-start-line="107" selection-start-column="24" selection-end-line="107" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/knn/Knn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="198">
-          <caret line="11" column="15" selection-start-line="11" selection-start-column="15" selection-end-line="11" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/Logistic/logRegres.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1062">
-          <caret line="60" column="35" selection-start-line="60" selection-start-column="35" selection-end-line="60" selection-end-column="35" />
-          <folding>
-            <element signature="e#25#44#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/numpy/core/fromnumeric.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="30276">
-          <caret line="1693" selection-start-line="1693" selection-end-line="1693" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/numpy/matrixlib/defmatrix.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1206">
-          <caret line="67" selection-start-line="67" selection-end-line="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/boosting/adaboost.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1818">
-          <caret line="102" lean-forward="true" selection-start-line="102" selection-end-line="102" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/knn/Knn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="882">
-          <caret line="51" column="30" selection-start-line="51" selection-start-column="30" selection-end-line="51" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/Logistic/logRegres.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2610">
-          <caret line="146" column="61" selection-start-line="146" selection-start-column="61" selection-end-line="146" selection-end-column="61" />
-          <folding>
-            <element signature="e#25#44#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/test/comparyData.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="48" lean-forward="true" selection-start-line="14" selection-start-column="48" selection-end-line="14" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/test/comparyData1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="22" column="34" lean-forward="true" selection-start-line="22" selection-start-column="34" selection-end-line="22" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/knn/Knn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="882">
-          <caret line="51" column="30" selection-start-line="51" selection-start-column="30" selection-end-line="51" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/Logistic/logRegres.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2610">
-          <caret line="146" column="61" lean-forward="true" selection-start-line="146" selection-start-column="61" selection-end-line="146" selection-end-column="61" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/knn/Knn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="882">
-          <caret line="51" column="30" selection-start-line="51" selection-start-column="30" selection-end-line="51" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/Logistic/logRegres.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2790">
-          <caret line="156" lean-forward="true" selection-start-line="156" selection-end-line="156" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/knn/Knn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="882">
-          <caret line="51" column="30" selection-start-line="51" selection-start-column="30" selection-end-line="51" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/Logistic/logRegres.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1800">
-          <caret line="101" column="17" lean-forward="true" selection-start-line="101" selection-start-column="17" selection-end-line="101" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/knn/Knn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3690">
-          <caret line="205" lean-forward="true" selection-start-line="205" selection-end-line="205" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/knn/Knn.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3456">
-          <caret line="194" column="108" lean-forward="true" selection-start-line="194" selection-start-column="108" selection-end-line="194" selection-end-column="108" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/knn/__init__.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/numpy/core/_methods.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="31" selection-start-line="31" selection-end-line="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://E:/personal/学习/python/机器学习实战/machinelearninginaction/Ch05/EXTRAS/sigmoidPlot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="72">
-          <caret line="4" column="3" lean-forward="true" selection-start-line="4" selection-start-column="3" selection-end-line="4" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/matplotlib/pyplot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="70" selection-start-line="70" selection-end-line="70" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/matplotlib/backends/__init__.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="15" selection-start-line="15" selection-end-line="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://E:/personal/test/machinelearninginaction/Ch05/EXTRAS/plot2D.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="234">
-          <caret line="13" column="28" selection-start-line="13" selection-start-column="28" selection-end-line="13" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://E:/personal/test/machinelearninginaction/Ch05/EXTRAS/plotSDerror.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://E:/personal/test/machinelearninginaction/Ch05/EXTRAS/plotGD.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="21" column="31" lean-forward="true" selection-start-line="21" selection-start-column="31" selection-end-line="21" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://E:/personal/test/machinelearninginaction/Ch05/EXTRAS/sigmoidPlot.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="74">
-          <caret line="5" column="10" lean-forward="true" selection-start-line="5" selection-start-column="10" selection-end-line="5" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://E:/personal/学习/python/机器学习实战/machinelearninginaction/Ch05/EXTRAS/plotSDerror.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="2" column="22" lean-forward="true" selection-start-line="2" selection-start-column="22" selection-end-line="2" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://E:/personal/学习/python/机器学习实战/machinelearninginaction/Ch05/EXTRAS/plotGD.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/numpy/core/numeric.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="487">
-          <caret line="202" selection-start-line="202" selection-end-line="202" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/numpy/matrixlib/defmatrix.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1206">
-          <caret line="67" selection-start-line="67" selection-end-line="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/numpy/core/fromnumeric.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2431">
-          <caret line="1693" selection-start-line="1693" selection-end-line="1693" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/boosting/adaboost.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2412">
-          <caret line="135" column="7" selection-start-line="135" selection-start-column="7" selection-end-line="135" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/data/testSet_pca.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/data/testSet.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="12" column="20" selection-start-line="12" selection-start-column="20" selection-end-line="12" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/pca/testSet_pca.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/data/secom.data">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/numpy/core/_methods.py" />
+    <entry file="file://E:/personal/学习/python/机器学习实战/machinelearninginaction/Ch05/EXTRAS/sigmoidPlot.py" />
+    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/matplotlib/pyplot.py" />
+    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/matplotlib/backends/__init__.py" />
+    <entry file="file://E:/personal/test/machinelearninginaction/Ch05/EXTRAS/plot2D.py" />
+    <entry file="file://E:/personal/test/machinelearninginaction/Ch05/EXTRAS/plotSDerror.py" />
+    <entry file="file://E:/personal/test/machinelearninginaction/Ch05/EXTRAS/plotGD.py" />
+    <entry file="file://E:/personal/test/machinelearninginaction/Ch05/EXTRAS/sigmoidPlot.py" />
+    <entry file="file://E:/personal/学习/python/机器学习实战/machinelearninginaction/Ch05/EXTRAS/plotSDerror.py" />
+    <entry file="file://E:/personal/学习/python/机器学习实战/machinelearninginaction/Ch05/EXTRAS/plotGD.py" />
+    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/numpy/core/numeric.py" />
+    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/numpy/matrixlib/defmatrix.py" />
+    <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/numpy/core/fromnumeric.py" />
+    <entry file="file://$PROJECT_DIR$/com/jian/boosting/adaboost.py" />
+    <entry file="file://$PROJECT_DIR$/com/jian/data/testSet_pca.txt" />
+    <entry file="file://$PROJECT_DIR$/com/jian/data/testSet.txt" />
+    <entry file="file://$PROJECT_DIR$/com/jian/pca/testSet_pca.txt" />
+    <entry file="file://$PROJECT_DIR$/com/jian/data/secom.data" />
     <entry file="file://$PROJECT_DIR$/com/jian/pca/secom.data" />
-    <entry file="file://$PROJECT_DIR$/com/jian/pca/secom">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/test/comparyData1.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="25" lean-forward="true" selection-start-line="14" selection-start-column="25" selection-end-line="14" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/com/test/comparyData.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="252">
-          <caret line="14" column="48" selection-start-line="14" selection-start-column="48" selection-end-line="14" selection-end-column="48" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/com/jian/pca/secom" />
+    <entry file="file://$PROJECT_DIR$/com/test/comparyData1.py" />
+    <entry file="file://$PROJECT_DIR$/com/test/comparyData.py" />
+    <entry file="file://$PROJECT_DIR$/com/jian/pca/pca.py" />
     <entry file="file://$PROJECT_DIR$/com/jian/Logistic/logRegres.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
+        <state relative-caret-position="3366">
           <caret line="154" selection-start-line="154" selection-end-line="155" selection-end-column="26" />
           <folding>
             <element signature="e#25#44#0" expanded="true" />
@@ -693,20 +461,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/pca/pca.py">
+    <entry file="file://$PROJECT_DIR$/com/carrier/data_download.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-972">
-          <caret selection-end-line="2" selection-end-column="31" />
+        <state relative-caret-position="198">
+          <caret line="27" lean-forward="true" selection-end-line="32" selection-end-column="38" />
           <folding>
-            <element signature="e#24#43#0" expanded="true" />
+            <element signature="e#80#112#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://C:/Program Files/Python36/Lib/codecs.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="112">
+          <caret line="320" selection-start-line="320" selection-end-line="320" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/com/jian/data/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/com/jian/knn/__init__.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/com/jian/knn/Knn.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-450">
-          <caret line="20" column="30" selection-start-line="20" selection-start-column="30" selection-end-line="20" selection-end-column="30" />
+        <state relative-caret-position="151">
+          <caret line="235" column="27" selection-start-line="235" selection-start-column="4" selection-end-line="235" selection-end-column="27" />
           <folding>
             <element signature="e#173#192#0" expanded="true" />
           </folding>
@@ -715,12 +496,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/com/carrier/person_analysis.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="5" column="5" selection-start-line="5" selection-start-column="5" selection-end-line="5" selection-end-column="5" />
+        <state relative-caret-position="187">
+          <caret line="433" column="22" selection-start-line="433" selection-start-column="22" selection-end-line="433" selection-end-column="22" />
           <folding>
-            <element signature="e#615#1980#0" />
-            <element signature="e#2082#2365#0" />
-            <element signature="e#3318#5491#0" />
+            <element signature="e#24#43#0" expanded="true" />
+            <element signature="e#942#2319#0" />
+            <element signature="e#2382#2745#0" />
+            <element signature="e#2805#3495#0" />
+            <element signature="e#3551#3618#0" />
+            <element signature="e#3681#5934#0" />
+            <element signature="e#6163#6746#0" />
+            <element signature="e#6684#7105#0" />
+            <element signature="e#10472#11774#0" />
+            <element signature="e#9384#9533#0" />
+            <marker date="1540519847987" expanded="true" signature="10480:10483" ph="..." />
+            <marker date="1540519847987" expanded="true" signature="11265:11653" ph="..." />
+            <marker date="1540519847987" expanded="true" signature="11768:14354" ph="..." />
           </folding>
         </state>
       </provider>
