@@ -82,13 +82,13 @@ def adaBoostTrainDS(dataArr, classLabels,numIt=40):
 
     for i in range(numIt):
         bestStump,error,classEst = buildStump(dataArr,classLabels,D)
-        print "D",D.T
+        print ("D",D.T)
 
         alpha = float(0.5*log((1.0-error)/max(error,1e-16)))
         bestStump['alpha'] = alpha
 
         weakClassArr.append(bestStump)
-        print "classEst: ", classEst.T
+        print ("classEst: ", classEst.T)
 
         # multiply的作用和*是不一样的，在矩阵运算中*是矩阵的乘法运算，multiply是对应位置的数相乘，所以我们看到传入的两个矩阵的维数是相同的
         # 把真确结果和预测结果传入，那么预测失败的对应位置就可以显现出来，这里明显大于零的位置时预测错误的位置
@@ -110,7 +110,7 @@ def adaBoostTrainDS(dataArr, classLabels,numIt=40):
 
         # 每一次迭代都会进行一次投票表决，表决的形式就是，每个弱分类器的分类结果乘以各自的权重a，每一个分类结果做累加
         aggClassEst += alpha*classEst
-        print "aggClassEst: ", aggClassEst.T
+        print ("aggClassEst: ", aggClassEst.T)
 
         # 程序最终通过aggClassEst的正负是否与真实分类一致来判定，分类迭代是否终止，这时候理解aggClassEst的意义尤为关键
         # aggClassEst是靠累加类记录的  aggClassEst += alpha*classEst 每一个弱分类器的权重不同， error越低它的a就越高
@@ -120,7 +120,7 @@ def adaBoostTrainDS(dataArr, classLabels,numIt=40):
 
         # 错误率
         errorRate = aggErrors.sum()/m
-        print "total error: ",errorRate,"\n"
+        print ("total error: ",errorRate,"\n")
 
         if errorRate == 0.0: break
     return weakClassArr
@@ -143,4 +143,4 @@ if __name__ == '__main__':
 
     error = adaBoostTrainDS(dataMatrix,labels,9)
 
-    print error
+    print (error)

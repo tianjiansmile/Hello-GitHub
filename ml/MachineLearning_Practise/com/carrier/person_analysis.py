@@ -83,7 +83,7 @@ class variable_person:
 
         self.varls.append(contact_region_count)
 
-    #  联系电话灰名单得分
+    #  联系电话灰名单得分 电话号码注册过的相关企业数量 查询过该用户的相关企业数量
     def user_info_compute(self):
         user_info_check = self.user_info_check
         data_type = self.type_check(user_info_check)
@@ -96,18 +96,53 @@ class variable_person:
                 if check_black_info != None:
                     phone_gray_score = check_black_info.get('phone_gray_score')
 
+                check_search_info = item.get('check_search_info')   # 需要判断一下相关企业的类型  CASH_LOAN
+                if check_search_info != None:
+                    register_org_cnt = check_search_info.get('register_org_cnt')
+                    searched_org_cnt = check_search_info.get('searched_org_cnt')
+
         elif data_type == 'dict':
             check_black_info = user_info_check.get('check_black_info')
             if check_black_info != None:
                 phone_gray_score = check_black_info.get('phone_gray_score')
 
+            check_search_info = user_info_check.get('check_search_info')
+            if check_search_info != None:
+                register_org_cnt = check_search_info.get('register_org_cnt')
+                searched_org_cnt = check_search_info.get('searched_org_cnt')
+
 
         self.varls.append(phone_gray_score)
+        self.varls.append(register_org_cnt)
+        self.varls.append(searched_org_cnt)
 
     def loan_evidence_compute(self,evidence):
+        # 主叫
+        call_count = 0
+        # 被呼叫
+        called_count = 0
         if evidence != None:
-            pass
-            # print(evidence)
+            if evidence.find('[总计]') == 0:
+                call_local = evidence.index('主叫')
+                called_local = evidence.index('被叫')
+                call_count = int(evidence[call_local+2:call_local+4].replace('次',''))
+                called_count = int(evidence[called_local+2:called_local+4].replace('次',''))
+            elif evidence == '未找到贷款类相关号码':
+                pass
+            elif evidence.find('联系列表') == 0:
+                ev_list = evidence.split('：')
+                ev_loan_list = ev_list[1].split('，')
+                for loan in ev_loan_list:
+                    call_local = loan.index('主叫')
+                    called_local = loan.index('被叫')
+                    call_count += int(loan[call_local + 2:call_local + 4].replace('次', ''))
+                    called_count += int(loan[called_local + 2:called_local + 4].replace('次', ''))
+            else:
+                print('kidding me....................................')
+
+            print(call_count,called_count,evidence)
+
+        return call_count,called_count
 
     # 通话行为监测统计
     def behavior_check_compute(self):
@@ -139,7 +174,7 @@ class variable_person:
                 elif item.get('check_point_cn') == '与贷款类号码联系情况':
                     contact_loan_result = item.get('result')
                     evidence = item.get('evidence')
-                    self.loan_evidence_compute(evidence)
+                    call_count, called_count = self.loan_evidence_compute(evidence)
                 elif item.get('check_point_cn') == '与银行类号码联系情况':
                     contact_bank_result = item.get('result')
                 elif item.get('check_point_cn') == '与信用卡类号码联系情况':
@@ -162,6 +197,9 @@ class variable_person:
         self.varls.append(contact_bank_result)
         self.varls.append(contact_credit_card_result)
         self.varls.append(contact_night_result)
+        # 最后加两个特征
+        self.varls.append(call_count)
+        self.varls.append(called_count)
 
 
     def type_check(self,item):
@@ -183,7 +221,7 @@ class variable_person:
 
 # 提取原始数据到文件
 def loop_file(carr_path,list):
-    with open('D:/Develop/test/carrier/report_var/report_var_new.txt', 'w') as rf:
+    with open('D:/Develop/test/carrier/report_var/report_add_call_val.txt', 'w') as rf:
         pre = ['54','12','42','0','0','65','68','15']
         for risk in list:
             try:
@@ -206,6 +244,7 @@ def loop_file(carr_path,list):
 
                 print(val_line)
                 if not operator.eq(pre[:7],judge.varls[:7]):
+                    pass
                     rf.write(val_line+'\n')
 
                 pre = judge.varls
@@ -245,7 +284,7 @@ def data_handler(file):
         array_lines = f.readlines()
         number_lines = len(array_lines)
         # 初始化一个特征矩阵,先取三个典型特征看看
-        data_matr = zeros((number_lines,3))
+        data_matr = zeros((number_lines,7))
         # 结果向量
         classLabelVector = []
 
@@ -258,7 +297,8 @@ def data_handler(file):
             temp_tran = val_tranform(temp)
             print(temp_tran)
 
-            # 先取phone_gray_score 6，behavior_check_score 7，contact_loan 12 做一个简单的数据分析
+            # phone_gray_score 6，register_org_cnt 7，searched_org_cnt 8 behavior_check_score 9
+            # contact_loan 14   call_count 18  called_count 19    做一个简单的数据分析
             data_matr, classLabelVector = val_filter(temp_tran,data_matr,classLabelVector,index)
 
             index += 1
@@ -269,49 +309,49 @@ def data_handler(file):
 # 特征数据转换补全
 def val_tranform(temp):
     # 8-15位置的数据特征是文本数据，需要转换为数值
-    contact_each_other = temp[8]
+    contact_each_other = temp[10]
     tran_val = contact_each_other_trans(contact_each_other, 1)
     if tran_val == -1:
         tran_val = 2
-    temp[8] = tran_val
+    temp[10] = tran_val
 
-    contact_110 = temp[9]
+    contact_110 = temp[11]
     tran_val = contact_each_other_trans(contact_110, 2)
     if tran_val == -1:
         tran_val = 0
-    temp[9] = tran_val
-    contact_lawyer = temp[10]
+    temp[11] = tran_val
+    contact_lawyer = temp[12]
     tran_val = contact_each_other_trans(contact_lawyer, 2)
     if tran_val == -1:
         tran_val = 0
-    temp[10] = tran_val
-    contact_court = temp[11]
+    temp[12] = tran_val
+    contact_court = temp[13]
     tran_val = contact_each_other_trans(contact_court, 2)
     if tran_val == -1:
         tran_val = 0
-    temp[11] = tran_val
+    temp[13] = tran_val
 
-    contact_loan = temp[12]
+    contact_loan = temp[14]
     tran_val = contact_each_other_trans(contact_loan, 3)
     if tran_val == -1:
         tran_val = 1
-    temp[12] = tran_val
-    contact_bank = temp[13]
+    temp[14] = tran_val
+    contact_bank = temp[15]
     tran_val = contact_each_other_trans(contact_bank, 3)
     if tran_val == -1:
         tran_val = 1
-    temp[13] = tran_val
-    contact_credit_card = temp[14]
+    temp[15] = tran_val
+    contact_credit_card = temp[16]
     tran_val = contact_each_other_trans(contact_credit_card, 3)
     if tran_val == -1:
         tran_val = 1
-    temp[14] = tran_val
+    temp[16] = tran_val
 
-    contact_night = temp[15]
+    contact_night = temp[17]
     tran_val = contact_each_other_trans(contact_night, 4)
     if tran_val == -1:
         tran_val = 1
-    temp[15] = tran_val
+    temp[17] = tran_val
 
     return temp
 
@@ -329,18 +369,23 @@ def val_tranform(temp):
 def lost_value_tran(val,num):
     pass
 
-#  phone_gray_score 6，behavior_check_score 7，contact_loan 12 做一个简单的数据分析
+# phone_gray_score 6，register_org_cnt 7，searched_org_cnt 8 behavior_check_score 9
+# contact_loan 14   call_count 18  called_count 19    做一个简单的数据分析
 def val_filter(temp_tran,data_matr,classLabelVector,index):
     data_matr[index, 0] = int(temp_tran[6])
     data_matr[index, 1] = int(temp_tran[7])
-    data_matr[index, 2] = int(temp_tran[12])
-    result = temp_tran[17]
+    data_matr[index, 2] = int(temp_tran[8])
+    data_matr[index, 3] = int(temp_tran[9])
+    data_matr[index, 4] = int(temp_tran[14])
+    data_matr[index, 5] = int(temp_tran[18])
+    data_matr[index, 6] = int(temp_tran[19])
+    result = temp_tran[21]
     if result == 'N':
         classLabelVector.append(1)
     elif result == 'Y':
         classLabelVector.append(5)
 
-    print(temp_tran[6], temp_tran[7], temp_tran[12], temp_tran[17])
+    print(temp_tran[6], temp_tran[7], temp_tran[8], temp_tran[9], temp_tran[14], temp_tran[18], temp_tran[19],temp_tran[21])
 
     return data_matr, classLabelVector
 
@@ -386,17 +431,25 @@ def contact_each_other_trans(val,num):
 
     return tran_val
 
+# phone_gray_score 0，register_org_cnt 1，searched_org_cnt 2 behavior_check_score 3
+            # contact_loan 4   call_count 5  called_count 6    做一个简单的数据分析
 def drowMap(matr,classVector):
     fig = plt.figure()
     ax = fig.add_subplot(111)
 
+    # 设置X轴标签
+    plt.xlabel('phone gray score')
+    # 设置Y轴标签
+    plt.ylabel('register_org_cnt')
+
     # 这里将喜欢不喜欢这一向量数据映射到了点的颜色上，用来区分不同情况
     # 最大的圈圈是黄色来表示的，看的出来
-    # phone_gray_score 6，behavior_check_score 7，contact_loan 12
-    ax.scatter(matr[:, 0], matr[:, 2], 20.0 * array(classVector), 20.0 * array(classVector))
-    # ax.scatter(matr[:, 1], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector))
+    # phone_gray_score 0，register_org_cnt 1，searched_org_cnt 2 behavior_check_score 3
+    # contact_loan 4   call_count 5  called_count 6    做一个简单的数据分析
+    # ax.scatter(matr[:, 0], matr[:, 1], 20.0 * array(classVector), 20.0 * array(classVector))
+    # ax.scatter(matr[:, 0], matr[:, 5], 20.0 * array(classVector), 20.0 * array(classVector))
+    ax.scatter(matr[:, 0], matr[:, 6], 20.0 * array(classVector), 20.0 * array(classVector))
 
-    # ax.scatter(matr[:, 0], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector))
     plt.show()
 
 #  画出3D图像
@@ -404,8 +457,19 @@ def draw3DMap(matr,classVector):
     fig = plt.figure()
     ax = Axes3D(fig)
     #  分别设置三个坐标轴代表的数据，把数据的类别 1 2 3 映射到散点数据点的大小size，和 数据点的颜色
-    # 我们把第三维的数据加上去以后，发现第三维的数据和数据类别标签之间并没有特别明显的关系，不如第一个特征和第二个特征明显
-    ax.scatter(matr[:, 0], matr[:, 1], matr[:, 2], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector), depthshade=True)
+    # phone_gray_score 0，register_org_cnt 1，searched_org_cnt 2 behavior_check_score 3
+    # contact_loan 4   call_count 5  called_count 6
+
+    # plt.xlim()
+    # ax.scatter(matr[:, 0], matr[:, 1], matr[:, 4], matr[:, 2], 8.0 * array(classVector), 8.0 * array(classVector), depthshade=True)
+    plt.ylim(0, 50)
+    ax.scatter(matr[:, 0], matr[:, 1], matr[:, 5], matr[:, 2], 10.0 * array(classVector), 10.0 * array(classVector), depthshade=True)
+    # ax.scatter(matr[:, 0], matr[:, 5], matr[:, 6], matr[:, 2], 10.0 * array(classVector), 10.0 * array(classVector), depthshade=True)
+    # ax.scatter(matr[:, 4], matr[:, 5], matr[:, 6], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector), depthshade=True)
+
+    # plt.xlim(0,50);plt.ylim(0,50)
+    # ax.scatter(matr[:, 1], matr[:, 5], matr[:, 6], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector), depthshade=True)
+
     plt.show()
 
 # 根据特征画出折线图
@@ -426,15 +490,18 @@ def drawLineMap(matr):
 if __name__ == '__main__':
     carr_path = 'D:/Develop/test/carrier/carr_data/'
     risk_path = 'D:/Develop/test/carrier/risk_score/risk_data_new.txt'
-    report_path = 'D:/Develop/test/carrier/report_var/report_var_new.txt'
+    report_path = 'D:/Develop/test/carrier/report_var/report_add_call_val.txt'
+
+    # 提取特征 到文件
     # list = read_risk_data(risk_path)
     # print(list)
     # loop_file(carr_path,list)
 
+    # 分析
     data_matr, classLabelVector = data_handler(report_path)
     # # 画出散点图
-    # print(data_matr)
-    # print(classLabelVector)
+    print(data_matr)
+    print(classLabelVector)
     # drowMap(data_matr, classLabelVector)
     #
     draw3DMap(data_matr, classLabelVector)

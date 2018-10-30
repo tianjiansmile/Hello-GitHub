@@ -9,19 +9,24 @@
 特种服务通话次数                                              special_count                 3
 铁路航空通话次数                                              airplan_count                 4
 contact_region 联系地区总数                                  contact_region_count           5
-user_info_check-check_black_info                             phone_gray_score               6
+用户号码联系黑中介分数 参考分为40，分数越低关系越紧密）      phone_gray_score               6
+电话号码注册过的相关企业数量								register_org_cnt                7
+查询过该用户的相关企业数量（姓名+身份证+电话号码）			searched_org_cnt                8
 
-behavior_check 通话行为监测得分总数                          behavior_check_score           7
-contact_each_other 互通过电话的号码数量                      contact_each_other_result      8
-contact_110 与110电话通话情况                                contact_110_result             9
-contact_lawyer 与律师电话通话情况                            contact_lawyer_result          10
-contact_court 与法院电话通话情况                             contact_court_result           11
-contact_loan 与贷款类号码联系情况                            contact_loan_result            12
+behavior_check 通话行为监测得分总数                          behavior_check_score           9
+contact_each_other 互通过电话的号码数量                      contact_each_other_result      10
+contact_110 与110电话通话情况                                contact_110_result             11
+contact_lawyer 与律师电话通话情况                            contact_lawyer_result          12
+contact_court 与法院电话通话情况                             contact_court_result           13
+contact_loan 与贷款类号码联系情况                            contact_loan_result            14
 
 evidence联系列表：
-contact_bank 与银行类号码联系情况                            contact_bank_result            13
-contact_credit_card 与信用卡类号码联系情况                   contact_credit_card_result     14
-contact_night：夜间活动情况                                  contact_night_result           15
+contact_bank 与银行类号码联系情况                            contact_bank_result            15
+contact_credit_card 与信用卡类号码联系情况                   contact_credit_card_result     16
+contact_night：夜间活动情况                                  contact_night_result           17
+
+主动call贷款类号码次数                                        call_count                    18            
+被 call贷款类号码次数                                         called_count                  19
 
 loanStatus	String	是否放款	N:未放款  Y:已放款
 
