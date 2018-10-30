@@ -2,6 +2,7 @@
 
 from numpy import *
 import matplotlib.pyplot as plt
+import os
 
 # 需要提前知道的一些东西
 # 原本的问题是，我们只需要把数据特征给输入进去，那么这个模型就要给出分类结果
@@ -16,7 +17,7 @@ import matplotlib.pyplot as plt
 def loadDataSet():
     dataMat = []
     labelMat = []
-    fr = open('E:/personal/test/testSet.txt')
+    fr = open(os.getcwd()+'/testSet.txt')
     for line in fr.readlines():
         lineArr = line.strip().split()
         dataMat.append([1.0,float(lineArr[0]),float(lineArr[1])])
