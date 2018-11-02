@@ -443,12 +443,12 @@ def drowMap(matr,classVector):
     plt.ylabel('register_org_cnt')
 
     # 这里将喜欢不喜欢这一向量数据映射到了点的颜色上，用来区分不同情况
-    # 最大的圈圈是黄色来表示的，看的出来
+    # 最大的圈圈是黄色来表示的，
     # phone_gray_score 0，register_org_cnt 1，searched_org_cnt 2 behavior_check_score 3
     # contact_loan 4   call_count 5  called_count 6    做一个简单的数据分析
     # ax.scatter(matr[:, 0], matr[:, 1], 20.0 * array(classVector), 20.0 * array(classVector))
-    # ax.scatter(matr[:, 0], matr[:, 5], 20.0 * array(classVector), 20.0 * array(classVector))
-    ax.scatter(matr[:, 0], matr[:, 6], 20.0 * array(classVector), 20.0 * array(classVector))
+    # ax.scatter(matr[:, 0], matr[:, 6], 20.0 * array(classVector), 20.0 * array(classVector))
+    ax.scatter(matr[:, 0], matr[:, 6], 8.0 * array(classVector), 8.0 * array(classVector))
 
     plt.show()
 
@@ -462,13 +462,13 @@ def draw3DMap(matr,classVector):
 
     # plt.xlim()
     # ax.scatter(matr[:, 0], matr[:, 1], matr[:, 4], matr[:, 2], 8.0 * array(classVector), 8.0 * array(classVector), depthshade=True)
-    plt.ylim(0, 50)
-    ax.scatter(matr[:, 0], matr[:, 1], matr[:, 5], matr[:, 2], 10.0 * array(classVector), 10.0 * array(classVector), depthshade=True)
+    # plt.ylim(0, 50)
+    # ax.scatter(matr[:, 0], matr[:, 1], matr[:, 5], matr[:, 2], 10.0 * array(classVector), 10.0 * array(classVector), depthshade=True)
     # ax.scatter(matr[:, 0], matr[:, 5], matr[:, 6], matr[:, 2], 10.0 * array(classVector), 10.0 * array(classVector), depthshade=True)
     # ax.scatter(matr[:, 4], matr[:, 5], matr[:, 6], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector), depthshade=True)
 
-    # plt.xlim(0,50);plt.ylim(0,50)
-    # ax.scatter(matr[:, 1], matr[:, 5], matr[:, 6], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector), depthshade=True)
+    plt.xlim(0,50);plt.ylim(0,50)
+    ax.scatter(matr[:, 1], matr[:, 5], matr[:, 6], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector), depthshade=True)
 
     plt.show()
 

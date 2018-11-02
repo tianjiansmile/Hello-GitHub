@@ -6,8 +6,7 @@ import sys
 from mpl_toolkits.mplot3d import Axes3D
 
 # 不同级包下的文件调用
-# from ..logistic import logRegres
-sys.path.append(os.getcwd() + '/logistic')
+from com.jian.logistic import logRegres
 
 class matplot:
     def __init__(self):
@@ -28,7 +27,7 @@ class matplot:
         # contact_loan 4   call_count 5  called_count 6    做一个简单的数据分析
         # ax.scatter(matr[:, 0], matr[:, 1], 20.0 * array(classVector), 20.0 * array(classVector))
         # ax.scatter(matr[:, 0], matr[:, 5], 20.0 * array(classVector), 20.0 * array(classVector))
-        ax.scatter(matr[:, 0], matr[:, 1], 20.0 * array(classVector), 20.0 * array(classVector))
+        ax.scatter(matr[:, 1], matr[:, 2], 20.0 * array(classVector), 20.0 * array(classVector))
 
         plt.show()
 
@@ -69,10 +68,61 @@ class matplot:
         plt.show()
         # python 一个折线图绘制多个曲线
 
+    def type_check(self,item):
+        try:
+            data_type = 'list'
+            if type(item).__name__ == 'list':
+                data_type = 'list'
+            elif type(item).__name__ == 'dict':
+                data_type = 'dict'
+            elif type(item).__name__ == 'str':
+                data_type = 'str'
+            elif type(item).__name__ == 'int':
+                data_type = 'int'
+            else:
+                data_type = 'undefined'
+
+            return data_type
+        except:
+            print("数据类型判断异常,%s" % str(item))
+
+    # 转化数据标签从0 1 到其他值，
+    def tranfrom(self,labelMat):
+        data_type = self.type_check(labelMat)
+        if data_type == 'list':
+            field_type = self.type_check(labelMat[0])
+            if field_type == 'int':
+                count = 0
+                for label in labelMat:
+                    if label == 0:
+                        labelMat[count] = 1
+                    else:
+                        labelMat[count] = 3
+                    count +=1
+
+
+            elif field_type == 'str':
+                count = 0
+                for label in labelMat:
+                    if int(label) == 0:
+                        labelMat[count] = 1
+                    else:
+                        labelMat[count] = 3
+                    count += 1
+            else:
+                print(field_type)
+
+        return labelMat
+
 if __name__ == '__main__':
     mat_plot = matplot()
-    print(os.getcwd())
 
     dataMat,labelMat = logRegres.loadDataSet()
 
-    mat_plot.drowMap(dataMat,labelMat)
+    data_matr = array(dataMat)
+    # print(shape(data_matr))
+    labelMat = mat_plot.tranfrom(labelMat)
+
+    # print(data_matr,labelMat)
+
+    mat_plot.drowMap(data_matr,labelMat)

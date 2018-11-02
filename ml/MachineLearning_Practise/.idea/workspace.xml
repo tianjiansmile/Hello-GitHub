@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c4fc27fd-bacb-449b-bbb7-0af963c91b94" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/com/jian/logistic/testSet.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/com/jian/matplotlib/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/com/jian/matplotlib/matplot.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/com/jian/matplotlib/testSet.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com/jian/logistic/logRegres.py" beforeDir="false" afterPath="$PROJECT_DIR$/com/jian/logistic/logRegres.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com/carrier/person_analysis.py" beforeDir="false" afterPath="$PROJECT_DIR$/com/carrier/person_analysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/com/jian/matplotlib/matplot.py" beforeDir="false" afterPath="$PROJECT_DIR$/com/jian/matplotlib/matplot.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../ml_document/运营商数据特征提取.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../ml_document/运营商数据特征提取.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -52,24 +52,25 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="10" />
-          <entry key="txt" value="2" />
+          <entry key="data" value="1" />
+          <entry key="py" value="12" />
+          <entry key="txt" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="PLAIN_TEXT" value="2" />
-          <entry key="Python" value="10" />
+          <entry key="PLAIN_TEXT" value="9" />
+          <entry key="Python" value="12" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="3553" />
+          <entry key="py" value="3915" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Python" value="3553" />
+          <entry key="Python" value="3915" />
         </counts>
       </usages-collector>
     </session>
@@ -97,22 +98,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/com/carrier/person_analysis.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="121">
-              <caret line="227" column="24" selection-start-line="227" selection-start-column="24" selection-end-line="227" selection-end-column="24" />
+            <state relative-caret-position="-473">
+              <caret line="467" column="23" lean-forward="true" selection-start-line="467" selection-start-column="23" selection-end-line="467" selection-end-column="23" />
               <folding>
                 <element signature="e#24#43#0" expanded="true" />
                 <element signature="e#942#2319#0" />
                 <element signature="e#2382#2745#0" />
+                <element signature="e#5687#8046#0" />
                 <element signature="e#6163#6746#0" />
                 <element signature="e#6684#7105#0" />
                 <element signature="e#10472#11774#0" />
                 <element signature="e#9384#9533#0" />
-                <marker date="1540889723212" expanded="true" signature="12490:12493" ph="..." />
-                <marker date="1540889723212" expanded="true" signature="13350:13973" ph="..." />
-                <marker date="1540889723212" expanded="true" signature="14088:17706" ph="..." />
+                <marker date="1540981102205" expanded="true" signature="12490:12493" ph="..." />
+                <marker date="1540981102205" expanded="true" signature="13350:13973" ph="..." />
+                <marker date="1540981102205" expanded="true" signature="14088:17700" ph="..." />
               </folding>
             </state>
           </provider>
@@ -128,10 +130,22 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/com/jian/matplotlib/matplot.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="132">
+              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+              <folding>
+                <marker date="1540897862423" expanded="true" signature="207:245" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/com/jian/logistic/logRegres.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="253">
-              <caret line="25" column="27" lean-forward="true" selection-start-line="25" selection-start-column="11" selection-end-line="25" selection-end-column="27" />
+              <caret line="22" column="27" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="27" />
               <folding>
                 <element signature="e#25#44#0" expanded="true" />
               </folding>
@@ -139,15 +153,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/com/jian/matplotlib/matplot.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/com/jian/matplotlib/testSet.txt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="264">
-              <caret line="12" selection-start-line="12" selection-end-line="12" />
-              <folding>
-                <element signature="e#24#43#0" expanded="true" />
-                <marker date="1540895147321" expanded="true" signature="245:283" ph="..." />
-              </folding>
+            <state relative-caret-position="154">
+              <caret line="7" column="25" lean-forward="true" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
             </state>
           </provider>
         </entry>
@@ -177,8 +187,8 @@
         <option value="$PROJECT_DIR$/com/carrier/data_download.py" />
         <option value="$PROJECT_DIR$/com/jian/boosting/adaboost.py" />
         <option value="$PROJECT_DIR$/com/jian/logistic/logRegres.py" />
-        <option value="$PROJECT_DIR$/com/carrier/person_analysis.py" />
         <option value="$PROJECT_DIR$/com/jian/matplotlib/matplot.py" />
+        <option value="$PROJECT_DIR$/com/carrier/person_analysis.py" />
       </list>
     </option>
   </component>
@@ -232,7 +242,7 @@
               <item name="MachineLearning_Practise" type="462c0819:PsiDirectoryNode" />
               <item name="com" type="462c0819:PsiDirectoryNode" />
               <item name="jian" type="462c0819:PsiDirectoryNode" />
-              <item name="logistic" type="462c0819:PsiDirectoryNode" />
+              <item name="data" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MachineLearning_Practise" type="b2602c69:ProjectViewProjectNode" />
@@ -257,11 +267,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\github\Hello-GitHub\ml\MachineLearning_Practise\com\jian\matplotlib" />
       <recent name="D:\github\Hello-GitHub\ml\MachineLearning_Practise\com\jian\logistic" />
       <recent name="D:\github\Hello-GitHub\ml\MachineLearning_Practise\com\jian\knn" />
       <recent name="D:\development\MachineLearning_Practise\com\jian\pca" />
       <recent name="D:\development\MachineLearning_Practise\com\jian\data" />
-      <recent name="D:\development\MachineLearning_Practise\com\test" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -276,7 +286,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.matplot">
+  <component name="RunManager" selected="Python.person_analysis">
     <configuration name="data_download" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="MachineLearning_Practise" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -393,10 +403,10 @@
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.person_analysis" />
         <item itemvalue="Python.matplot" />
         <item itemvalue="Python.logRegres" />
         <item itemvalue="Python.pca" />
-        <item itemvalue="Python.person_analysis" />
         <item itemvalue="Python.data_download" />
       </list>
     </recent_temporary>
@@ -416,14 +426,13 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.15252976" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.15252976" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32909605" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.31914893" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.31914893" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.40261865" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -474,7 +483,6 @@
     <entry file="file://D:/Program Files (x86)/Python2.7/Lib/site-packages/numpy/core/fromnumeric.py" />
     <entry file="file://$PROJECT_DIR$/com/jian/data/testSet_pca.txt" />
     <entry file="file://$PROJECT_DIR$/com/jian/pca/testSet_pca.txt" />
-    <entry file="file://$PROJECT_DIR$/com/jian/data/secom.data" />
     <entry file="file://$PROJECT_DIR$/com/jian/pca/secom.data" />
     <entry file="file://$PROJECT_DIR$/com/jian/pca/secom" />
     <entry file="file://$PROJECT_DIR$/com/test/comparyData1.py" />
@@ -518,13 +526,6 @@
     <entry file="file://$PROJECT_DIR$/com/jian/logistic/testSet.txt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/com/jian/pca/pca.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="253">
-          <caret line="86" column="38" selection-start-line="86" selection-start-column="26" selection-end-line="86" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://C:/Program Files/Python36/Lib/site-packages/mpl_toolkits/mplot3d/axes3d.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="129">
@@ -539,42 +540,59 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/com/carrier/person_analysis.py">
+    <entry file="file://$PROJECT_DIR$/com/jian/pca/pca.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="121">
-          <caret line="227" column="24" selection-start-line="227" selection-start-column="24" selection-end-line="227" selection-end-column="24" />
-          <folding>
-            <element signature="e#24#43#0" expanded="true" />
-            <element signature="e#942#2319#0" />
-            <element signature="e#2382#2745#0" />
-            <element signature="e#6163#6746#0" />
-            <element signature="e#6684#7105#0" />
-            <element signature="e#10472#11774#0" />
-            <element signature="e#9384#9533#0" />
-            <marker date="1540889723212" expanded="true" signature="12490:12493" ph="..." />
-            <marker date="1540889723212" expanded="true" signature="13350:13973" ph="..." />
-            <marker date="1540889723212" expanded="true" signature="14088:17706" ph="..." />
-          </folding>
+        <state relative-caret-position="253">
+          <caret line="86" column="38" selection-start-line="86" selection-start-column="26" selection-end-line="86" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/com/jian/matplotlib/testSet.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="154">
+          <caret line="7" column="25" lean-forward="true" selection-start-line="7" selection-start-column="25" selection-end-line="7" selection-end-column="25" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/com/jian/logistic/logRegres.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="253">
-          <caret line="25" column="27" lean-forward="true" selection-start-line="25" selection-start-column="11" selection-end-line="25" selection-end-column="27" />
+          <caret line="22" column="27" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="27" />
           <folding>
             <element signature="e#25#44#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/com/jian/data/secom.data">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/com/jian/matplotlib/matplot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="264">
-          <caret line="12" selection-start-line="12" selection-end-line="12" />
+        <state relative-caret-position="132">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+          <folding>
+            <marker date="1540897862423" expanded="true" signature="207:245" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/com/carrier/person_analysis.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-473">
+          <caret line="467" column="23" lean-forward="true" selection-start-line="467" selection-start-column="23" selection-end-line="467" selection-end-column="23" />
           <folding>
             <element signature="e#24#43#0" expanded="true" />
-            <marker date="1540895147321" expanded="true" signature="245:283" ph="..." />
+            <element signature="e#942#2319#0" />
+            <element signature="e#2382#2745#0" />
+            <element signature="e#5687#8046#0" />
+            <element signature="e#6163#6746#0" />
+            <element signature="e#6684#7105#0" />
+            <element signature="e#10472#11774#0" />
+            <element signature="e#9384#9533#0" />
+            <marker date="1540981102205" expanded="true" signature="12490:12493" ph="..." />
+            <marker date="1540981102205" expanded="true" signature="13350:13973" ph="..." />
+            <marker date="1540981102205" expanded="true" signature="14088:17700" ph="..." />
           </folding>
         </state>
       </provider>
