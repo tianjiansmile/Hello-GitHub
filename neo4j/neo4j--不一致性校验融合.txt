@@ -1,0 +1,27 @@
+	
+不一致性校验
+针对当前反欺诈网络里面存在的一些资源节点存在的问题，比如 companyname 多个人实际同属一个公司，
+但是填写时公司字符串不能匹配，这样多个人同属一个公司的关系就无法建立了，还有比如address这种几点存在同样的问题
+这里我们就需要进行节点融合。
+具体方案是：
+1 查出可以节点之间的相似度，给出可疑节点列表
+    这里在本地模拟了这种不一致的情况
+	(Laurence)-[:ACTED_IN {roles:['Morpheus']}]->(TheMatrixs), 写进去的时候这个关系	TheMatrixs 多了一个s	
+     (ValK)-[:ACTED_IN {roles:['Iceman']}]->(TopGuns),		  同样的，这里模拟 节点输入时的错误 
+	 
+	 导致整个网络中有一些关系是错误的
+	 
+	 match (lf:Person {name:"Laurence Fishburne"})-[rel:ACTED_IN]->(tomMovie) return lf,rel,tomMovie
+	 match (lf:Person {name:"Laurence Fishburne"})-[rel:ACTED_IN]->(tomMovie)<-[rels:ACTED_IN]-(other:Person)  return lf,tomMovie,other
+
+2 对节点关系进行修改
+   拿到需要修改的节点和关系数据之后可以构造cypher语句，进行更新
+		
+
+	对这两个模拟出错的节点进行融合
+	match (p:Person)-[rel:ACTED_IN]->(movie) return p,movie  查询所有ACTED_IN关系数据
+	最后对节点和关系进行修改
+	1 删除错误的关系和节点
+	match (p:Person {name:"Laurence Fishburne"})-[rel:ACTED_IN]->(m: Movie {title:"The Matrixs"}) delete rel,m
+	2 创建新的关系
+	merge (p:Person {name:"Laurence Fishburne"})-[rel:ACTED_IN {roles:['Morpheus']}]->(m: Movie {title:"The Matrix"})
