@@ -1,0 +1,50 @@
+
+neo4j 图算法社区  https://neo4j.com/developer/graph-algorithms/#_installation
+
+Comprehensive Guide to neo4j Graph Algorithms： https://go.neo4j.com/rs/710-RRC-335/images/Comprehensive-Guide-to-Graph-Algorithms-in-Neo4j-ebook-EN-US.pdf?_ga=2.52125801.1163163276.1541660433-1539277440.1541394781
+
+1 社交网络图的聚类   https://blog.csdn.net/liveway6/article/details/78327108
+
+  1中介度  betweenness
+
+查找两个节点之间的最短路径 跳数在10以内
+MATCH (p1:Person {name:"Jonathan Lipnicki"}),(p2:Person{name:"Joel Silver"}), p=shortestpath((p1)-[*..10]-(p2)) RETURN p
+查找两个节点之间的所有最短路径 跳数在10以内
+MATCH (p1:Person {name:"Jonathan Lipnicki"}),(p2:Person{name:"Joel Silver"}), p=allshortestpaths((p1)-[*..10]-(p2)) RETURN p
+删除所有
+MATCH (a)-[r1]-(), (m)-[r2]-() DELETE a,r1,m,r2
+
+   networkx与neo4j图算法的对比
+   
+   基于最短路径的中心度算法
+   betweenness_centrality：网络中任意两个节点的所有最短路径，如果这些最短路径中有很多条都经过了某个节点，那么就认为这个节点的Betweenness Centrality高
+   closeness_centrality：如果节点到图中其它节点的最短距离都很小，那么我们认为该节点的Closeness Centrality高，
+                         从几何上更符合中心度的概念，因为到其它节点的平均最短距离最小，意味着这个节点从几何角度看是出于图的中心位置
+						 大数据量下，经典的Closeness Centrality和Betwenness Centrality几乎都是不可计算的
+						 
+   harmonic_centrality：接近中心度的代替方案：计算的是一个点到其他所有点的距离的总和，这个总和越小就说明这个点到其他所有点的路径越短，也就说明这个点距离其他所有点越近
+   
+   利用中介度来发现社区
+	常见做法：是从一个包含全部边的中介度，不断去掉具有最高中介度的边，直到图分裂为合适数目的连通分量为止。
+	存在的局限性：不可能把一个节点分配到两个社区中，这导致每个节点最终都分配到各自社区中。
+	
+   基于反馈的中心度算法
+   PageRank：
+   Triangles：环路检测
+   
+   聚类系数
+   Clustering Coefficient：聚集系数是表示一个图形中节点聚集程度的系数，证据显示，在现实中的网络中，尤其是在特定的网络中，由于相对高密度连接点的关系，
+                           节点总是趋向于建立一组严密的组织关系。在现实世界的网络，这种可能性往往比两个节点之间随机设立了一个连接的平均概率更大。
+   Average Clustering Coefficient：全局聚类系数
+
+   标签传播算法
+   Label Propagation： 是一种半监督聚类算法；它在聚类算法中的特点是聚类速度快，但聚类结果随机。
+					   1.为所有节点指定一个唯一的标签； 2.逐轮刷新所有节点的标签，直到达到收敛要求为止。对于每一轮刷新，节点标签刷新的规则如下: 
+					   对于某一个节点，考察其所有邻居节点的标签，并进行统计，将出现个数最多的那个标签赋给当前节点。当个数最多的标签不唯一时，随机选一个。  
+                       这里有两篇标签传播算法的改进： 
+						1.Community Detection Using A Neighborhood strenghth driven 
+						(http://arxiv.org/abs/1105.3264) 
+						2.融入节点重要性和标签影响力的标签传播社区发现算法 
+						(http://xwxt.sict.ac.cn/CN/abstract/abstract2843.shtml
+	shortest_path：最短路径
+			   

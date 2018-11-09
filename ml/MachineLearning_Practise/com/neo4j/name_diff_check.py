@@ -22,19 +22,20 @@ class Neo4jHandler:
                 person = keys[0];movie = keys[1]
                 result = tx.run(cypher)
                 for record in result:
+                    # print(record)
                     # 查看一个未知对象的类型  查询到的是对象和对象的嵌套， <Record: <Node: person>, <Node:movie>>
                     # type(record)
                     # 查看一个对象的所有方法
                     p_id = record[person].id
                     m_id = record[movie].id
 
-                    p = dict(record[person])
-                    p['p_id'] = p_id
+                    # p = dict(record[person])
                     m = dict(record[movie])
                     m['m_id'] = m_id
+                    m['p_id'] = p_id
                     # 合并两个字典
-                    p_m = dict(p,**m)
-                    data.append(p_m)
+                    # p_m = dict(p,**m)
+                    data.append(m)
 
                 return data
 
@@ -46,49 +47,62 @@ class Neo4jHandler:
         with self.driver.session() as session:
             with session.begin_transaction() as tx:
                 result = tx.run(cypher)
-                return result
+                for item in result:
+                    type = public_function.type_check(item)
+                    # json.load(item)
+                    print(type,item)
         session.close()
 
-    # 对电影名称进行相似度检查， data里面每三元组是一个字典
+    # 对公司名称进行相似度检查， data里面每三元组是一个字典
     def moviename_check(self,data,field):
         # title 提纯
         movie_name = [di.get(field) for di in data]
+        print('before',len(data), len(movie_name))
         movie_name = list(set(movie_name))
-        # print(movie_name)
+        print('after',len(movie_name))
 
         # 字符相似度的阈值
         threadhold = 0.8
-        # 过滤出相似度高于阈值的name
+        # 1 过滤出相似度高于阈值的name
         similar = [(name,n,difflib.SequenceMatcher(None, name, n).quick_ratio()) for name in movie_name
                    for n in movie_name if name!=n and difflib.SequenceMatcher(None, name, n).quick_ratio() > threadhold]
         print(len(similar),similar)
         print(data)
 
-        # 找到需要merger 的movie节点id 进行merge 也就是说 找到错误movie节点的id
-        # 手动筛查 Top Guns 和 The Matrixs 需要进行merge
-        merge_ids = {'Top Guns':0,'Top Gun':0,'The Matrixs':0,'The Matrix':0}
-        fault_title = [('Top Guns','Top Gun'),('The Matrixs','The Matrix')]
-        for fau in fault_title:
-            for record in data:
-                if record.get('title') == fau[0]:
-                    fault_id = record.get('m_id')
-                    merge_ids[fau[0]] = int(fault_id)
-                if record.get('title') == fau[1]:
-                    fault_id = record.get('m_id')
-                    merge_ids[fau[1]] = int(fault_id)
+
+        # 2 手动筛查,标记出两个相似节点中，正确节点和错误节点
+
+        # 对相似节点的数据整理，记录下每一个问题节点的id和对应person的id
+        # 手动筛查
+        final = {}
+        for sim in similar:
+            name = sim[0]
+            temp = []
+            for re in data:
+                if re.get('nodeID') == name:
+                    temp.append(re.get('p_id'))
+                    temp.append(re.get('m_id'))
+                    final[name] = temp
+            print(name,final[name])
 
 
-        print(merge_ids)
+
+
+        # print(merge_ids)
 
 
 
 if __name__ == "__main__":
-    uri = "bolt://localhost:7687"
+    uri = "bolt://pro3:7687"
     driver = GraphDatabase.driver(uri, auth=("neo4j", "123456"))
 
     my_neo4j = Neo4jHandler(driver)
     # print(my_neo4j)
-    cypher_read = 'match (p:Person)-[rel:ACTED_IN]->(movie) return p,movie'
-    data = my_neo4j.listreader(cypher_read,['p','movie'])
-    my_neo4j.moviename_check(data,'title')
+    company_cypher_read = 'match (p:PERSON)-[rel:HAS_COMPANYNAME]->(com:COMPANYNAME) return p,com limit 1000'
+    address_cypher_read = 'match (p:PERSON)-[rel]->(com:ADDRESS) return p,com limit 100'
+    data = my_neo4j.listreader(company_cypher_read,['p','com'])
+    my_neo4j.moviename_check(data,'nodeID')
+
+    # data = my_neo4j.listreader(address_cypher_read, ['p', 'com'])
+    # my_neo4j.moviename_check(data, 'nodeID')
 
