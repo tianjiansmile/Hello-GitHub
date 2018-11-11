@@ -2,3 +2,4 @@ neo4j 数据可视化开源社区 https://neo4j.com/graph-visualization-neo4j/
                          https://neo4j.com/developer/graph-visualization/
 						 
 利用Gephi 对neo4j数据进行可视化
+   可以将逾期用户和黑名单用户进行标记，然后可视化先观察一下这些用户的社交情况
