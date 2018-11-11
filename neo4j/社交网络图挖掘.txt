@@ -1,7 +1,13 @@
 
 neo4j 图算法社区  https://neo4j.com/developer/graph-algorithms/#_installation
 
+neo4j 结合spark  https://www.jianshu.com/p/8bef80b9acfc
+
+neo4j社区 反欺诈项目  https://neo4j.com/graphgist/bank-fraud-detection
+
 Comprehensive Guide to neo4j Graph Algorithms： https://go.neo4j.com/rs/710-RRC-335/images/Comprehensive-Guide-to-Graph-Algorithms-in-Neo4j-ebook-EN-US.pdf?_ga=2.52125801.1163163276.1541660433-1539277440.1541394781
+
+专业的图挖掘社区以及可视化项目 https://linkurio.us/blog/category/use-case/
 
 1 社交网络图的聚类   https://blog.csdn.net/liveway6/article/details/78327108
 
