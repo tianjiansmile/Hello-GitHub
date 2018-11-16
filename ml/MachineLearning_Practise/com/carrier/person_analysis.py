@@ -7,7 +7,7 @@ import sys
 import operator
 from mpl_toolkits.mplot3d import Axes3D
 
-# 主要用于提取用户变量
+# 主要用于提取用户变量，对运营商统计报告做数据项分析
 class variable_person:
 
     def __init__(self,filepath,filename):
