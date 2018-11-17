@@ -7,11 +7,13 @@ neo4j社区 反欺诈项目  https://neo4j.com/graphgist/bank-fraud-detection
 
 Comprehensive Guide to neo4j Graph Algorithms： https://go.neo4j.com/rs/710-RRC-335/images/Comprehensive-Guide-to-Graph-Algorithms-in-Neo4j-ebook-EN-US.pdf?_ga=2.52125801.1163163276.1541660433-1539277440.1541394781
 
-专业的图挖掘社区以及可视化项目 https://linkurio.us/blog/category/use-case/
+
+社区发现(Community Detection)算法 利用了 Gephi 可视化  利用 GraphChi 进行海量数据图计算 https://blog.csdn.net/cleverlzc/article/details/39494957
+
 
 1 社交网络图的聚类   https://blog.csdn.net/liveway6/article/details/78327108
 
-  1中介度  betweenness
+
 
 查找两个节点之间的最短路径 跳数在10以内
 MATCH (p1:Person {name:"Jonathan Lipnicki"}),(p2:Person{name:"Joel Silver"}), p=shortestpath((p1)-[*..10]-(p2)) RETURN p
@@ -21,7 +23,8 @@ MATCH (p1:Person {name:"Jonathan Lipnicki"}),(p2:Person{name:"Joel Silver"}), p=
 MATCH (a)-[r1]-(), (m)-[r2]-() DELETE a,r1,m,r2
 
    networkx与neo4j图算法的对比
-   
+
+1 centrality  
    基于最短路径的中心度算法
    betweenness_centrality：网络中任意两个节点的所有最短路径，如果这些最短路径中有很多条都经过了某个节点，那么就认为这个节点的Betweenness Centrality高
    closeness_centrality：如果节点到图中其它节点的最短距离都很小，那么我们认为该节点的Closeness Centrality高，
@@ -36,8 +39,10 @@ MATCH (a)-[r1]-(), (m)-[r2]-() DELETE a,r1,m,r2
 	
    基于反馈的中心度算法
    PageRank：
-   Triangles：环路检测
    
+   
+2 community_detection:
+
    聚类系数
    Clustering Coefficient：聚集系数是表示一个图形中节点聚集程度的系数，证据显示，在现实中的网络中，尤其是在特定的网络中，由于相对高密度连接点的关系，
                            节点总是趋向于建立一组严密的组织关系。在现实世界的网络，这种可能性往往比两个节点之间随机设立了一个连接的平均概率更大。
@@ -52,5 +57,56 @@ MATCH (a)-[r1]-(), (m)-[r2]-() DELETE a,r1,m,r2
 						(http://arxiv.org/abs/1105.3264) 
 						2.融入节点重要性和标签影响力的标签传播社区发现算法 
 						(http://xwxt.sict.ac.cn/CN/abstract/abstract2843.shtml
-	shortest_path：最短路径
+	
+	
+	LOUVAIN——社交网络挖掘之大规模网络的社区发现算法  https://blog.csdn.net/xuanyuansen/article/details/68941507
+	Louvain算法是基于模块度（Modularity）的社区发现算法，该算法在效率和效果上都表现比较好，
+	并且能够发现层次性的社区结构，其优化的目标是最大化整个图属性结构（社区网络）的模块度。
+	a、易于理解；b、非监督；和c、计算快速，最后我们可以得到的结果是层次化的社区发现结果。
+	其中需要理解的核心点有：
+	a、模块度Modularity的定义，这个定义是描述社区内紧密程度的值Q；
+	b、模块度增量delta Q，即把一个孤立的点放入一个社区C后，计算Modularity的变化，其中计算过程的要点是，首先计算1个点的Modularity，
+	和社区C的Modularity，再计算合并后新社区的Modularity，新社区的Modularity减去前两个Modularity就是delta Q。
+	CALL algo.louvain.stream("John", "CONNECTED")
+	YIELD nodeId, communities
+	RETURN algo.getNodeById(nodeId).id AS libraries, communities
+	
+	强连通分量 SCC
+	
+	Triangles：环路检测
+	
+	并查集（Union-Find）是解决动态连通性问题的一类非常高效的数据结构
+	CALL algo.unionFind.stream("John", "CONNECTED")
+	YIELD nodeId,setId
+	RETURN setId, collect(algo.getNodeById(nodeId)) AS libraries
+	ORDER BY size(libraries) DESC
+
+path finding
+	
+	allShortestPaths: 所有的最短路径
+	CALL algo.allShortestPaths.stream("Todd")
+	YIELD sourceNodeId, targetNodeId, distance
+	WHERE sourceNodeId < targetNodeId
+	RETURN algo.getNodeById(sourceNodeId).id AS source,
+		   algo.getNodeById(targetNodeId).id AS target,
+		   distance
+	ORDER BY distance DESC
+	LIMIT 10
+	
+	randomWalk：随机游走的基本思想是将图像看成由固定的顶点和边组成的连通带权无向图，RandomWalk从未标记顶点开始随机漫步，
+	首次到达各类标记顶点的概率代表了未标记点归属于标记类的可能性，把最大的概率所在类的标签赋给未标记顶点，完成分割
+	MATCH (source:Node {id: "John"})
+	CALL algo.randomWalk.stream(id(source), 5, 1)
+	YIELD nodeIds
+	UNWIND algo.getNodesById(nodeIds) AS place
+	RETURN place.id AS place
+	
+	spanningTree.minimum： 给定一个无向图，如果他的某个子图中，任意两个顶点都能互相连通并且是一棵树，那么这棵树就叫做生成树（spanning tree）.
+    如果边上有权值，那么使得边权和最小的生成树叫做最小生成树（MST，Minimum Spanning Tree）
+	MATCH (n:Node {id:"Amsterdam"})
+	CALL algo.spanningTree.minimum("Node", "Node", "connected", id(n),
+	  {write:true, writeProperty:"MINST"})
+	YIELD loadMillis, computeMillis, writeMillis, effectiveNodeCount
+	RETURN loadMillis, computeMillis, writeMillis, effectiveNodeCount
+
 			   

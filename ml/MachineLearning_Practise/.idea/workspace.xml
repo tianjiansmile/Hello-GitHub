@@ -2,10 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="c4fc27fd-bacb-449b-bbb7-0af963c91b94" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/MachineLearning_Practise.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/MachineLearning_Practise.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/com/neo4j/handle_neo4j.py" beforeDir="false" afterPath="$PROJECT_DIR$/com/neo4j/handle_neo4j.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../neo4j/社交网络可视化.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../neo4j/neo4j-project/Neo4jGraphAnalytics/networkx-neo4j" beforeDir="false" afterPath="$PROJECT_DIR$/../../neo4j/neo4j-project/Neo4jGraphAnalytics/networkx-neo4j" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../neo4j/社交网络图挖掘.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../neo4j/社交网络图挖掘.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -285,12 +284,6 @@
               <item name="MachineLearning_Practise" type="462c0819:PsiDirectoryNode" />
               <item name="com" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="MachineLearning_Practise" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MachineLearning_Practise" type="462c0819:PsiDirectoryNode" />
-              <item name="com" type="462c0819:PsiDirectoryNode" />
-              <item name="neo4j" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
@@ -465,7 +458,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="7" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1532738" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
