@@ -34,7 +34,7 @@ def readPanbao(path,finalfile):
             # print match,uid,pid,internaluid,internalpid
 
             if orderlist.get(match) == None:
-                print panbaocount,internaluid+', '+internalpid
+                print (panbaocount,internaluid+', '+internalpid)
                 global diffcount
                 diffcount = diffcount + 1
                 finalfile.write(internaluid+', '+internalpid)
@@ -42,10 +42,10 @@ def readPanbao(path,finalfile):
 readOrder('D:/spark/order.txt')
 
 txtName = "D:/spark/neededData.txt"
-finalfile = file(txtName, "a+")
+finalfile = open(txtName, "a+")
 
 readPanbao('D:/spark/panbao.txt',finalfile)
 
 finalfile.close()
 
-print ordercount,diffcount,panbaocount
+print (ordercount,diffcount,panbaocount)

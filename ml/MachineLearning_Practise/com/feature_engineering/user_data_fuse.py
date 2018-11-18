@@ -3,7 +3,7 @@ import json
 import requests
 import re
 
-# 主要实现对用户的所有订单数据和征信数据做融合处理---- 数据融合
+# 主要实现对用户的所有订单数据和征信数据做融合处理---- 数据融合---- 用户纯用户同构网络
 class Person:
     def __init__(self,data):
         self.jsondata = data

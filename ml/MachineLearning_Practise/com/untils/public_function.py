@@ -1,4 +1,5 @@
 # -*- coding: UTF-8 -*-
+import pymysql
 
 # 数据类型检查
 def type_check(item):

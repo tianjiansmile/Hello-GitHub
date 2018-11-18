@@ -1,5 +1,14 @@
 neo4j 数据可视化开源社区 https://neo4j.com/graph-visualization-neo4j/
                          https://neo4j.com/developer/graph-visualization/
 						 
+neo4j APOC document https://neo4j-contrib.github.io/neo4j-apoc-procedures/#_import_on_gephi
+    可视化，导出neo4j到Gephi
+	1  导出neo4j所有的数据为gephi数据，进行可视化
+	   call apoc.export.graphml.all("E:/out.graphml",null)
+	   
+	2  也可以通过 apoc.gephi.add 直接导入gephi
+	
+	
+						 
 利用Gephi 对neo4j数据进行可视化
    可以将逾期用户和黑名单用户进行标记，然后可视化先观察一下这些用户的社交情况
