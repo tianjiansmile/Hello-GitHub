@@ -68,35 +68,41 @@ class Phone:
 
 
 
+# 尽可能收集用户通话数据
+def collect_phone_data(p_list, cc,id):
+    phone = Phone(p_list, cc)
+    phone.phone()
+    phone.call_extact()
+    phone.write_to_csv(id)
 
-
+# 查询电话该用户数据
 def mysql_connect():
-    db = pymysql.connect(host="139.224.118.4", user="root",
-                         password="zhouao.123", db="user_db", port=8066)
+    db = pymysql.connect(host="*", user="*",
+                         password="*", db="user_db", port=8066)
 
     cur = db.cursor()
     id = '510681199710165312'
     phone_sql = "select distinct phone_num from user_phone_info up LEFT JOIN " \
           "user_basics_info ub on ub.user_id=up.user_id where ub.identity_no = %s"
 
-    call_sql = "select user_data from user_call_record up LEFT JOIN user_basics_info ub on ub.user_id=up.user_id " \
+    call_sql = "select up.user_data,uo.other from user_call_record up LEFT JOIN user_basics_info ub on ub.user_id=up.user_id " \
+               "LEFT JOIN user_order uo on uo.user_id=ub.user_id" \
                "where ub.identity_no = %s"
 
 
 
     cur.execute(phone_sql,id)  # 像sql语句传递参数
+    # 用户手机号
     p_list = cur.fetchall()
 
     cur.execute(call_sql,id)
     c_list = cur.fetchall()
+    # 用户通话记录
     cc = []
     for i in range(len(c_list)):
         cc.append(c_list[i][0])
 
-    phone = Phone(p_list,cc)
-    phone.phone()
-    phone.call_extact()
-    phone.write_to_csv(id)
+    collect_phone_data(p_list,cc,id)
 
     db.close()
 

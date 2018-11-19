@@ -6,7 +6,18 @@ neo4j APOC document https://neo4j-contrib.github.io/neo4j-apoc-procedures/#_impo
 	1  导出neo4j所有的数据为gephi数据，进行可视化
 	   call apoc.export.graphml.all("E:/out.graphml",null)
 	   
-	2  也可以通过 apoc.gephi.add 直接导入gephi
+	2  也可以通过 apoc.gephi.add 直接导入gephi   主要通过 Graph Streaming
+	    1 安装Graph Streaming插件
+		2 新建项目，重命名工作区，比如workspace1
+		3 启动Master server
+		4 conf/neo4j.conf 中添加 apoc.gephi.url=http://localhost:8080/workspace1
+		5   match path = (:Node)-[rel]->(:Node)
+			WITH path LIMIT 1000
+			with collect(path) as paths
+			call apoc.gephi.add(null,'workspace1', paths) yield nodes, relationships, time
+			return nodes, relationships, time
+			
+		查看并调节gephi可视化效果
 	
 	
 						 
