@@ -24,14 +24,12 @@ class Neo4jHandler:
 
 
 
-def write_csv_neo4j(my_neo4j):
-
-    id = 'test'
+def write_csv_neo4j(my_neo4j,id):
 
     # node 节点写入
     cypher_node = "LOAD CSV WITH HEADERS  FROM 'file:///"+id+"node.csv' AS line " \
     "MERGE (p:phone{id:line.id,is_loaner:line.is_loaner}) "
-    # "MERGE (p:phone{id:line.id}) ON CREATE SET p.is_loaner = line.is_loaner"
+    # "MERGE (p:phone{id:line.id,is_loaner:line.is_loaner}) ON CREATE SET p.is_loaner=line.is_loaner ON MATCH SET p.is_loaner=1 return p"
 
     # rel写入
     cypher_rel = "LOAD CSV WITH HEADERS  FROM 'file:///"+id+"rel.csv' AS line " \
@@ -39,11 +37,11 @@ def write_csv_neo4j(my_neo4j):
                   "merge (from)-[r:called{call:line.property1,times:line.property2}]-(to)"
 
     my_neo4j.cypherexecuter(cypher_node)
-    # my_neo4j.cypherexecuter(cypher_rel)
+    my_neo4j.cypherexecuter(cypher_rel)
 
 
 if __name__ == "__main__":
-    uri = "bolt://localhost:7687"
+    uri = "bolt://localhost:11008"
     driver = GraphDatabase.driver(uri, auth=("neo4j", "123456"))
 
     my_neo4j = Neo4jHandler(driver)

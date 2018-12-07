@@ -1,0 +1,111 @@
+电话社交网络的研究
+ 土盘测试  http://106.15.228.74:7474/browser/                          
+Developer:
+考虑一下单纯的构建电话网络或者，是通话之间建立关系，中间不算人这一层
+人作为电话的附属，因为真正的欺诈电话或是中介中心不会参与进件，只负责中介
+
+下一步的网络构建按照时间序列进入网络，具体目标就是去金盘拿2018.08月的进件idnum,电话和征信数据包地址，
+然后关联金盘通话记录，如果记录存在解析，如果不存在从线上拉包解析，这次还是建立通话关系，人作为本人电话的附属节点，
+这次需要将订单的通过情况，贷后情况带入网络中去，做标记
+
+1 数据整理
+    1 数据获取：以用户id为中心，获取其电话和通话记录，并进行数据融合，目前原则上取当前用户的最新征信数据的通话记录作为原始通话数据
+	2 数据融合：只拿该用户最近三个月的通话数据，提取申请人电话号码，提取申请人三个月通话记录号码，过滤官方号码
+  
+
+2 导入neo4j
+      创建索引：CREATE INDEX ON :phone(id)  明显提高查询和写入速度
+	  
+	  主要用于对于一些即为中间号码又为申请人号码的节点做融合
+	  MERGE (p:phone { id: '18981062617' })
+		ON CREATE SET p.is_loaner=-1
+		ON MATCH SET p.is_loaner=1
+
+
+3 图谱挖掘
+
+  1查看所有二度关联的中间电话并计数，主要为了统计一些官方电话
+  match path = (p:phone)-[rel]->(t)<-[r]-(other) return t.id,count(t.id) order by count(t.id) desc
+  
+  查看通话次数统计情况
+  match (p:phone)-[rel]-(o:phone) return rel.times,count(rel.times) order by count(rel.times) desc
+  
+  1. 中介挖掘: 主要挖掘中介团伙，通过申请人的共同联系人网络分析
+	  
+	   查看所有二度关联的中间电话
+		  match (p:phone)-[r]->(o)<-[rel]-(ph:phone) return p,o,ph
+		  
+		  导出关联数据到gephi
+		  match path = (p:phone)-[rel]->(t:phone)<-[r]-(other)
+					WITH path LIMIT 100000
+					with collect(path) as paths
+					call apoc.gephi.add(null,'test', paths) yield nodes, relationships, time
+					return nodes, relationships, time
+				
+		  挖掘结果第一弹
+		  通过可视化，发现一些异常节点，比如可以看到 15262685846，15951125174,这两个电话所有的通话都一样的，这涉嫌了通过同一设备去申请贷款
+		  通过查询，发现两个电话分属两个人，但是通话记录一模一样，从这个角度来看，通话记录可以作为设备指纹的一部分，
+		  而且还发现，这些通话号码的前缀都是一样的，这些通话记录涉嫌伪造
+		  match (p:phone)-[r]->(o)<-[rel]-(ph:phone) where p.id='15262685846' return p,o,ph
+		  
+		  
+	  
+	   3 查看借款人之间的关系，关系定义为四度，也就是说拥有共同联系人的申请人
+		match path =(p:person)-[*..4]-(p1:person) 
+					WITH path LIMIT 10000 with collect(path) as paths
+					call apoc.gephi.add(null,'test', paths) yield nodes, relationships, time
+					return nodes, relationships, time
+		
+		将person的标签映射到gephi，注意第四个参数是关系的权重，也可以取关系的属性做权重，第五个参数是列表，主要传入节点的属性，如果加了单引号默认这个属性是str
+		match path =(p:person)-[*..4]-(p1:person) 
+					WITH path LIMIT 10000 with collect(path) as paths
+					call apoc.gephi.add(null,'test', paths,'weight',['is_black', 'overdue']) yield nodes, relationships, time
+					return nodes, relationships, time
+					
+		对通话次数做限定 两次及以上	
+		match path = (p:person)-[a]->(ph:phone)-[rel:called]->(o:phone)<-[r:called]-(ph1:phone)<-[b]-(p1:person) 
+		where rel.times > '1' and  r.times >'1' 
+		WITH path LIMIT 10000 with collect(path) as paths
+					call apoc.gephi.add(null,'test', paths,'times',['is_black', 'overdue']) yield nodes, relationships, time
+					return nodes, relationships, time
+		
+		对通话次数做限定 两次以上，这次是比较强的联系关系
+        match path = (p:person)-[a]->(ph:phone)-[rel:called]->(o:phone)<-[r:called]-(ph1:phone)<-[b]-(p1:person) 
+		where rel.times > '2' and  r.times >'2' 
+		WITH path LIMIT 10000 with collect(path) as paths
+					call apoc.gephi.add(null,'test', paths,'times',['is_black', 'overdue']) yield nodes, relationships, time
+					return nodes, relationships, time	
+					
+		挖掘结果第二弹
+		存在一些中间节点，很多借口用户都指向了同一个电话，这个中介性很明显了，
+		match (p:phone)-[rel:called]->(t:phone)<-[r:called]-(other:phone) return t.id,count(t) order by count(t) desc
+					
+ 2. 团伙挖掘，通过分析借款人之间的直接联系，或者共同的黑中介
+				
+   4 查看存在直接联系的借款人，关系定义为三度
+   match path =  (p:person)-[*..3]-(p1:person) with collect(path) as paths
+				call apoc.gephi.add(null,'test', paths) yield nodes, relationships, time
+				return nodes, relationships, time
+				
+   match path =  (p:person)-[r]->(ph:phone)-[rel]-(ph1:phone)<-[a]-(p1:person) with collect(path) as paths
+				call apoc.gephi.add(null,'test', paths) yield nodes, relationships, time
+				return nodes, relationships, time
+				
+	将person的标签映射到gephi			
+	match path =  (p:person)-[r]->(ph:phone)-[rel]-(ph1:phone)<-[a]-(p1:person) with collect(path) as paths
+				call apoc.gephi.add(null,'test', paths,['is_black', 'overdue']) yield nodes, relationships, time
+				return nodes, relationships, time
+  
+  找一下成为中间人的借款人
+  match (p:phone)-[rel]->(t:phone)<-[r]-(other) where t.is_loaner='1' return p,t,other
+  
+  CALL algo.louvain(
+  'match (p:phone)-[rel]->(t:phone)<-[r]-(other)
+   RETURN id(p1) as source, id(p2) as target, f.times as weight',
+  {graph:'cypher',write:true});
+
+4 可视化辅助
+
+JAVA_HOME=/opt/jdk1.8
+export SCALA_HOME=/home/tianjian/spark/scala/scala-2.11.7
+export SPARK_HOME=/home/tianjian/spark/spark-2.4.0-bin-hadoop2.7

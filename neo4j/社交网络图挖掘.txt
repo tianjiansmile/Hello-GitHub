@@ -22,6 +22,10 @@ Comprehensive Guide to neo4j Graph Algorithms： https://go.neo4j.com/rs/710-RRC
 社区发现(Community Detection)算法 利用了 Gephi 可视化  利用 GraphChi 进行海量数据图计算 https://blog.csdn.net/cleverlzc/article/details/39494957
 
 
+
+algo 算法文档  https://neo4j.com/docs/graph-algorithms/current/algorithms/louvain/
+
+
 1 社交网络图的聚类   https://blog.csdn.net/liveway6/article/details/78327108
 
 
@@ -30,8 +34,16 @@ Comprehensive Guide to neo4j Graph Algorithms： https://go.neo4j.com/rs/710-RRC
 MATCH (p1:Person {name:"Jonathan Lipnicki"}),(p2:Person{name:"Joel Silver"}), p=shortestpath((p1)-[*..10]-(p2)) RETURN p
 查找两个节点之间的所有最短路径 跳数在10以内
 MATCH (p1:Person {name:"Jonathan Lipnicki"}),(p2:Person{name:"Joel Silver"}), p=allshortestpaths((p1)-[*..10]-(p2)) RETURN p
+
 删除所有
-MATCH (a)-[r1]-(), (m)-[r2]-() DELETE a,r1,m,r2
+MATCH (a)-[r1]-() DELETE a,r1
+清空数据两种方法：
+一、用下列 Cypher 语句：
+	match (n) detach delete n
+二、
+	1、停掉服务；
+	2、删除 graph.db 目录；
+	3、重启服务
 
    networkx与neo4j图算法的对比
 
