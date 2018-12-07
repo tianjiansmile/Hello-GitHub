@@ -99,8 +99,8 @@ def collect_phone_data(p_list, cc,id):
     phone.write_to_csv(id)
 
 def user_prepare():
-    db = pymysql.connect(host="139.224.118.4", user="root",
-                         password="zhouao.123", db="user_db", port=8066)
+    db = pymysql.connect(host="*", user="root",
+                         password="*", db="user_db", port=8066)
 
     cur = db.cursor()
     user_sql  = 'select ub.identity_no from user_call_record uc left join user_basics_info ub on ub.user_id = uc.user_id' \
@@ -120,8 +120,8 @@ def user_prepare():
 
 # 查询电话该用户数据
 def mysql_connect(id_list):
-    db = pymysql.connect(host="139.224.118.4", user="root",
-                         password="zhouao.123", db="user_db", port=8066)
+    db = pymysql.connect(host="*", user="root",
+                         password="*", db="user_db", port=8066)
 
     cur = db.cursor()
     phone_sql = "select distinct phone_num from user_phone_info up LEFT JOIN " \
