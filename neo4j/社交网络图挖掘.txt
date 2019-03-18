@@ -28,6 +28,9 @@ algo 算法文档  https://neo4j.com/docs/graph-algorithms/current/algorithms/lo
 
 1 社交网络图的聚类   https://blog.csdn.net/liveway6/article/details/78327108
 
+图挖掘公开数据集 https://blog.csdn.net/wzgang123/article/details/51089521
+
+网络表示以及网络嵌入学习论文和代码清单  https://blog.csdn.net/yimingsilence/article/details/80474046
 
 
 查找两个节点之间的最短路径 跳数在10以内
@@ -46,7 +49,9 @@ MATCH (a)-[r1]-() DELETE a,r1
 	3、重启服务
 
    networkx与neo4j图算法的对比
-
+   
+六度分割理论，小世界理论：
+   如果一个社区，或是一个子图的平均路径长度小于等于6的话，可以将这样一个子图定义为小世界网络
 1 centrality  
    基于最短路径的中心度算法
    betweenness_centrality：网络中任意两个节点的所有最短路径，如果这些最短路径中有很多条都经过了某个节点，那么就认为这个节点的Betweenness Centrality高

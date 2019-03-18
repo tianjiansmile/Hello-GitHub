@@ -1,16 +1,94 @@
 电话社交网络的研究
- 土盘测试  http://106.15.228.74:7474/browser/                          
-Developer:
-考虑一下单纯的构建电话网络或者，是通话之间建立关系，中间不算人这一层
-人作为电话的附属，因为真正的欺诈电话或是中介中心不会参与进件，只负责中介
+ 土盘测试  http://106.15.228.74:7474/browser/      
 
-下一步的网络构建按照时间序列进入网络，具体目标就是去金盘拿2018.08月的进件idnum,电话和征信数据包地址，
-然后关联金盘通话记录，如果记录存在解析，如果不存在从线上拉包解析，这次还是建立通话关系，人作为本人电话的附属节点，
-这次需要将订单的通过情况，贷后情况带入网络中去，做标记
 
-1 数据整理
-    1 数据获取：以用户id为中心，获取其电话和通话记录，并进行数据融合，目前原则上取当前用户的最新征信数据的通话记录作为原始通话数据
-	2 数据融合：只拿该用户最近三个月的通话数据，提取申请人电话号码，提取申请人三个月通话记录号码，过滤官方号码
+社交网络构建设想：
+  总的来说：电话网络的构建有两种，依据目前的运营商数据，origin数据中，有用户的通话详单，report中有用户的通话记录统计信息，
+	  第一种网络设想是参考浙江大学杨洋教授的思路，构建一个纯用户的同构社交网络，那用户之间的关系是怎么定义呢，就是说只要两个用户有过通话
+	  就在这两个用户之间建立连接，这个关系属性主要包括通话时长，通话次数，通话时间，依据origin数据，拿到全量的origin数据，解析数据到网络中，最后
+	  会将网络中孤立的节点剔除掉，或是直接构建有联系的用户，这样的一个网络中直接考虑了借贷人的直接联系，这样的网络会凸显出联系紧密的群体或是团伙，
+	  我觉得最大的挑战是数据融合和清洗，工程量是比较大的。总之这样的网络主要去挖掘用户之间的联系。
+	  关于通话网络的研究主要参考 https://dl.ccf.org.cn/audioVideo/detail.html?id=4161731848882176 
+	   杨洋教授的研究，相关的论文地址  https://zhuanlan.zhihu.com/p/34544862?edition=yidianzixun&utm_source=yidianzixun&yidian_docid=0IYYbJDZ
+	  
+	  第二种就是我们下面介绍的，通过用户的通话记录统计信息建立网络，在这个网络中只要和借贷人存在联系的电话，在满足一定的条件下都可能进入网络中，
+	  report数据的特点是他统计了每一个和借贷人有过交互的电话，以及他们的通话主叫被叫次数，这样的数据我们拿来构建的是一个庞大的电话社交网，
+	  主要的挑战一方面来自于源数据量就比较大，另一方面网络的数据负荷是一个比较大的考验，还有一个比较大的难点是，数据清洗，因为这一一个通话网络
+	  的构建主要作用可能是中介挖掘，团伙监控等，根据目前的网络建设的情况来看，一些社会服务电话会干扰我们的挖掘工作，比如快递，餐饮，司机，等等号码，
+	  这些中间人是作为很多用户的通话记录中的，但是这些通话本身不存在欺诈风险和中介风险，所有电话标签在这个网络中尤其重要，这对于鉴别中介团伙等等问题
+	  是很重要的，就算清洗工作做得比较完善，我们可以很快挖掘出一些联系紧密的社区，很常见的情况就是很多借贷人都与同一个电话存在紧密联系，那这样的中间电话
+	  是有风险考虑的，但是最终还是要人工去查，去确定这样的电话最终的属性。这样的通话网络可能更趋向于中介挖掘，团伙监控等
+	  
+	  虽然这个网络主要基于通话数据，但是基于运营商数据，我们还可以引入其他的数据来构建起用户之间的联系，
+	  考虑加入用户地址信息，做地址融合，考虑加入紧急联系人 ，设备号，以及平台账号等，这是后期工作，估量工作量是非常大的
+  
+  第一版： 是按照第二种方式考虑单纯的构建电话网络或者，是通话之间建立关系，中间不算人这一层 人作为电话的附属，
+       因为真正的欺诈电话或是中介中心很有可能不会参与进件，只负责中介。在这个网络中只存在电话或者说，将用户附属在电话节点周围。
+	   到目前看来效果不好，因为没有对数据标签进行清洗，导致网络节点冗余，一个借贷人的通话节点平均200，这样的网络数据量太大，而且社会服务电话干扰巨大。
+	  
+	 
+  第二版： 网络的结构变化不大，主要工作集中在数据清洗 
+          目前是按照进件的时间顺序，去解析运营商报告，这次还是建立通话关系，人作为本人电话的附属节点，
+		这次需要将订单的通过情况，贷后情况带入网络中去，做标记，第一版数据融合过滤太过于差，最后导致网络比较乱，虽然确实可以看到很多借贷人联系了
+		同一个人，但是目前看来很有可能是这个中间人是快递，司机，一些社会服务人员普遍是这些中间节点，这些人是需要过滤的，还有就是一些弱联系的电话也进入了网络
+		比如主动call借贷人一次的电话
+
+		1 数据整理  data_fuse/call_data_analysis.py
+			1 数据获取：以用户id为中心，获取其电话和通话记录，并进行数据融合，目前原则上取当前用户的最新征信数据的通话记录作为原始通话数据
+			2 数据融合：只拿该用户最近三个月的通话数据，提取申请人电话号码，提取申请人三个月通话记录号码,但是考虑到没有通话日期，所以获取全量通话数据
+			具体问题：由于很多用户的通话记录都是空的，所以还是通过运营商报告解析通话数据
+					  运营商报告来自于5个渠道，这些渠道的报告格式都不是完全一样的，通过对于报告的解析分析，得到如下特征
+					  moxie：魔蝎：按通话次数降序，没有通话日期，有呼出呼入次数时长，有电话标记
+					  jxl：聚信立：通话次数无序，没有通话日期，有呼出呼入次数时长，有电话标记
+					  lhp：量化派：按通话次数降序，有通话日期，有呼出呼入次数时长，无电话标记
+					  dhb：贷后邦：通话次数无序，没有通话日期，有呼出呼入次数时长，有电话标记
+					  rong360      按通话次数降序，有通话日期，有呼出呼入次数时长，有电话标记
+			3 数据下载	
+				将通话数据按照 电话号码：通话次数|主叫|被叫|电话标记    的形式写入文件	
+				1 通过解析得到各个渠道的数据比例是： {'mix': 0, 'jxl': 403, 'lhp': 0, 'dhb': 48, 'rong': 0}
+				2 电话标记高频关键词：移动 银行，酒店 送餐 餐饮 菜 客栈 餐厅 汽车 维修 有限公司 宾馆 旅行社 美容 地产 物流 快递 信托
+				
+			4 数据统计
+				1001-1003订单量 117316 对于一个借贷人被叫次数远高于主叫次数，
+				这其中 所有通话电话数量 43807446  主叫0次 29661950 虚拟和上网号码量 524531 电话有标签数量： 6335367   
+					   命中关键词数量 3954135 借贷人主叫0次命中数量 3157105，也就是说借贷人主动呼叫这些社会服务电话情况比较少
+				从统计结果来看，所有通话中 有四分之三的通话都是借贷人被呼叫而且借贷人没有再次联系这些电话，这些电话成为中介或是团伙的概率比较小的
+				
+			5 数据清洗
+				1 从以上分析来看，主叫0次的电话号码占去很大一部分，还有命中一些社会服务的电话号码无论联系多么频繁，看起来都和欺诈无关
+				2 还有很多号码虽然号码一致但是标签不一致，比如一些社会号码12533之类的，还有就是同一个电环号码既是借款人电话号码又是通话记录中的一个
+				  导致流入网络之后无法融合在一起，这种数据需要做融合
+				 这些数据是需要过滤
+				
+				
+			6 网络结构
+				节点；phone：id(电话号码),label(电话标签)  person: id(身份证号), is_black,overdue..
+				关系：call: times(通话次数),c_out(主叫),c_in(被叫)
+				
+				tips: 在使用gephi时遇到的坑： 节点属性的命名，第一版的时候，没有命名问题是因为当时没有中文在网络中，这次引入电话标签后，
+				APOC的导入数据到gephi的函数报了错，无奈之下只能，先将neo4j数据转存graphml文件，然后导入gephi，但是这里就出现了命名问题，
+				call apoc.export.graphml.query('match path = (pe:person)-[r]->(p:phone)-[rel]->(t:phone) return pe,r,p,rel,t','C:/Users/Administrator/Desktop/exportAll4.graphml',{useTypes:true})
+				如果我把id设置为节点的属性，文件导入gephi时id这个属性居然没有引入，我只好把id转换成pid之类的，这次数据可以流进gephi，但是并没有赋值到
+				gephi的Lable标签上，最后只好把电话号码身份证设置为label字段，电话标签设置为mark
+				
+			最后决定
+			第一步：导入数据时统一标签都是no，
+			第二步：是更新标签值，将借款人更新为loaner，将有标签的电话更新到对应的标签
+			第三步：将逾期情况更新到网络中，包括借款人节点和借款人电话节点
+  
+  第三版：将异构网络转化为同构网络
+  后期比较高大上的图算法可能是要基于同构网络展开，在这样同构网络中只有借贷用户，
+  同构到异构转换目前我还没有解决方案，我的想法是讲电话网络复制到一个新的库，然后将电话节点融合掉只剩下用户节点，
+  还有一种比较宏大的方案就是，基于用户通过用户的各种资源来构建用户之间的关系，比如，首先通话通话记录，无论是origin也好还好report的数据也好，
+  再次要去查询用户地址相似性，用户设备关联，用户账号的关联
+  
+  最后的拍板方案是：全量用户运营商数据融合之后写入mongodb，包括用户基础信息，地址，通话记录，通讯录，紧急联系人，
+  网络的设计方案是，只要借贷人之间存在联系即建立连接，包括 1，拥有相同电话，2互相通话，3互为联系人，4，互为紧急联系人 
+  
+
+
+		
+			
   
 
 2 导入neo4j
@@ -50,7 +128,7 @@ Developer:
 		  
 		  
 	  
-	   3 查看借款人之间的关系，关系定义为四度，也就是说拥有共同联系人的申请人
+	   3 查看借款人之间的关系，关系定义为四度，也就是说拥有共同联系人的申请人  1322012018120606
 		match path =(p:person)-[*..4]-(p1:person) 
 					WITH path LIMIT 10000 with collect(path) as paths
 					call apoc.gephi.add(null,'test', paths) yield nodes, relationships, time
@@ -75,6 +153,13 @@ Developer:
 		WITH path LIMIT 10000 with collect(path) as paths
 					call apoc.gephi.add(null,'test', paths,'times',['is_black', 'overdue']) yield nodes, relationships, time
 					return nodes, relationships, time	
+		
+        纯逾期用户的通话关系		
+		match path = (p:person)-[a]->(ph:phone)-[rel:called]->(o:phone)<-[r:called]-(ph1:phone)<-[b]-(p1:person) 
+		            where p.is_black = '1' and p1.is_black='1' and rel.times > '1' and  r.times >'1'  
+					WITH path LIMIT 10000 with collect(path) as paths
+					call apoc.gephi.add(null,'test', paths,'times',['is_black', 'overdue']) yield nodes, relationships, time
+					return nodes, relationships, time
 					
 		挖掘结果第二弹
 		存在一些中间节点，很多借口用户都指向了同一个电话，这个中介性很明显了，
@@ -93,7 +178,7 @@ Developer:
 				
 	将person的标签映射到gephi			
 	match path =  (p:person)-[r]->(ph:phone)-[rel]-(ph1:phone)<-[a]-(p1:person) with collect(path) as paths
-				call apoc.gephi.add(null,'test', paths,['is_black', 'overdue']) yield nodes, relationships, time
+				call apoc.gephi.add(null,'test', paths,'times',['is_black', 'overdue']) yield nodes, relationships, time
 				return nodes, relationships, time
   
   找一下成为中间人的借款人
@@ -103,9 +188,157 @@ Developer:
   'match (p:phone)-[rel]->(t:phone)<-[r]-(other)
    RETURN id(p1) as source, id(p2) as target, f.times as weight',
   {graph:'cypher',write:true});
+  
+  
+  导出为Graphml文件
+  call apoc.export.graphml.query('match path = (pe:phone)-[r]->(p:phone)<-[rel]->(t:phone) return pe,r,p,rel,t',
+  'C:/Users/Administrator/Desktop/exportAll4.graphml',{useTypes:true})
+  
+    call apoc.export.graphml.query("match path = (p:person)-[a]-(q:person)-[b]-(r:person) where p.is_black='1' or q.is_black='1' or r.is_black='1' return p,a,q,b,r",
+  'C:/Users/Administrator/Desktop/black.graphml',{useTypes:true})
 
 4 可视化辅助
 
+同构社交网络的研究
+   1 网络设计
+   这个网络是同构用户网络，我们将通过借贷人之间的直接联系建立网络关系
+	# 1 将用户idnum和电话构建字典
+	# 2 按日期去查每一个用户的calls，然后遍历calls的电话，从字典中撞，撞到的立即建立通话关系
+	# 3 同样的遍历紧急联系人列表撞一次
+	# 4 融合好通讯录，遍历通讯录再撞一次
+	# 5 寻求通过间接通话关系建立用户之间的连接
+	
+	# 紧急联系人的这一层筛查，基本没情况，也就是说，用户填写的紧急联系人手机号基本没有去借贷，
+	  如果想要用户紧急联系人的话，还是一样需要把所有用户的紧急联系人放入字典，然后那用户所有紧急联系人去撞字典，然后建立连接
+	
+	
+	目前网络有50万节点，我只是将有关系的用户建立了连接，也就是说目前网络中的用户都不是孤立的，但是最终的网络中肯定要讲所有用户都创建进去，
+	以便每天的更新，用户节点是全量的。目前跑了150万用户，拿了100数据跑了一下，50万节点写了进去，说明借贷人之间是存在着联系的，目前看来已经
+	有小规模社区成形，但是社区数据大给计算上确实带来了难题。
+	最终需要将全量用户写入网络，也就是说生产环境中所有用户都在网络中，不管有没有关联关系，因为这个网络是动态的，我们需要不断的更新
+	
+	match path =  (a:person)-[r]-(b:person)-[q]-(c:person)<-[p]-(d:person) WITH path LIMIT 10000 with collect(path) as paths
+				call apoc.gephi.add(null,'test', paths,'times',['nid']) yield nodes, relationships, time
+				return nodes, relationships, time
+				
+	match (p)-[*..3]-(q) where p.nid='511381199307264497' return p,q
+	
+    call apoc.export.graphml.query("match path = (p:person)-[a]-(q:person)-[b]-(r:person) where p.is_black='1' or q.is_black='1' or r.is_black='1' return p,a,q,b,r",
+    'C:/Users/Administrator/Desktop/black.graphml',{useTypes:true})
+  
+    match path = (p)-[a]-(q)-[b]-(r) where p.nid='511381199307264497' with collect(path) as paths
+				call apoc.gephi.add(null,'test', paths,'times',['nid']) yield nodes, relationships, time
+				return nodes, relationships, time
+				
+	2 网络涉黑标记
+	  1 强标记 催收黑名单
+	  2 弱标记 逾期黑名单 pd1,pd3,pd7,M1
+	  
+	 
+	  
+	4 线下网络挖掘
+	  1 首先需要确定每一个连通分量，对不同的连通分量做社区挖掘，如果都不连通的话，那就没什么联系了
+	  利用algo的算法，按照节点的连通性对节点进行分区标记
+	  CALL algo.unionFind('person', '', {write:true, partitionProperty:"partition"})
+			YIELD nodes, setCount, loadMillis, computeMillis, writeMillis;
+			
+	  CALL algo.unionFind('person', '', {graph:'huge',write:true, partitionProperty:"partition"})
+		YIELD nodes, setCount, loadMillis, computeMillis, writeMillis;
+	 
+	 # 通过标签传播算法分区
+	  CALL algo.labelPropagation('person', 'call','BOTH',
+	  {iterations:10,partitionProperty:'lcommunity', write:true})
+	YIELD nodes, iterations, loadMillis, computeMillis, writeMillis, write, partitionProperty;
+	  	
+	  
+	  2 确定不同分区之后，按社区节点多少降序排序，开始对分区进行社区算法的研究，具体：
+		  可以通过排序，查看各个社区节点数目
+		  MATCH (u:person)
+			RETURN u.partition as partition,count(*) as size_of_partition
+			ORDER by size_of_partition DESC
+			LIMIT 20;
+			
+		match path = (p:person) where p.partition=397375 with collect(path) as paths
+			call apoc.gephi.add(null,'test',paths) yield nodes, relationships, time
+			return nodes, relationships, time
+			
+		match path = (p:person)-[r]-(q)-[a]-(o)-[b]-(c)-[d]-(e) where p.partition=1061384 WITH path LIMIT 30000 with collect(path) as paths
+			call apoc.gephi.add(null,'test',paths) yield nodes, relationships, time
+			return nodes, relationships, time
+			
+	  3 高密子图挖掘
+	    群控设备，猫池等等欺诈团体使用的批量身份证和手机号，如果是盗用身份和手机号，这个比较难以检测，如果这些手机号
+		是批量的假号，这些手机号的通话记录是没办法造假的，养号的套路是假号互相通话，营造出一种正常通话的感觉，但是在网络中
+		这些假号码的最大特征就是互相之间联系密切，会形成高密子图
+		
+	  4 欺诈标注传播
+	    通过催收黑名单，逾期用户，设置欺诈用户名单，标记网络并利用trustrank算法将涉黑标注传播开来
+		创新之处，利用马尔科夫链进行迭代，通过通话时长和通话次数不同权重的来确定最终关系的权重值，利用转移矩阵来
+		实现：spark graphx
+		
+	  5图挖掘
+	     1 network embedding
+             deepwalk：1 random walk   2 wordtovec	
+			 
+	     2 gcn
+		   1 卷积神经网络学习
+		   2 tensorflow使用或是pytorch使用
+		   3 搭建模型
+		   
+	
+	5 网络监控
+	  随着新进件用户的数据更新到网络，监控网络的动态变化，比如一些社区的闭合
+	  
+	6 推出网络变量线上服务
+	  对新进件的用户的运营商数据进行网络更新和查询，输出一阶二阶用户变量，涉黑情况
+	  1 比如一度联系人中有多少黑中介，一度联系人中的逾期人数有多少，此类特征的KS较高且有效
+	    联系强度: 根据两个号码之间通话频次、周期性、主被叫关系等来判断两个号码之间紧密的程度，用于衡量两个人之间可以互相影响的程度
+		有效联系人: 联系强度达到某个特定值以上的联系人
+		
+	  网络变量可以衍生出很多，比如说，社区人数,男女比例
+	    1 团内其他用户的表现，比方说逾期率、通过量等。这一特征判断的核心思想可以归纳为“近朱者赤，近墨者黑”。
+		这些特征现有的接口就可以提供，社团内的其他节点或是一阶相邻节点的申请，通过，拒绝，逾期，放款量这些特征都可以访问接口实现
+		2 团本身的特性，比方说节点数、团内用户的连接紧密程度等，还有其他一些节点度量数据。
+		团内用户的属性，比方说团内的女性人数、地区分布、平均借款额度，申请次数等。一般而言，团内女性人数占比越大，团内用户是“好人”的概率就越大。
+		
+	7 网络定时更新
+	
+  2接入其他网络关系
+    1 wifi数据，一般群控设备用wifi可以很好的发现，这些设备的wifi是一致的
+	
+	
+  3 生产环境的网络构建和服务
+    把社交网络当成一个服务平台，为其他部门提供网络数据服务。
+	1 网络构建问题
+	  全量数据需要进入网络，这样的情况下，需要将当前所有用户数据进入网络，
+	  思路是讲所有用户id和电话号码组成字典放入redis，然后利用多线程或是多进程快速建立全量网络
+	2 网络更新问题
+	  每当一个新的进件进来，调用一次网络变量服务，如果此用户在网络中不存在，创建新用户和新关系
+	3 网络变量输出问题
+	
+  4 开发过程中的难题
+    整个过程主要分为两步，第一步是电话，身份证建立字典，然后读取每一个人的通话记录，紧急联系人，通讯录，去字典撞一遍。
+	第二步，将撞到的数据，存入neo4j建立关系。
+	第一个过程采用分页读取，可以很好的提高查询速度，
+	第二步因为每插入一个节点都需要查询其是否存在，这个过程成了速度瓶颈
+	测试环境：将该构造的节点不重复的写入文件，将全部关系也写入文件，然后读取文件直接创建节点和关系，将所有需要创建的节点统计出来直接在neo4j创建
+	生产环境：在构建字典的时候可能将全量用户写进网络，在撞数据时只写入关系
+	
+	最终还是使用neo4-import 导入数据，单条插入速度超级neo4j-admin import --nodes some_path_to／node.csv --relationships some_path_to/rel.csv慢
+	用neo4-import导入，需要将导入节点和关系先写成csv文件，然后快速导入
+	先关闭neo4j，删除graph.db，然后进入cmd，转入bin目录
+	执行 neo4j-admin import --nodes D:\Develop\test\neo4j_data\user_whole\nodes.csv --relationships D:\Develop\test\neo4j_data\user_whole\rels.csv
+	  
+	  
+		
+	
+						
 JAVA_HOME=/opt/jdk1.8
 export SCALA_HOME=/home/tianjian/spark/scala/scala-2.11.7
 export SPARK_HOME=/home/tianjian/spark/spark-2.4.0-bin-hadoop2.7
+
+CALL algo.pageRank(
+  'MATCH (p:person) RETURN id(p) as id',
+  'MATCH (p1:person)-[rel]-(p2:person) where p1.partition=372809 and p2.partition=372809 RETURN id(p1) as source, id(p2) as target',
+  {graph:'cypher', iterations:5, write: true}
+)

@@ -2,6 +2,7 @@ neo4j 数据可视化开源社区 https://neo4j.com/graph-visualization-neo4j/
                          https://neo4j.com/developer/graph-visualization/
 						 
 neo4j APOC document https://neo4j-contrib.github.io/neo4j-apoc-procedures/#_import_on_gephi
+APOC 中午文档  http://we-yun.com/apoc/index34.html#_export_graphml_from_query
 
 algo 算法文档  https://neo4j.com/docs/graph-algorithms/current/algorithms/louvain/
 
