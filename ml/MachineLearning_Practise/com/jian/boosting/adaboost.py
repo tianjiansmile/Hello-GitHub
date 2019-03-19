@@ -3,6 +3,10 @@
 from numpy import *
 import matplotlib.pyplot as plt
 
+# 分类的核心过程无非是说，当前列向量的每一个值都只有两种分类结果 1 or -1
+# 用 threshVal 来当做分类界限，他的判断方式就是，在坐标轴上切一刀，左边的是一类，右边的是另一类
+# 这个分类界限 从最小值过渡到最大值，就是不断的切，然后比对一下分类结果的准确率。记录下错误率最低的
+
 def loadSimpData():
     # 测试样例特征
     datMat = matrix([[1., 2.1],
