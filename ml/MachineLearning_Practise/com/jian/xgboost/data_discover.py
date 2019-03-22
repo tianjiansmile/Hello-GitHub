@@ -57,13 +57,13 @@ def data_check(train):
     # ax2.hist(uniq_values_in_categories[uniq_values_in_categories.unique_values <= 30].unique_values, bins=30)
     # ax2.annotate('Binary features', xy=(3, 71), xytext=(7, 71), arrowprops=dict(facecolor='black'))
     #
-    # plt.figure(figsize=(16, 8))
+    plt.figure(figsize=(16, 8))
     # # 我们看一下损失值的分布 损失值中有几个显著的峰值表示严重事故。这样的数据分布，使得这个功能非常扭曲导致的回归表现不佳。
-    # plt.plot(train['id'], train['loss'])
-    # plt.title('Loss values per id')
-    # plt.xlabel('id')
-    # plt.ylabel('loss')
-    # plt.legend()
+    plt.plot(train['id'], train['loss'])
+    plt.title('Loss values per id')
+    plt.xlabel('id')
+    plt.ylabel('loss')
+    plt.legend()
     # plt.show()
     # # 基本上，偏度度量了实值随机变量的均值分布的不对称性。让我们计算损失的偏度：
     # stats.mstats.skew(train['loss']).data

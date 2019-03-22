@@ -333,9 +333,6 @@
 		
 	
 						
-JAVA_HOME=/opt/jdk1.8
-export SCALA_HOME=/home/tianjian/spark/scala/scala-2.11.7
-export SPARK_HOME=/home/tianjian/spark/spark-2.4.0-bin-hadoop2.7
 
 CALL algo.pageRank(
   'MATCH (p:person) RETURN id(p) as id',

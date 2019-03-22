@@ -74,9 +74,9 @@ def simple_xgboost_train(train_x,label):
     ax2.set_xlabel('Rounds')
     ax2.set_ylabel('Loss')
     ax2.grid(True)
-    ax2.plot(bst_cv2.iloc[40:][['train-mae-mean', 'test-mae-mean']])
+    ax2.plot(bst_cv2.iloc[40:][['train-ma-mean', 'test-mae-mean']])
     ax2.legend(['Training Loss', 'Test Loss'])
-
+    plt.show()
 
 
 # 使用平均绝对误差来衡量
@@ -124,6 +124,9 @@ class XGBoostRegressor(object):
         self.params.update(params)
         return self
 
+def mae_score(y_true, y_pred):
+    return mean_absolute_error(np.exp(y_true), np.exp(y_pred))
+
 if __name__ == '__main__':
     train = pd.read_csv('train.csv')
     # 做对数转换
@@ -155,3 +158,7 @@ if __name__ == '__main__':
     print("ytrain:", train_y.shape)
 
     simple_xgboost_train(train_x, train['log_loss'])
+
+    mae_scorer = make_scorer(mae_score, greater_is_better=False)
+    bst = XGBoostRegressor(eta=0.1, colsample_bytree=0.5, subsample=0.5,
+                           max_depth=5, min_child_weight=3, num_boost_round=50)
