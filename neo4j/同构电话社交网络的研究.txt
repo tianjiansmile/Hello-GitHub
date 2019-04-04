@@ -278,7 +278,14 @@
 		
 	  5图挖掘
 	     1 network embedding
-             deepwalk：1 random walk   2 wordtovec	
+             deepwalk：1 random walk   2 wordtovec
+             目前针对小规模网络比如karate做测试：
+                     1 feature：网络节点特征的提取： 1 邻接矩阵， 2 邻居vote， 3 randomwalk+word2vec 4 GCN
+
+                     2 model： 模型的选取就比较弹性了，sklearn系列的很多，目前试了，SVM，K邻近算法，K邻近在deepwalk的特征下面有非常好的表现	
+					 接下来，可以尝试更多的模型试试deepwalk的特征怎么样
+					 
+             对于网络嵌入来说，主要工作就是提取图信息嵌入节点特征，模型其实影响好像没有那么大					 
 			 
 	     2 gcn
 		   1 卷积神经网络学习

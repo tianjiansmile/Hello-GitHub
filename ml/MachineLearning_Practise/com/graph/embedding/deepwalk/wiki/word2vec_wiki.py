@@ -10,7 +10,7 @@ import networkx as nx
 
 # 通过word2vec生成节点特征
 def word_to_vec(nodes):
-    with open('sentence.txt','r') as f:
+    with open('wiki_sentence.txt','r') as f:
         sentences = []
         for line in f:
             cols = line.strip().split('\t')
@@ -44,13 +44,6 @@ def word_to_vec(nodes):
 
 
 
-# 读取karate节点label
-def get_label():
-    with open('karate_comm.dat','r') as f:
-        sentences = []
-        for line in f:
-            print(line)
-
 def get_embedings():
     features = {}
     with open('test.model.txt','r') as f:
@@ -69,7 +62,7 @@ def get_embedings():
     return features
 
 def evaluate_embeddings(embeddings):
-    X, Y = classify.read_node_label_pro('karate_comm.dat')
+    X, Y = classify.read_node_label_pro('wiki_labels.txt')
     tr_frac = 0.8
     print("Training classifier using {:.2f}% nodes...".format(
         tr_frac * 100))
@@ -95,22 +88,20 @@ def train_predict(feature,label):
 
 
 if __name__ == '__main__':
-    G = nx.karate_club_graph()
+    G = nx.read_edgelist('Wiki_edgelist.txt',
+                         create_using=nx.Graph(), nodetype=None, data=[('weight', int)])
     nodes = G.nodes
-
-    # 标签
-    label = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
 
     # 成功提取word2vec特征
     features = word_to_vec(nodes)
     # features = get_embedings()
-    # evaluate_embeddings(features)
+    evaluate_embeddings(features)
 
-    f_data = []
-    for re in features.values():
-        f_data.append(re)
-
-    train_predict(f_data, label)
+    # f_data = []
+    # for re in features.values():
+    #     f_data.append(re)
+    #
+    # train_predict(f_data, label)
 
 
 

@@ -25,7 +25,8 @@ def graph2matrix(G):
 def train(edgeMat,label):
     X_train, X_test, y_train, y_test = train_test_split(edgeMat, label, test_size=0.3, random_state=1)
 
-    clf = SVC(kernel="linear")
+    # clf = SVC(kernel="linear")
+    clf = KNeighborsClassifier(n_neighbors=3)
 
     clf.fit(X_train, y_train)
     predicted = clf.predict(X_test)

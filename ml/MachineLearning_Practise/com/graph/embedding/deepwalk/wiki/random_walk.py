@@ -29,10 +29,10 @@ def roulette(_datas, _ps):
 	return np.random.choice(_datas, p=_ps)
 
 # 从图中提取节点特征
-def node_vec(nodes):
-    num = 3 # 重复10次
-    deep_num = 5 # 跳数
-    with open('sentence.txt','w') as f:
+def node_vec(G,nodes):
+    num = 20
+    deep_num = 30 # 跳数
+    with open('wiki_sentence.txt','w') as f:
         k = 1
         for word in nodes:
             print(k)
@@ -40,7 +40,7 @@ def node_vec(nodes):
             corpus = randomWalk(G, num, deep_num, word)
             print(corpus)
             for cols in corpus:
-                col = [str(i) for i in cols]
+                col = [i for i in cols]
                 sentences = '\t'.join(col)
                 f.write(sentences + '\n')
 
@@ -48,8 +48,8 @@ def draw_graph(G):
     # plt.subplots(1, 1, figsize=(15, 6))
 
     # 返回Zachary的空手道俱乐部图。
-    G.clear()
-    G = nx.karate_club_graph()
+    # G.clear()
+    # G = nx.karate_club_graph()
     plt.subplot(1, 2, 1)
     nx.draw(G, with_labels=True)
     plt.title('karate_club_graph')
@@ -58,10 +58,12 @@ def draw_graph(G):
     plt.yticks([])
     plt.show()
 
+
 if __name__ == '__main__':
-    G = nx.karate_club_graph()
+    G = nx.read_edgelist('Wiki_edgelist.txt',
+                         create_using=nx.Graph(), nodetype=None, data=[('weight', int)])
     nodes = G.nodes
 
     # draw_graph(G)
 
-    node_vec(nodes)
+    node_vec(G,nodes)
