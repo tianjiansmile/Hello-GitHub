@@ -18,6 +18,14 @@ from sklearn.metrics import roc_auc_score
 import numpy as np
 from  com.risk_score import scorecard_functions_V3 as sf
 
+# 数据的标签，拒绝， 通过（通过贷后正常，通过贷后逾期），
+# 按照通过还是拒绝来预测是否通过
+# 以是否通过为数据标签得到一大批特征的VI值在0.02以上 是有效的
+
+# 按照贷后来预测贷后逾期情况
+# 目前来看数据样本不平衡，申请通过的订单很少，而申请通过的订单中逾期情况更少
+# 如果要预测贷后是否逾期，样本的预备应该是所有申请通过的订单分为逾期和不逾期的
+
 
 
 def data_check(train):
@@ -50,7 +58,7 @@ def data_check(train):
         cat_uniques.append(len(train[cat].unique()))
 
     uniq_values_in_categories = pd.DataFrame.from_items([('cat_name', cont_features), ('unique_values', cat_uniques)])
-    # print(uniq_values_in_categories)
+    print(uniq_values_in_categories)
 
 
 
@@ -71,10 +79,10 @@ def data_check(train):
     # ax2.annotate('Binary features', xy=(3, 71), xytext=(7, 71), arrowprops=dict(facecolor='black'))
 
     # 特征之间的相关性
-    plt.subplots(figsize=(16, 9))
-    correlation_mat = train[cont_features].corr()
-    sns.heatmap(correlation_mat, annot=True)
-    plt.show()
+    # plt.subplots(figsize=(16, 9))
+    # correlation_mat = train[cont_features].corr()
+    # sns.heatmap(correlation_mat, annot=True)
+    # plt.show()
 
 # 将用户审核通过次数转换为是否审核通过
 def map_label(x):
@@ -99,7 +107,7 @@ def map_label(x):
 def box_split(train):
 
     cat_features = [cont for cont in list(train.select_dtypes(
-        include=['float64', 'int64']).columns) if cont not in ['idNum,approve_sum_label']]
+        include=['float64', 'int64']).columns) if cont not in ['idNum,y']]
 
     # 变量类型超过5
     more_value_features = []
@@ -121,17 +129,17 @@ def box_split(train):
     var_bin_list = []  # 由于某个取值没有好或者坏样本而需要合并的变量
     for col in less_value_features:
         #  bad rate ,某一个变量对应所有的标签必须涵盖两种标签，也就是单调
-        binBadRate = sf.BinBadRate(train, col, 'approve_sum_label')[0]
+        binBadRate = sf.BinBadRate(train, col, 'y')[0]
         if min(binBadRate.values()) == 0:  # 由于某个取值没有坏样本而进行合并
             print('{} need to be combined due to 0 bad rate'.format(col))
-            combine_bin = sf.MergeBad0(train, col, 'approve_sum_label')
+            combine_bin = sf.MergeBad0(train, col, 'y')
             merge_bin_dict[col] = combine_bin
             newVar = col + '_Bin'
             train[newVar] = train[col].map(combine_bin)
             var_bin_list.append(newVar)
         if max(binBadRate.values()) == 1:  # 由于某个取值没有好样本而进行合并
             print('{} need to be combined due to 0 good rate'.format(col))
-            combine_bin = sf.MergeBad0(train, col, 'approve_sum_label', direction='good')
+            combine_bin = sf.MergeBad0(train, col, 'y', direction='good')
             merge_bin_dict[col] = combine_bin
             newVar = col + '_Bin'
             train[newVar] = train[col].map(combine_bin)
@@ -149,7 +157,7 @@ def box_split(train):
     # （ii）当取值>5时：用bad rate进行编码，放入连续型变量里
     br_encoding_dict = {}  # 记录按照bad rate进行编码的变量，及编码方式
     for col in more_value_features:
-        br_encoding = sf.BadRateEncoding(train, col, 'approve_sum_label')
+        br_encoding = sf.BadRateEncoding(train, col, 'y')
         train[col + '_br_encoding'] = br_encoding['encoding']
         br_encoding_dict[col] = br_encoding['bad_rate']
         num_features.append(col + '_br_encoding')
@@ -164,39 +172,39 @@ def box_split(train):
         print("{} is in processing".format(col))
         if -1 not in set(train[col]):  # －1会当成特殊值处理。如果没有－1，则所有取值都参与分箱
             max_interval = 5  # 分箱后的最多的箱数
-            cutOff = sf.ChiMerge(train, col, 'approve_sum_label', max_interval=max_interval, special_attribute=[], minBinPcnt=0)
+            cutOff = sf.ChiMerge(train, col, 'y', max_interval=max_interval, special_attribute=[], minBinPcnt=0)
             train[col + '_Bin'] = train[col].map(lambda x: sf.AssignBin(x, cutOff, special_attribute=[]))
-            monotone = sf.BadRateMonotone(train, col + '_Bin', 'approve_sum_label')  # 检验分箱后的单调性是否满足
+            monotone = sf.BadRateMonotone(train, col + '_Bin', 'y')  # 检验分箱后的单调性是否满足
             while (not monotone):
                 # 检验分箱后的单调性是否满足。如果不满足，则缩减分箱的个数。
                 max_interval -= 1
-                cutOff = sf.ChiMerge(train, col, 'approve_sum_label', max_interval=max_interval, special_attribute=[],
+                cutOff = sf.ChiMerge(train, col, 'y', max_interval=max_interval, special_attribute=[],
                                   minBinPcnt=0)
                 train[col + '_Bin'] = train[col].map(lambda x: sf.AssignBin(x, cutOff, special_attribute=[]))
                 if max_interval == 2:
                     # 当分箱数为2时，必然单调
                     break
-                monotone = sf.BadRateMonotone(train, col + '_Bin', 'approve_sum_label')
+                monotone = sf.BadRateMonotone(train, col + '_Bin', 'y')
             newVar = col + '_Bin'
             train[newVar] = train[col].map(lambda x: sf.AssignBin(x, cutOff, special_attribute=[]))
             var_bin_list.append(newVar)
         else:
             max_interval = 5
             # 如果有－1，则除去－1后，其他取值参与分箱
-            cutOff = sf.ChiMerge(train, col, 'approve_sum_label', max_interval=max_interval, special_attribute=[-1],
+            cutOff = sf.ChiMerge(train, col, 'y', max_interval=max_interval, special_attribute=[-1],
                               minBinPcnt=0)
             train[col + '_Bin'] = train[col].map(lambda x: sf.AssignBin(x, cutOff, special_attribute=[-1]))
-            monotone = sf.BadRateMonotone(train, col + '_Bin', 'approve_sum_label', ['Bin -1'])
+            monotone = sf.BadRateMonotone(train, col + '_Bin', 'y', ['Bin -1'])
             while (not monotone):
                 max_interval -= 1
                 # 如果有－1，－1的bad rate不参与单调性检验
-                cutOff = sf.ChiMerge(train, col, 'approve_sum_label', max_interval=max_interval, special_attribute=[-1],
+                cutOff = sf.ChiMerge(train, col, 'y', max_interval=max_interval, special_attribute=[-1],
                                   minBinPcnt=0)
                 train[col + '_Bin'] = train[col].map(lambda x: sf.AssignBin(x, cutOff, special_attribute=[-1]))
                 if max_interval == 3:
                     # 当分箱数为3-1=2时，必然单调
                     break
-                monotone = sf.BadRateMonotone(train, col + '_Bin', 'approve_sum_label', ['Bin -1'])
+                monotone = sf.BadRateMonotone(train, col + '_Bin', 'y', ['Bin -1'])
             newVar = col + '_Bin'
             train[newVar] = train[col].map(lambda x: sf.AssignBin(x, cutOff, special_attribute=[-1]))
             var_bin_list.append(newVar)
@@ -218,7 +226,7 @@ def box_split(train):
     # 4，连续变量。分箱后新的变量存放在var_bin_list中
     all_var = var_bin_list + less_value_features
     for var in all_var:
-        woe_iv = sf.CalcWOE(train, var, 'approve_sum_label')
+        woe_iv = sf.CalcWOE(train, var, 'y')
         WOE_dict[var] = woe_iv['WOE']
         IV_dict[var] = woe_iv['IV']
 
@@ -303,7 +311,7 @@ def box_split(train):
     2，符号为负
     '''
     ### (1)将多变量分析的后变量带入LR模型中
-    y = train['approve_sum_label']
+    y = train['y']
     X = train[multi_analysis]
     X['intercept'] = [1] * X.shape[0]
 
@@ -325,7 +333,7 @@ def box_split(train):
             print('the intercept is not significant!')
             break
         multi_analysis.remove(varMaxP)
-        y = train['approve_sum_label']
+        y = train['y']
         X = train[multi_analysis]
         X['intercept'] = [1] * X.shape[0]
 
@@ -339,7 +347,7 @@ def box_split(train):
     print(summary)
 
     train['prob'] = LR.predict(X)
-    auc = roc_auc_score(train['approve_sum_label'], train['prob'])  # AUC = 0.73
+    auc = roc_auc_score(train['y'], train['prob'])  # AUC = 0.73
     print(auc)
 
     #############################################################################################################
@@ -368,19 +376,61 @@ def box_split(train):
     #         KS = performance['KS']
     #         model_parameter[(C_penalty, bad_weight)] = KS
 
-
-if __name__ == '__main__':
-    train = pd.read_excel('features.xls',sheetname='sheet1')
+# 测试是否通过
+def approve_predict():
+    train = pd.read_excel('feature.xls', sheetname='sheet1')
 
     # data_check(train)
 
     # 删除任何一行有空值的记录
     train.dropna(axis=0, how='any', inplace=True)
 
+    # 将通过次数转换为0,1标签
     train['approve_sum_label'] = train['approve_sum_label'].map(map_label)
-    print(len(train['approve_sum_label'].unique()))
+
+    # 将逾期次数转化为0，1标签
+    # train['overdue_sum_label'] = train['overdue_sum_label'].map(map_label)
 
     # 处理标签：Fully Paid是正常用户；Charged Off是违约用户
-    # train['y'] = train['approve_sum_label'].map(lambda x: int(x == 'Charged Off'))
+    train['y'] = train['approve_sum_label']
+
+    print(len(train['y'].unique()))
+
+    # 将不参与训练的特征数据删除
+    train.drop(['apply_int_label', 'apply_pdl_label', 'apply_sum_label'
+                   , 'approve_int_label', 'approve_pdl_label', 'approve_sum_label', 'overdue_pdl_label',
+                'overdue_int_label', 'overdue_sum_label', 'maxOverdue_pdl_label',
+                'maxOverdue_int_label', 'maxOverdue_sum_label'], axis=1, inplace=True)
 
     box_split(train)
+
+def overdue_predict():
+
+    train = pd.read_excel('approve_feature.xls', sheetname='sheet1')
+
+    # data_check(train)
+
+    # 删除任何一行有空值的记录
+    train.dropna(axis=0, how='any', inplace=True)
+
+    # 将通过次数转换为0,1标签
+    # train['approve_sum_label'] = train['approve_sum_label'].map(map_label)
+
+    # 将逾期次数转化为0，1标签
+    train['overdue_sum_label'] = train['overdue_sum_label'].map(map_label)
+
+    # 处理标签：Fully Paid是正常用户；Charged Off是违约用户
+    train['y'] = train['overdue_sum_label']
+
+    print(len(train['y'].unique()))
+
+    # 将不参与训练的特征数据删除
+    train.drop(['apply_int_label', 'apply_pdl_label', 'apply_sum_label'
+                   , 'approve_int_label', 'approve_pdl_label', 'approve_sum_label', 'overdue_pdl_label',
+                'overdue_int_label', 'overdue_sum_label', 'maxOverdue_pdl_label',
+                'maxOverdue_int_label', 'maxOverdue_sum_label'], axis=1, inplace=True)
+
+    box_split(train)
+
+if __name__ == '__main__':
+    overdue_predict()
