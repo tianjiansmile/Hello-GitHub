@@ -70,56 +70,6 @@ def data_check(train):
     sns.heatmap(correlation_mat, annot=True)
     plt.show()
 
-'''
-第三步：分箱，采用ChiMerge,要求分箱完之后：
-（1）不超过5箱
-（2）Bad Rate单调
-（3）每箱同时包含好坏样本
-（4）特殊值如－1，单独成一箱
-
-连续型变量可直接分箱
-类别型变量：
-（a）当取值较多时，先用bad rate编码，再用连续型分箱的方式进行分箱
-（b）当取值较少时：
-    （b1）如果每种类别同时包含好坏样本，无需分箱
-    （b2）如果有类别只包含好坏样本的一种，需要合并
-'''
-def box_split(train):
-
-    cat_features = [cont for cont in list(train.select_dtypes(
-        include=['float64', 'int64']).columns) if cont not in ['idNum']]
-
-    more_value_features = []
-    less_value_features = []
-    # 第一步，检查类别型变量中，哪些变量取值超过5
-    for var in cat_features:
-        valueCounts = len(set(train[var]))
-        if valueCounts > 5:
-            more_value_features.append(var)  # 取值超过5的变量，需要bad rate编码，再用卡方分箱法进行分箱
-        else:
-            less_value_features.append(var)
-
-    # （i）当取值<5时：如果每种类别同时包含好坏样本，无需分箱；如果有类别只包含好坏样本的一种，需要合并
-    merge_bin_dict = {}  # 存放需要合并的变量，以及合并方法
-    var_bin_list = []  # 由于某个取值没有好或者坏样本而需要合并的变量
-    for col in less_value_features:
-        binBadRate = BinBadRate(trainData, col, 'y')[0]
-        if min(binBadRate.values()) == 0:  # 由于某个取值没有坏样本而进行合并
-            print
-            '{} need to be combined due to 0 bad rate'.format(col)
-            combine_bin = MergeBad0(trainData, col, 'y')
-            merge_bin_dict[col] = combine_bin
-            newVar = col + '_Bin'
-            trainData[newVar] = trainData[col].map(combine_bin)
-            var_bin_list.append(newVar)
-        if max(binBadRate.values()) == 1:  # 由于某个取值没有好样本而进行合并
-            print
-            '{} need to be combined due to 0 good rate'.format(col)
-            combine_bin = MergeBad0(trainData, col, 'y', direction='good')
-            merge_bin_dict[col] = combine_bin
-            newVar = col + '_Bin'
-            trainData[newVar] = trainData[col].map(combine_bin)
-            var_bin_list.append(newVar)
 
 
 
@@ -127,5 +77,3 @@ if __name__ == '__main__':
     train = pd.read_excel('features.xls',sheetname='sheet1')
 
     data_check(train)
-
-    box_split(train)
