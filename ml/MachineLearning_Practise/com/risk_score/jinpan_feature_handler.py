@@ -7,7 +7,7 @@ from dateutil.relativedelta import relativedelta
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+from sklearn import ensemble
 from patsy.highlevel import dmatrices
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 from sklearn.linear_model import LogisticRegressionCV
@@ -298,7 +298,7 @@ def box_split(train):
     X = np.matrix(train[multi_analysis_vars_1])
     VIF_list = [variance_inflation_factor(X, i) for i in range(X.shape[1])]
     max_VIF = max(VIF_list)
-    print(max_VIF)
+    print('多变量分析 maxVIF',max_VIF)
     # 最大的VIF是1.32267733123，因此这一步认为没有多重共线性
     multi_analysis = multi_analysis_vars_1
 
@@ -346,9 +346,11 @@ def box_split(train):
     summary = LR.summary()
     print(summary)
 
-    train['prob'] = LR.predict(X)
-    auc = roc_auc_score(train['y'], train['prob'])  # AUC = 0.73
-    print(auc)
+    train['pred'] = LR.predict(X)
+    ks = sf.KS(train, 'pred', 'y')
+    # ks = sf.ks_calc_auc(train,train['pred'],train['y'])
+    auc = roc_auc_score(train['y'], train['pred'])  # AUC = 0.73
+    print('准确度Area Under Curve auc',auc,'区分度 KS',ks)
 
     #############################################################################################################
     # 尝试用L1约束#
@@ -375,6 +377,47 @@ def box_split(train):
     #         performance = sf.KS_AR(scorecard_result,'prob','target')
     #         KS = performance['KS']
     #         model_parameter[(C_penalty, bad_weight)] = KS
+
+    # 用随机森林法估计变量重要性#
+    #
+    var_WOE_list = multi_analysis_vars_1
+    X = train[var_WOE_list]
+    X = np.matrix(X)
+    y = train['y']
+    y = np.array(y)
+
+    RFC = RandomForestClassifier()
+    RFC_Model = RFC.fit(X, y)
+    features_rfc = train[var_WOE_list].columns
+    featureImportance = {features_rfc[i]: RFC_Model.feature_importances_[i] for i in range(len(features_rfc))}
+    featureImportanceSorted = sorted(featureImportance.items(), key=lambda x: x[1], reverse=True)
+    # we selecte the top 10 features
+    features_selection = [k[0] for k in featureImportanceSorted[:8]]
+
+    y = train['y']
+    X = train[features_selection]
+    X['intercept'] = [1] * X.shape[0]
+
+    LR = sm.Logit(y, X).fit()
+    summary = LR.summary()
+
+    print('RandomForest important featursorted',features_selection)
+
+    train['pred'] = LR.predict(X)
+    ks = sf.KS(train, 'pred', 'y')
+    # ks = sf.ks_calc_auc(train,train['pred'],train['y'])
+    auc = roc_auc_score(train['y'], train['pred'])  # AUC = 0.73
+    print('准确度Area Under Curve auc', auc, '区分度 KS', ks)
+
+    # 用GBDT跑出变量重要性，挑选出合适的变量
+    clf = ensemble.GradientBoostingClassifier()
+    gbdt_model = clf.fit(X, y)
+    importace = gbdt_model.feature_importances_.tolist()
+    featureImportance = zip(multi_analysis, importace)
+    featureImportanceSorted = sorted(featureImportance, key=lambda k: k[1], reverse=True)
+
+    print('GBDT important featursorted', featureImportanceSorted)
+
 
 # 测试是否通过
 def approve_predict():
@@ -433,4 +476,11 @@ def overdue_predict():
     box_split(train)
 
 if __name__ == '__main__':
+    starttime = time.time()
+    # 是否通过预测
+    # approve_predict()
+
     overdue_predict()
+
+    endtime = time.time()
+    print(' cost time: ', endtime - starttime)
