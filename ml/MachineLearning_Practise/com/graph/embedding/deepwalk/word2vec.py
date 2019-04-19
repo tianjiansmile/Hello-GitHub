@@ -218,7 +218,7 @@ if __name__ == '__main__':
 
     train_predict(f_data, label)
 
-    # plot_embeddings(features, nodes)
+    plot_embeddings(features, nodes)
 
     plot_label_embeddings_3D(features, nodes, label)
 

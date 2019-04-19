@@ -109,7 +109,7 @@ def plot_label_embeddings_3D(embeddings, nodes):
 
     p3d = plt.figure().add_subplot(111, projection='3d')
     for c, idx in color_idx.items():
-        p3d.scatter(node_pos[idx, 0], node_pos[idx, 1], node_pos[idx, 2], zdir='z', s = 20, c = None, depthshade = True )
+        p3d.scatter(node_pos[idx, 0], node_pos[idx, 1], node_pos[idx, 2], zdir='z', s = 30, c = None, depthshade = True )
     plt.legend()
     plt.show()
 
@@ -128,7 +128,7 @@ if __name__ == '__main__':
     features = word_to_vec(nodes)
 
     # 查看表示学习之后的空间分布
-    # plot_embeddings(features, nodes)
+    plot_embeddings(features, nodes)
 
     plot_label_embeddings_3D(features, nodes)
 

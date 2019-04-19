@@ -9,9 +9,16 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn import metrics
 
-def kmeans(X):
+def kmeans(X,w):
+
+    # new_df = pca_handle(X)
+
+    # nodes = [i for i in range(w)]
+    #
+    new_df = TSNE_handle(X)
+
     # 2类
-    km = KMeans(n_clusters=2).fit(X)
+    km = KMeans(n_clusters=2).fit(new_df)
 
     # 聚类结果
     beer['cluster'] = km.labels_
@@ -20,7 +27,6 @@ def kmeans(X):
 
     # print(beer.head())
 
-    new_df = pca_handle(pca_handle(beer[1:300]))
 
     d = new_df[beer['cluster'] == 0]
     plt.plot(d[0], d[1], 'r.')
@@ -53,16 +59,28 @@ def pca_handle(new_df):
 
     return new_pca
 
+# TSNE 降维
+def TSNE_handle(embeddings):
+    # 读取node id 和对应标签
+
+    model = TSNE(n_components=3)
+    node_pos = model.fit_transform(embeddings)
+
+    return node_pos
+
 # 对子图deepwalk训练得到的word2vec特征进行UML
-def word_vec_test(beer):
+def word_vec_test(beer,w):
     feature = ['v' + str(i) for i in range(1, 301)]
     X = beer[feature]
-    kmeans(X)
+    kmeans(X,w)
     # dbscan(X)
 
 
 if __name__ == '__main__':
     beer = pd.read_csv('word_vec.txt', sep=' ')
 
+    w,v = beer.shape
+    print(w,v)
 
-    word_vec_test(beer)
+
+    word_vec_test(beer,w)
