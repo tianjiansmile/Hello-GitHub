@@ -53,19 +53,16 @@ def pca_handle(new_df):
 
     return new_pca
 
-def loop():
-    head = 'id '
-    for i in range(1,300):
-        # print('id','v_'+str(i))
-        head += 'v'+str(i)+' '
-
-    print(head)
-
-if __name__ == '__main__':
-    beer = pd.read_csv('word_vec.txt', sep=' ')
-    feature = ['v'+str(i) for i in range(1,301)]
+# 对子图deepwalk训练得到的word2vec特征进行UML
+def word_vec_test(beer):
+    feature = ['v' + str(i) for i in range(1, 301)]
     X = beer[feature]
     kmeans(X)
     # dbscan(X)
 
-    # loop()
+
+if __name__ == '__main__':
+    beer = pd.read_csv('word_vec.txt', sep=' ')
+
+
+    word_vec_test(beer)

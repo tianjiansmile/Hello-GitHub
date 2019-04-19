@@ -17,6 +17,7 @@ from numpy import log
 from sklearn.metrics import roc_auc_score
 import numpy as np
 from  com.risk_score import scorecard_functions_V3 as sf
+from com.risk_score import feature_filter
 
 # 数据的标签，拒绝， 通过（通过贷后正常，通过贷后逾期），
 # 按照通过还是拒绝来预测是否通过
@@ -401,7 +402,7 @@ def box_split(train):
     LR = sm.Logit(y, X).fit()
     summary = LR.summary()
 
-    print('RandomForest important featursorted',features_selection)
+    print('RandomForest important featursorted', features_selection)
 
     train['pred'] = LR.predict(X)
     ks = sf.KS(train, 'pred', 'y')

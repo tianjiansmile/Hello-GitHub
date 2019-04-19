@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from neo4j.v1 import GraphDatabase
 from com.untils import public_function
 import json
-from py2neo import Graph
 import difflib
 
 #  用GraphDatabase访问neo4j

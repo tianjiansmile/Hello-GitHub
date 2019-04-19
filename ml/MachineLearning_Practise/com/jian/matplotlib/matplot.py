@@ -43,7 +43,7 @@ class matplot:
         # plt.xlim()
         # ax.scatter(matr[:, 0], matr[:, 1], matr[:, 4], matr[:, 2], 8.0 * array(classVector), 8.0 * array(classVector), depthshade=True)
         plt.ylim(0, 50)
-        ax.scatter(matr[:, 0], matr[:, 1], matr[:, 5], matr[:, 2], 10.0 * array(classVector), 10.0 * array(classVector), depthshade=True)
+        ax.scatter(matr[:, 0], matr[:, 1], matr[:, 2], matr[:, 2], 10.0 * array(classVector), 10.0 * array(classVector), depthshade=True)
         # ax.scatter(matr[:, 0], matr[:, 5], matr[:, 6], matr[:, 2], 10.0 * array(classVector), 10.0 * array(classVector), depthshade=True)
         # ax.scatter(matr[:, 4], matr[:, 5], matr[:, 6], matr[:, 2], 15.0 * array(classVector), 15.0 * array(classVector), depthshade=True)
 
@@ -125,4 +125,4 @@ if __name__ == '__main__':
 
     # print(data_matr,labelMat)
 
-    mat_plot.drowMap(data_matr,labelMat)
+    mat_plot.draw3DMap(data_matr,labelMat)

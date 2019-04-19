@@ -5,12 +5,16 @@ from sklearn.model_selection import train_test_split
 from sklearn.svm import SVC
 from sklearn.discriminant_analysis import  QuadraticDiscriminantAnalysis
 from sklearn.neighbors import KNeighborsClassifier
+from mpl_toolkits.mplot3d import Axes3D as p3d
 import networkx as nx
+import numpy as np
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
 
 
 # 通过word2vec生成节点特征
 def word_to_vec(nodes):
-    with open('loan_sentence.txt','r') as f:
+    with open('loan_sentence1.txt','r') as f:
         sentences = []
         for line in f:
             cols = line.strip().split('\t')
@@ -43,14 +47,6 @@ def word_to_vec(nodes):
 
 
 
-def evaluate_embeddings(embeddings):
-    X, Y = classify.read_node_label_pro('karate_comm.dat')
-    tr_frac = 0.8
-    print("Training classifier using {:.2f}% nodes...".format(
-        tr_frac * 100))
-    clf = classify.Classifier(embeddings=embeddings, clf=LogisticRegression())
-    clf.split_train_evaluate(X, Y, tr_frac)
-
 # 训练并且预测
 def train_predict(feature,label):
 
@@ -68,10 +64,61 @@ def train_predict(feature,label):
     score = clf.score(X_test, y_test)
     print(score)
 
+# 将embedding向量转化为二维空间数据
+def plot_embeddings(embeddings, nodes):
+    # 读取node id 和对应标签
+    X = nodes
+
+    emb_list = []
+    for k in X:
+        emb_list.append(embeddings[str(k)])
+    emb_list = np.array(emb_list)
+
+    # 降维
+    model = TSNE(n_components=2)
+    node_pos = model.fit_transform(emb_list)
+
+    color_idx = {}
+    for i in range(len(X)):
+        color_idx.setdefault('0', [])
+        color_idx['0'].append(i)
+
+    # 利用list的有序性，将每一个节点的降维特征映射到画布上
+    for c, idx in color_idx.items():
+        plt.scatter(node_pos[idx, 0], node_pos[idx, 1], label=c)
+    plt.legend()
+    plt.show()
+
+# 将embedding向量转化为三维空间数据
+def plot_label_embeddings_3D(embeddings, nodes):
+    # 读取node id 和对应标签
+    X = nodes
+
+    emb_list = []
+    for k in X:
+        emb_list.append(embeddings[str(k)])
+    emb_list = np.array(emb_list)
+
+    model = TSNE(n_components=3)
+    node_pos = model.fit_transform(emb_list)
+
+    color_idx = {}
+    for i in range(len(X)):
+        color_idx.setdefault('0', [])
+        color_idx['0'].append(i)
+
+    p3d = plt.figure().add_subplot(111, projection='3d')
+    for c, idx in color_idx.items():
+        p3d.scatter(node_pos[idx, 0], node_pos[idx, 1], node_pos[idx, 2], zdir='z', s = 20, c = None, depthshade = True )
+    plt.legend()
+    plt.show()
 
 
 if __name__ == '__main__':
-    G = nx.read_edgelist('loan_edgelist.txt',
+    import time
+
+    starttime = time.time()
+    G = nx.read_edgelist('loan_edgelist1.txt',
                          create_using=nx.Graph(), nodetype=None,
                          data=[('type', str), ('call_len', float), ('times', int)])
     nodes = G.nodes
@@ -79,6 +126,14 @@ if __name__ == '__main__':
 
     # 成功提取word2vec特征
     features = word_to_vec(nodes)
+
+    # 查看表示学习之后的空间分布
+    # plot_embeddings(features, nodes)
+
+    plot_label_embeddings_3D(features, nodes)
+
+    endtime = time.time()
+    print(' cost time: ', endtime - starttime)
 
 
 

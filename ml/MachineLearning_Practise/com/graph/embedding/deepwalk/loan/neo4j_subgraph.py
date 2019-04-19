@@ -67,10 +67,10 @@ def neo4j_to_file(filename,data):
 if __name__ == '__main__':
     my_neo4j = Neo4jHandler(driver)
     # print(my_neo4j)
-    cypher_read = 'match path = (p:person)-[a]-(q:person) where p.community=1477374 and q.community=1477374 ' \
+    cypher_read = 'match path = (p:person)-[a]-(q:person) where p.community=3229132 and q.community=3229132 ' \
                   'return id(p) as sid,id(q) as tid,type(a) as rel,a.call_len as ' \
                   'call_len, a.time as times'
     data = my_neo4j.cypherexecuter(cypher_read)
 
-    filename = 'loan_edgelist.txt'
+    filename = 'loan_edgelist1.txt'
     neo4j_to_file(filename, data)

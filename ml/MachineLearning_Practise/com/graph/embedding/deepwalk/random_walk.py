@@ -31,7 +31,7 @@ def roulette(_datas, _ps):
 # 从图中提取节点特征
 def node_vec(nodes):
     num = 3 # 重复10次
-    deep_num = 5 # 跳数
+    deep_num = 30 # 跳数
     with open('sentence.txt','w') as f:
         k = 1
         for word in nodes:

@@ -6,6 +6,13 @@ from sklearn.svm import SVC
 from sklearn.discriminant_analysis import  QuadraticDiscriminantAnalysis
 from sklearn.neighbors import KNeighborsClassifier
 import networkx as nx
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D as p3d
+import pandas as pd
+import numpy as np
+from sklearn.decomposition import PCA
+from sklearn.manifold import TSNE
 
 
 # 通过word2vec生成节点特征
@@ -93,10 +100,109 @@ def train_predict(feature,label):
     score = clf.score(X_test, y_test)
     print(score)
 
+def kmeans(beer):
+    # 2类
+    km = KMeans(n_clusters=2).fit(beer)
+
+    # 聚类结果
+    beer['cluster'] = km.labels_
+    # beer.sort_values('cluster')
+    # print(beer['cluster'])
+
+    # print(beer.head())
+
+    new_df = pca_handle(pca_handle(beer[1:]))
+
+    d = new_df[beer['cluster'] == 0]
+    plt.plot(d[0], d[1], 'r.')
+    d = new_df[beer['cluster'] == 1]
+    plt.plot(d[0], d[1], 'go')
+    #
+    plt.show()
+
+# PCA 降维
+def pca_handle(new_df):
+    pca = PCA(n_components=2)
+    new_pca = pd.DataFrame(pca.fit_transform(new_df))
+
+    return new_pca
+
+# 将有标签的embedding向量转化为二维空间数据
+def plot_label_embeddings(embeddings, nodes,label):
+    # 读取node id 和对应标签
+    X, Y = nodes,label
+
+    emb_list = []
+    for k in X:
+        emb_list.append(embeddings[str(k)])
+    emb_list = np.array(emb_list)
+
+    model = TSNE(n_components=2)
+    node_pos = model.fit_transform(emb_list)
+
+    color_idx = {}
+    for i in range(len(X)):
+        color_idx.setdefault(Y[i], [])
+        color_idx[Y[i]].append(i)
+
+    for c, idx in color_idx.items():
+        plt.scatter(node_pos[idx, 0], node_pos[idx, 1], label=c)
+    plt.legend()
+    plt.show()
+
+# 将embedding向量转化为二维空间数据
+def plot_embeddings(embeddings, nodes):
+    # 读取node id 和对应标签
+    X = nodes
+
+    emb_list = []
+    for k in X:
+        emb_list.append(embeddings[str(k)])
+    emb_list = np.array(emb_list)
+
+    model = TSNE(n_components=2)
+    node_pos = model.fit_transform(emb_list)
+
+    color_idx = {}
+    for i in range(len(X)):
+        color_idx.setdefault('0', [])
+        color_idx['0'].append(i)
+
+    for c, idx in color_idx.items():
+        plt.scatter(node_pos[idx, 0], node_pos[idx, 1], label=c)
+    plt.legend()
+    plt.show()
+
+# 将有标签的embedding向量转化为三维空间数据
+def plot_label_embeddings_3D(embeddings, nodes,label):
+    # 读取node id 和对应标签
+    X, Y = nodes,label
+
+    emb_list = []
+    for k in X:
+        emb_list.append(embeddings[str(k)])
+    emb_list = np.array(emb_list)
+
+    model = TSNE(n_components=3)
+    node_pos = model.fit_transform(emb_list)
+
+    color_idx = {}
+    for i in range(len(X)):
+        color_idx.setdefault(Y[i], [])
+        color_idx[Y[i]].append(i)
+
+    p3d = plt.figure().add_subplot(111, projection='3d')
+    for c, idx in color_idx.items():
+        # plt.scatter(node_pos[idx, 0], node_pos[idx, 1], label=c)
+        p3d.scatter(node_pos[idx, 0], node_pos[idx, 1], node_pos[idx, 2], zdir='z', s = 20, c = None, depthshade = True )
+    plt.legend()
+    plt.show()
 
 if __name__ == '__main__':
     G = nx.karate_club_graph()
     nodes = G.nodes
+
+    print(nodes)
 
     # 标签
     label = [0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
@@ -111,6 +217,12 @@ if __name__ == '__main__':
         f_data.append(re)
 
     train_predict(f_data, label)
+
+    # plot_embeddings(features, nodes)
+
+    plot_label_embeddings_3D(features, nodes, label)
+
+    # kmeans()
 
 
 

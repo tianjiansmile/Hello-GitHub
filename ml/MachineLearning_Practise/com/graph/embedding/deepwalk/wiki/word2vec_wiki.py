@@ -6,6 +6,9 @@ from sklearn.svm import SVC
 from sklearn.discriminant_analysis import  QuadraticDiscriminantAnalysis
 from sklearn.neighbors import KNeighborsClassifier
 import networkx as nx
+import numpy as np
+from sklearn.manifold import TSNE
+import matplotlib.pyplot as plt
 
 
 # 通过word2vec生成节点特征
@@ -86,6 +89,27 @@ def train_predict(feature,label):
     score = clf.score(X_test, y_test)
     print(score)
 
+def plot_embeddings(embeddings,):
+    X, Y = classify.read_node_label('wiki_labels.txt')
+
+    emb_list = []
+    for k in X:
+        emb_list.append(embeddings[k])
+    emb_list = np.array(emb_list)
+
+    model = TSNE(n_components=2)
+    node_pos = model.fit_transform(emb_list)
+
+    color_idx = {}
+    for i in range(len(X)):
+        color_idx.setdefault(Y[i][0], [])
+        color_idx[Y[i][0]].append(i)
+
+    for c, idx in color_idx.items():
+        plt.scatter(node_pos[idx, 0], node_pos[idx, 1], label=c)
+    plt.legend()
+    plt.show()
+
 
 if __name__ == '__main__':
     G = nx.read_edgelist('Wiki_edgelist.txt',
@@ -95,13 +119,12 @@ if __name__ == '__main__':
     # 成功提取word2vec特征
     features = word_to_vec(nodes)
     # features = get_embedings()
+
+    # 评估
     evaluate_embeddings(features)
 
-    # f_data = []
-    # for re in features.values():
-    #     f_data.append(re)
-    #
-    # train_predict(f_data, label)
+    # 可视化
+    plot_embeddings(features)
 
 
 
