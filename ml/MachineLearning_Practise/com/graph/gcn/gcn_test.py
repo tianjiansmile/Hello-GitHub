@@ -31,6 +31,7 @@ if __name__ == '__main__':
 
     # 对于0节点只有1是他的邻居。传播之后，0节点的特征是[1,-1],这是0节点邻居特征的和
     # 每个节点的表征（每一行）现在是其相邻节点特征的和！换句话说，图卷积层将每个节点表示为其相邻节点的聚合
+    # 对角线都为0，无法传播当前节点自己的特征
     C = A * X
 
     # print(C)
@@ -52,17 +53,23 @@ if __name__ == '__main__':
 
     # 通过将邻接矩阵 A 与度矩阵 D 的逆相乘，对其进行变换，从而通过节点的度对特征表征进行归一化
     F = D ** -1 * A * X
-    # print(F)
+    print(F)
 
-    plot_embeddings(F)
 
+    # 应用权重
     W = np.matrix([
         [1, -1],
         [-1, 1]
     ])
 
-    D_hat = A_hat = A + I
+    D_hat = np.array(np.sum(A_hat, axis=0))[0]
+    D_hat = np.matrix(np.diag(D_hat))
+
     D_hat ** -1 * A_hat * X * W
 
-    relu(D_hat ** -1 * A_hat * X * W)
+    out= relu(D_hat ** -1 * A_hat * X * W)
+
+    print(out)
+
+    plot_embeddings(out)
 
