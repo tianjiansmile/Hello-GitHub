@@ -28,7 +28,7 @@ def plot_embeddings(embeddings):
 
     for i,idx in embeddings.items():
         print(i,idx)
-        plt.scatter(idx[0], idx[1], label='0')
+        plt.scatter(idx[0], idx[1], label=i)
     plt.legend()
     plt.show()
 

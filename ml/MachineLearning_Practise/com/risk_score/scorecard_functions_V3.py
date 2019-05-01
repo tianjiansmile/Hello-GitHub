@@ -17,7 +17,7 @@ def SplitData(df, col, numOfSplit, special_attribute=[]):
     n = N/numOfSplit
     splitPointIndex = [i*n for i in range(1,numOfSplit)]
     rawValues = sorted(list(df2[col]))
-    splitPoint = [rawValues[i] for i in splitPointIndex]
+    splitPoint = [rawValues[int(i)] for i in splitPointIndex]
     splitPoint = sorted(list(set(splitPoint)))
     return splitPoint
 

@@ -27,6 +27,12 @@ from com.risk_score import feature_filter
 # 目前来看数据样本不平衡，申请通过的订单很少，而申请通过的订单中逾期情况更少
 # 如果要预测贷后是否逾期，样本的预备应该是所有申请通过的订单分为逾期和不逾期的
 
+# 本程序旨在筛选金盘特征中比较有效的特征，之前已经对老的历史特征做过评估，
+# 这一次我通过追加不同类型的特征来对比前后的模型表现效果
+# 1 老特征
+# 2 加入比率特征
+# 3 加入网络特征
+
 
 
 def data_check(train):
@@ -250,6 +256,9 @@ def box_split(train):
 
     # IV_dict.pop('loan_rate_int_60_br_encoding_Bin')
 
+    # IV_dict.pop('loanamount_sum_7_br_encoding_Bin')
+    # IV_dict.pop('loan_rate_int_14_br_encoding_Bin')
+
     # 选取IV>0.01的变量
     high_IV = {k: v for k, v in IV_dict.items() if v >= 0.02}
     high_IV_sorted = sorted(high_IV.items(), key=lambda x: x[1], reverse=True)
@@ -450,12 +459,17 @@ def approve_predict(file):
                 'overdue_int_label', 'overdue_sum_label', 'maxOverdue_pdl_label',
                 'maxOverdue_int_label', 'maxOverdue_sum_label'], axis=1, inplace=True)
 
+    # 删除rate特征
+    # feature_control_drop(train)
+    # # 删除network特征
+    # feature_call_drop(train)
+    feature_contact_drop(train)
 
     box_split(train)
 
-def overdue_predict():
+def overdue_predict(file):
 
-    train = pd.read_excel('approve_feature.xls', sheetname='sheet1')
+    train = pd.read_excel(file, sheetname='sheet1')
 
     # data_check(train)
 
@@ -479,16 +493,67 @@ def overdue_predict():
                 'overdue_int_label', 'overdue_sum_label', 'maxOverdue_pdl_label',
                 'maxOverdue_int_label', 'maxOverdue_sum_label'], axis=1, inplace=True)
 
+    # feature_control_drop(train)
+    # feature_call_drop(train)
+    # feature_contact_drop(train)
+
     box_split(train)
+
+# 删除比率特征
+def feature_control_drop(train):
+    # 将不参与训练的特征数据删除
+    col_time = ['7','14','30','60','90','180','all']
+    col_basic = ['approve_rate_pdl_7', 'approve_rate_int_7', 'approve_rate_sum_7'
+                , 'reject_rate_pdl_7', 'reject_rate_int_7', 'reject_rate_sum_7',
+                'loan_rate_pdl_7','loan_rate_int_7', 'loan_rate_sum_7',
+                'overdue_rate_pdl_7','overdue_rate_int_7', 'overdue_rate_sum_7',
+                'loan_avg_pdl_7','loan_avg_int_7','loan_avg_sum_7',
+                'loan_times_pdl_7','loan_times_int_7','loan_times_sum_7'
+                ]
+    col_drop = []
+    for i in range(len(col_time)-1):
+        for j in range(len(col_basic)):
+            col_drop.append(col_basic[j])
+            col_basic[j] = col_basic[j].replace(col_time[i],col_time[i+1])
+
+    for col in col_basic:
+        col_drop.append(col)
+
+    # print(col_drop)
+    train.drop(col_drop, axis=1, inplace=True)
+
+# 删除网络特征
+def feature_call_drop(train):
+    col_drop = ['call_max_overdue_sum','call_max_overdue_pdl','call_max_overdue_int',
+                'call_max_overdue_times','call_max_apply_sum','call_max_approve_sum',
+                'call_max_loanamount_sum','call_avg_overdue_sum','call_avg_overdue_pdl',
+                'call_avg_overdue_int','call_avg_overdue_times','call_avg_apply_sum',
+                'call_avg_approve_sum','call_avg_loanamount_sum']
+
+    train.drop(col_drop, axis=1, inplace=True)
+
+def feature_contact_drop(train):
+    col_drop = ['contact_max_overdue_sum','contact_max_overdue_pdl','contact_max_overdue_int',
+                'contact_max_overdue_times','contact_max_apply_sum','contact_max_approve_sum',
+                'contact_max_loanamount_sum','contact_avg_overdue_sum','contact_avg_overdue_pdl',
+                'contact_avg_overdue_int','contact_avg_overdue_times','contact_avg_apply_sum',
+                'contact_avg_approve_sum','contact_avg_loanamount_sum']
+
+    train.drop(col_drop, axis=1, inplace=True)
 
 if __name__ == '__main__':
     starttime = time.time()
     # 是否通过预测
     # file = 'feature_pro.xlsx'
-    file = 'feature.xls'
-    approve_predict(file)
+    # approve_predict(file)
 
-    # overdue_predict()
+    # file = 'approve_feature_pro.xlsx'
+    # overdue_predict(file)
+
+    # 新的一批样本，全部为通过样本 样本量46000，逾期用户4400，基本为paydayloan
+    file = 'new_approve_feature _clean.xlsx'
+    overdue_predict(file)
+
 
     endtime = time.time()
     print(' cost time: ', endtime - starttime)
