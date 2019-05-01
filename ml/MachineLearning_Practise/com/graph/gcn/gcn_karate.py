@@ -6,8 +6,10 @@ zkc = nx.karate_club_graph()
 order = sorted(list(zkc.nodes()))
 A = nx.to_numpy_matrix(zkc, nodelist=order)
 I = np.eye(zkc.number_of_nodes())
+# 带有自旋的邻接矩阵
 A_hat = A + I
 D_hat = np.array(np.sum(A_hat, axis=0))[0]
+# 按节点度进行归一化处理
 D_hat = np.matrix(np.diag(D_hat))
 
 W_1 = np.random.normal(
@@ -40,4 +42,4 @@ feature_representations = {
 
 print(feature_representations)
 
-plot_embeddings(feature_representations)
+# plot_embeddings(feature_representations)

@@ -86,7 +86,7 @@ def evaluate_embeddings(embeddings):
 # 训练并且预测
 def train_predict(feature,label):
 
-    X_train, X_test, y_train, y_test = train_test_split(feature, label, test_size=0.7, random_state=1)
+    X_train, X_test, y_train, y_test = train_test_split(feature, label, test_size=0.3, random_state=1)
 
     # clf = SVC(kernel="linear")
     # K邻近算法效果最佳
@@ -100,32 +100,7 @@ def train_predict(feature,label):
     score = clf.score(X_test, y_test)
     print(score)
 
-def kmeans(beer):
-    # 2类
-    km = KMeans(n_clusters=2).fit(beer)
 
-    # 聚类结果
-    beer['cluster'] = km.labels_
-    # beer.sort_values('cluster')
-    # print(beer['cluster'])
-
-    # print(beer.head())
-
-    new_df = pca_handle(pca_handle(beer[1:]))
-
-    d = new_df[beer['cluster'] == 0]
-    plt.plot(d[0], d[1], 'r.')
-    d = new_df[beer['cluster'] == 1]
-    plt.plot(d[0], d[1], 'go')
-    #
-    plt.show()
-
-# PCA 降维
-def pca_handle(new_df):
-    pca = PCA(n_components=2)
-    new_pca = pd.DataFrame(pca.fit_transform(new_df))
-
-    return new_pca
 
 # 将有标签的embedding向量转化为二维空间数据
 def plot_label_embeddings(embeddings, nodes,label):
@@ -218,11 +193,12 @@ if __name__ == '__main__':
 
     train_predict(f_data, label)
 
-    plot_embeddings(features, nodes)
+    # plot_label_embeddings(features, nodes, label)
 
-    plot_label_embeddings_3D(features, nodes, label)
+    # plot_embeddings(features, nodes)
 
-    # kmeans()
+    # plot_label_embeddings_3D(features, nodes, label)
+
 
 
 
