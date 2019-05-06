@@ -59,12 +59,22 @@ def dbscan(X):
     print(labels)
     beer['cluster'] = labels
 
+    color_idx = {0: [], 1: []}
+    color_idx.setdefault(0, [])
+    count = 0
+    for lab in beer['cluster']:
 
-    d = new_df[beer['cluster'] == 0]
-    plt.plot(d[0], d[1], 'r.')
-    d = new_df[beer['cluster'] == 1]
-    plt.plot(d[0], d[1], 'go')
-    #
+        if lab == 0:
+            color_idx[0].append(count)
+        else:
+            color_idx[1].append(count)
+        count += 1
+
+    print(color_idx)
+
+    for c, idx in color_idx.items():
+        plt.scatter(new_df[idx, 0], new_df[idx, 1], label=c)
+    plt.legend()
     plt.show()
 
 # PCA 降维
