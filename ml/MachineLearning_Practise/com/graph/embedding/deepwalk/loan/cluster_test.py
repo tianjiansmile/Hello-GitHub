@@ -23,27 +23,42 @@ def kmeans(X,w):
     # 聚类结果
     beer['cluster'] = km.labels_
     # beer.sort_values('cluster')
-    # print(beer['cluster'])
 
-    # print(beer.head())
+    color_idx = {0:[],1:[]}
+    color_idx.setdefault(0, [])
+    count = 0
+    for lab in beer['cluster']:
 
+        if lab == 0:
+            color_idx[0].append(count)
+        else:
+            color_idx[1].append(count)
+        count += 1
 
-    d = new_df[beer['cluster'] == 0]
-    plt.plot(d[0], d[1], 'r.')
-    d = new_df[beer['cluster'] == 1]
-    plt.plot(d[0], d[1], 'go')
-    #
+    print(color_idx)
+
+    for c, idx in color_idx.items():
+        plt.scatter(new_df[idx, 0], new_df[idx, 1], label=c)
+    plt.legend()
     plt.show()
+    # d = new_df[beer['cluster'] == 0]
+    # plt.plot(d[0], d[1], 'r.')
+    # d = new_df[beer['cluster'] == 1]
+    # plt.plot(d[0], d[1], 'go')
+    #
+    # plt.show()
 
 def dbscan(X):
-    db = DBSCAN(eps=10, min_samples=2).fit(X)
+
+    new_df = TSNE_handle(X)
+
+    db = DBSCAN(eps=10, min_samples=2).fit(new_df)
 
     # 分类结果
     labels = db.labels_
     print(labels)
     beer['cluster'] = labels
 
-    new_df = pca_handle(pca_handle(beer[1:300]))
 
     d = new_df[beer['cluster'] == 0]
     plt.plot(d[0], d[1], 'r.')
@@ -63,7 +78,7 @@ def pca_handle(new_df):
 def TSNE_handle(embeddings):
     # 读取node id 和对应标签
 
-    model = TSNE(n_components=3)
+    model = TSNE(n_components=2)
     node_pos = model.fit_transform(embeddings)
 
     return node_pos
