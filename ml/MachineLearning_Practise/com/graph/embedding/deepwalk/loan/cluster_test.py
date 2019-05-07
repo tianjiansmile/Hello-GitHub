@@ -9,6 +9,8 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn import metrics
 
+# 对社交网络中的一个社区的embedding向量进行无监督分类
+
 def kmeans(X,w):
 
     # new_df = pca_handle(X)
@@ -17,25 +19,33 @@ def kmeans(X,w):
     #
     new_df = TSNE_handle(X)
 
+    label_count = 15
+
     # 2类
-    km = KMeans(n_clusters=2).fit(new_df)
+    km = KMeans(n_clusters=label_count).fit(new_df)
 
     # 聚类结果
     beer['cluster'] = km.labels_
     # beer.sort_values('cluster')
 
-    color_idx = {0:[],1:[]}
-    color_idx.setdefault(0, [])
+    color_idx = {}
+    for i in range(label_count):
+        color_idx.setdefault(i, [])
+
     count = 0
     for lab in beer['cluster']:
-
-        if lab == 0:
-            color_idx[0].append(count)
-        else:
-            color_idx[1].append(count)
+        for i in range(label_count):
+            if lab == i:
+                color_idx[i].append(count)
+        # elif lab == 1:
+        #     color_idx[1].append(count)
+        # elif lab == 2:
+        #     color_idx[2].append(count)
+        # elif lab == 3:
+        #     color_idx[3].append(count)
         count += 1
 
-    print(color_idx)
+    # print(color_idx)
 
     for c, idx in color_idx.items():
         plt.scatter(new_df[idx, 0], new_df[idx, 1], label=c)
@@ -96,6 +106,7 @@ def TSNE_handle(embeddings):
 # 对子图deepwalk训练得到的word2vec特征进行UML
 def word_vec_test(beer,w):
     feature = ['v' + str(i) for i in range(1, 301)]
+    print(feature)
     X = beer[feature]
     kmeans(X,w)
     # dbscan(X)
