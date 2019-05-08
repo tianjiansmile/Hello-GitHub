@@ -11,22 +11,43 @@ from sklearn import metrics
 
 # 对社交网络中的一个社区的embedding向量进行无监督分类
 
+def plot_2D(color_idx,new_df,centers,label_count):
+    for c, idx in color_idx.items():
+        plt.scatter(new_df[idx, 0], new_df[idx, 1], label=c)
+
+    plt.scatter(centers.tn1, centers.tn2, linewidths=label_count, marker='+', s=300, c='black')
+
+    plt.legend()
+    plt.show()
+
+def plot_3D(color_idx,new_df,centers,label_count):
+
+    p3d = plt.figure().add_subplot(111, projection='3d')
+    for c, idx in color_idx.items():
+        p3d.scatter(new_df[idx, 0], new_df[idx, 1], new_df[idx, 2], zdir='z', label=c,s=30, c=None, depthshade=True)
+    plt.legend()
+    plt.show()
+
 def kmeans(X,w):
 
-    # new_df = pca_handle(X)
+    # 映射之后的维度
+    col = 3
+    node_pos = TSNE_handle(X,col)
 
-    # nodes = [i for i in range(w)]
-    #
-    new_df = TSNE_handle(X)
-
-    label_count = 15
+    label_count = 5
 
     # 2类
-    km = KMeans(n_clusters=label_count).fit(new_df)
+    km = KMeans(n_clusters=label_count).fit(node_pos)
 
     # 聚类结果
     beer['cluster'] = km.labels_
     # beer.sort_values('cluster')
+    beer['tn1'] = node_pos[:,0]
+    beer['tn2'] = node_pos[:,1]
+    beer['tn3'] = node_pos[:,2]
+
+    beer.drop(w, axis=1, inplace=True)
+    centers = beer.groupby("cluster").mean().reset_index()
 
     color_idx = {}
     for i in range(label_count):
@@ -37,26 +58,13 @@ def kmeans(X,w):
         for i in range(label_count):
             if lab == i:
                 color_idx[i].append(count)
-        # elif lab == 1:
-        #     color_idx[1].append(count)
-        # elif lab == 2:
-        #     color_idx[2].append(count)
-        # elif lab == 3:
-        #     color_idx[3].append(count)
         count += 1
 
     # print(color_idx)
 
-    for c, idx in color_idx.items():
-        plt.scatter(new_df[idx, 0], new_df[idx, 1], label=c)
-    plt.legend()
-    plt.show()
-    # d = new_df[beer['cluster'] == 0]
-    # plt.plot(d[0], d[1], 'r.')
-    # d = new_df[beer['cluster'] == 1]
-    # plt.plot(d[0], d[1], 'go')
-    #
-    # plt.show()
+    # plot_2D(color_idx, node_pos, centers, label_count)
+
+    plot_3D(color_idx, node_pos, centers, label_count)
 
 def dbscan(X):
 
@@ -95,10 +103,10 @@ def pca_handle(new_df):
     return new_pca
 
 # TSNE 降维
-def TSNE_handle(embeddings):
+def TSNE_handle(embeddings,col):
     # 读取node id 和对应标签
 
-    model = TSNE(n_components=2)
+    model = TSNE(n_components=col)
     node_pos = model.fit_transform(embeddings)
 
     return node_pos
@@ -108,7 +116,7 @@ def word_vec_test(beer,w):
     feature = ['v' + str(i) for i in range(1, 301)]
     print(feature)
     X = beer[feature]
-    kmeans(X,w)
+    kmeans(X,feature)
     # dbscan(X)
 
 
