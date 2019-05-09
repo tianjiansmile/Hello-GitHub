@@ -244,87 +244,105 @@
 	  
 	 
 	  
-	4 线下网络挖掘
-	  1 首先需要确定每一个连通分量，对不同的连通分量做社区挖掘，如果都不连通的话，那就没什么联系了
-	  利用algo的算法，按照节点的连通性对节点进行分区标记
-	  CALL algo.unionFind('person', '', {write:true, partitionProperty:"partition"})
+	3 线下网络挖掘
+		  1 首先需要确定每一个连通分量，对不同的连通分量做社区挖掘，如果都不连通的话，那就没什么联系了
+		  利用algo的算法，按照节点的连通性对节点进行分区标记
+		  CALL algo.unionFind('person', '', {write:true, partitionProperty:"partition"})
+				YIELD nodes, setCount, loadMillis, computeMillis, writeMillis;
+				
+		  CALL algo.unionFind('person', '', {graph:'huge',write:true, partitionProperty:"partition"})
 			YIELD nodes, setCount, loadMillis, computeMillis, writeMillis;
-			
-	  CALL algo.unionFind('person', '', {graph:'huge',write:true, partitionProperty:"partition"})
-		YIELD nodes, setCount, loadMillis, computeMillis, writeMillis;
-	 
-	 # 通过标签传播算法分区
-	  CALL algo.labelPropagation('person', 'call','BOTH',
-	  {iterations:10,partitionProperty:'lcommunity', write:true})
-	YIELD nodes, iterations, loadMillis, computeMillis, writeMillis, write, partitionProperty;
-	
-	   
-	  
-	  2 确定不同分区之后，按社区节点多少降序排序，开始对分区进行社区算法的研究，具体：
-		  可以通过排序，查看各个社区节点数目
-		  MATCH (u:person)
-			RETURN u.partition as partition,count(*) as size_of_partition
-			ORDER by size_of_partition DESC
-			LIMIT 20;
-			
-		match path = (p:person) where p.partition=397375 with collect(path) as paths
-			call apoc.gephi.add(null,'test',paths) yield nodes, relationships, time
-			return nodes, relationships, time
-			
-		match path = (p:person)-[r]-(q)-[a]-(o)-[b]-(c)-[d]-(e) where p.partition=1061384 WITH path LIMIT 30000 with collect(path) as paths
-			call apoc.gephi.add(null,'test',paths) yield nodes, relationships, time
-			return nodes, relationships, time
-			
-	  3 高密子图挖掘
-	    群控设备，猫池等等欺诈团体使用的批量身份证和手机号，如果是盗用身份和手机号，这个比较难以检测，如果这些手机号
-		是批量的假号，这些手机号的通话记录是没办法造假的，养号的套路是假号互相通话，营造出一种正常通话的感觉，但是在网络中
-		这些假号码的最大特征就是互相之间联系密切，会形成高密子图
+		 
+		 # 通过标签传播算法分区
+		  CALL algo.labelPropagation('person', 'call','BOTH',
+		  {iterations:10,partitionProperty:'lcommunity', write:true})
+		YIELD nodes, iterations, loadMillis, computeMillis, writeMillis, write, partitionProperty;
 		
-	  4 欺诈标注传播
-	    通过催收黑名单，逾期用户，设置欺诈用户名单，标记网络并利用trustrank算法将涉黑标注传播开来
-		创新之处，利用马尔科夫链进行迭代，通过通话时长和通话次数不同权重的来确定最终关系的权重值，利用转移矩阵来
-		实现：spark graphx
-		
-	  5图挖掘
-	     1 network embedding
-             deepwalk：1 random walk   2 wordtovec
-             目前针对小规模网络比如karate做测试：
-                     1 feature：网络节点特征的提取： 1 邻接矩阵， 2 邻居vote， 3 randomwalk+word2vec 4 GCN
-
-                     2 model： 模型的选取就比较弹性了，sklearn系列的很多，目前试了，SVM，K邻近算法，K邻近在deepwalk的特征下面有非常好的表现	
-					 接下来，可以尝试更多的模型试试deepwalk的特征怎么样
-					 
-             对于网络嵌入来说，主要工作就是提取图信息嵌入节点特征，模型其实影响好像没有那么大	
-	     
-	     除了可视化进行初步的调研之后，我们应该选取一些有代表性的社区去跑deepwalk，GCN试一试
-		     1. 将社区转化为networkx的图模型。
-		     2. 将社区节点的特征金盘历史特征提取出来
-		     3. 运行deepwalk得到每一个节点的嵌入向量
-		     4. 尝试应用聚类算法进行高密子图拆分
-
-			 
-	     2 gcn
-		   1 卷积神经网络学习
-		   2 tensorflow使用或是pytorch使用
-		   3 搭建模型
 		   
+		  
+		  2 确定不同分区之后，按社区节点多少降序排序，开始对分区进行社区算法的研究，具体：
+			  可以通过排序，查看各个社区节点数目
+			  MATCH (u:person)
+				RETURN u.partition as partition,count(*) as size_of_partition
+				ORDER by size_of_partition DESC
+				LIMIT 20;
+				
+			match path = (p:person) where p.partition=397375 with collect(path) as paths
+				call apoc.gephi.add(null,'test',paths) yield nodes, relationships, time
+				return nodes, relationships, time
+				
+			match path = (p:person)-[r]-(q)-[a]-(o)-[b]-(c)-[d]-(e) where p.partition=1061384 WITH path LIMIT 30000 with collect(path) as paths
+				call apoc.gephi.add(null,'test',paths) yield nodes, relationships, time
+				return nodes, relationships, time
+				
+		  3 高密子图挖掘
+			群控设备，猫池等等欺诈团体使用的批量身份证和手机号，如果是盗用身份和手机号，这个比较难以检测，如果这些手机号
+			是批量的假号，这些手机号的通话记录是没办法造假的，养号的套路是假号互相通话，营造出一种正常通话的感觉，但是在网络中
+			这些假号码的最大特征就是互相之间联系密切，会形成高密子图，虽然这么说，但是根据通话构建的网络普遍连接是一个大的连通图，
+			高密子图存在而且普遍存在，怎么辨别出那个子图是欺诈团体，哪些是中介团体，哪些是正常的团体呢，这个比较麻烦。
+			针对目前通话网络，需要去验证一下，高密子图的整体的一个通过，逾期，涉黑情况，
+			如果高密子图的这些指标高于平均指标的话， 那通话网络是有欺诈检测的潜力在里面的。
+			
+		  4 欺诈标注传播
+			通过催收黑名单，逾期用户，设置欺诈用户名单，标记网络并利用trustrank算法将涉黑标注传播开来
+			创新之处，利用马尔科夫链进行迭代，通过通话时长和通话次数不同权重的来确定最终关系的权重值，利用转移矩阵来
+			实现：spark graphx
+			
+		  5图挖掘
+			 1 network embedding
+				 deepwalk：1 random walk   2 wordtovec
+				 目前针对小规模网络比如karate做测试：
+						 1 feature：网络节点特征的提取： 1 邻接矩阵， 2 邻居vote， 3 randomwalk+word2vec 4 GCN
+
+						 2 model： 模型的选取就比较弹性了，sklearn系列的很多，目前试了，SVM，K邻近算法，K邻近在deepwalk的特征下面有非常好的表现	
+						 接下来，可以尝试更多的模型试试deepwalk的特征怎么样
+						 
+				 对于网络嵌入来说，主要工作就是提取图信息嵌入节点特征，模型其实影响好像没有那么大
+				 
+			 
+			 除了可视化进行初步的调研之后，我们应该选取一些有代表性的社区去跑deepwalk，GCN试一试
+				 1. 将社区转化为图数据。
+				 2. 分别尝试将社区所有节点本身历史借贷特征和图embedding特征跑出来
+				 3. 尝试应用聚类算法进行高密子图拆分
+				
+				 
+				目前针对用户网络中选取的一个社区做了deepwalk测试，最终将学到的表示向量降维到二维，可以达到和gephi同样的效果，
+				 证明deepwalk确实可以学习图结构信息，但是如何将这种算法应用到真实业务场景中去，目前还是未知，
+				 至于社区中节点的历史特征没有聚类的意义，
+
+				 
+			 2 gcn
+			   1 卷积神经网络学习
+			   2 tensorflow使用或是pytorch使用
+			   3 搭建模型
+			   
 	
-	5 网络监控
+	4 网络监控
 	  随着新进件用户的数据更新到网络，监控网络的动态变化，比如一些社区的闭合
 	  
-	6 推出网络变量线上服务
-	  对新进件的用户的运营商数据进行网络更新和查询，输出一阶二阶用户变量，涉黑情况
-	  1 比如一度联系人中有多少黑中介，一度联系人中的逾期人数有多少，此类特征的KS较高且有效
-	    联系强度: 根据两个号码之间通话频次、周期性、主被叫关系等来判断两个号码之间紧密的程度，用于衡量两个人之间可以互相影响的程度
-		有效联系人: 联系强度达到某个特定值以上的联系人
-		
-	  网络变量可以衍生出很多，比如说，社区人数,男女比例
-	    1 团内其他用户的表现，比方说逾期率、通过量等。这一特征判断的核心思想可以归纳为“近朱者赤，近墨者黑”。
-		这些特征现有的接口就可以提供，社团内的其他节点或是一阶相邻节点的申请，通过，拒绝，逾期，放款量这些特征都可以访问接口实现
-		2 团本身的特性，比方说节点数、团内用户的连接紧密程度等，还有其他一些节点度量数据。
-		团内用户的属性，比方说团内的女性人数、地区分布、平均借款额度，申请次数等。一般而言，团内女性人数占比越大，团内用户是“好人”的概率就越大。
-		
-	7 网络定时更新
+	5 推出网络变量线上服务
+	      社交网络一大优势就是网络变量输出，我认为有两大类变量可以输出：
+		  1 节点本身的金融属性特征
+		       目前已经上线的特征主要有，当前节点一度联系人最大和平均两个维度的用户申请，拒绝，通过，逾期次数，天数的特征
+			   效果： KS和AUC都有明显的提高，平均提高5个百分点
+		  2 图结构特征：社区，团，边
+		        团节点数，度，紧密程度维度
+				团内性别占比，地区分布
+				团内边属性聚合，比如通话次数，通话时长
+		       
+		  对新进件的用户的运营商数据进行网络更新和查询，输出一阶二阶用户变量，涉黑情况
+		  1 比如一度联系人中有多少黑中介，一度联系人中的逾期人数有多少，此类特征的KS较高且有效
+			联系强度: 根据两个号码之间通话频次、周期性、主被叫关系等来判断两个号码之间紧密的程度，用于衡量两个人之间可以互相影响的程度
+			有效联系人: 联系强度达到某个特定值以上的联系人
+			
+		  2 网络变量可以衍生出很多，比如说，社区人数,男女比例
+			1 团内其他用户的表现，比方说逾期率、通过量等。这一特征判断的核心思想可以归纳为“近朱者赤，近墨者黑”。
+			这些特征现有的接口就可以提供，社团内的其他节点或是一阶相邻节点的申请，通过，拒绝，逾期，放款量这些特征都可以访问接口实现
+			2 团本身的特性，比方说节点数、团内用户的连接紧密程度等，还有其他一些节点度量数据。
+			团内用户的属性，比方说团内的女性人数、地区分布、平均借款额度，申请次数等。一般而言，团内女性人数占比越大，团内用户是“好人”的概率就越大。
+		  
+	  
+	6 网络定时更新
 	
   2接入其他网络关系
     1 wifi数据，一般群控设备用wifi可以很好的发现，这些设备的wifi是一致的
@@ -353,7 +371,13 @@
 	执行 neo4j-admin import --nodes D:\Develop\test\neo4j_data\user_whole\nodes.csv --relationships D:\Develop\test\neo4j_data\user_whole\rels.csv
 	  
 	  
-		
+反欺诈同构网络
+    现有的问题是通话同构网络比较稠密，干扰性较大，很难将欺诈团伙和正常团伙区别开来，主要是因为其实通话关系本身是弱欺诈属性，
+当然我也想了，一些欺诈团伙可能互相之间联系紧密，但是我发现高密子图非常多，这些子图的用户从借贷情况来看，
+并没有很好的把逾期的人群给区别出来，故而考虑了另一种构建方案：
+    这一次网络关系将引入欺诈属性比较强的关系，盘点一下：设备，wifi，IP，imie，以及共用手机号，以及共用紧急联系人，
+将这些强属性关系作为评价，构建一个同构网络，看看网络的情况，如果太洗漱估计也没啥用。如果可以广泛联系，或是成团，那么欺诈检测的
+这种事就可以很容易搞了。	
 	
 						
 
