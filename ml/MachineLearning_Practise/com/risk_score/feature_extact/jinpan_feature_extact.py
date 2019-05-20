@@ -254,10 +254,15 @@ def box_split(train):
     （2）比较两两线性相关性。如果相关系数的绝对值高于阈值，剔除IV较低的一个
     '''
 
-    # IV_dict.pop('loan_rate_int_60_br_encoding_Bin')
+    IV_dict.pop('loanamount_pdl_7_br_encoding_Bin')
 
-    # IV_dict.pop('loanamount_sum_7_br_encoding_Bin')
-    # IV_dict.pop('loan_rate_int_14_br_encoding_Bin')
+    IV_dict.pop('loanamount_int_7_br_encoding_Bin')
+    IV_dict.pop('loan_avg_pdl_7_br_encoding_Bin')
+    #
+    IV_dict.pop('loan_avg_int_7_br_encoding_Bin')
+    IV_dict.pop('loanamount_pdl_14_br_encoding_Bin')
+    # IV_dict.pop('apply_int_diff_11_br_encoding_Bin')
+    # IV_dict.pop('approve_mert_pdl_diff_3_br_encoding_Bin')
 
     # 选取IV>0.01的变量
     high_IV = {k: v for k, v in IV_dict.items() if v >= 0.02}
@@ -463,7 +468,10 @@ def approve_predict(file):
     # feature_control_drop(train)
     # # 删除network特征
     # feature_call_drop(train)
-    feature_contact_drop(train)
+    # feature_contact_drop(train)
+
+    # 删除迁移特征
+    feature_mer_drop(train)
 
     box_split(train)
 
@@ -541,6 +549,36 @@ def feature_contact_drop(train):
 
     train.drop(col_drop, axis=1, inplace=True)
 
+def feature_mer_drop(train):
+    col_drop = ['apply_pdl_diff_1','apply_int_diff_1','approve_pdl_diff_1','approve_int_diff_1',
+                 'apply_pdl_diff_2', 'apply_int_diff_2', 'approve_pdl_diff_2', 'approve_int_diff_2',
+                 'apply_pdl_diff_3', 'apply_int_diff_3', 'approve_pdl_diff_3', 'approve_int_diff_3',
+                 'apply_pdl_diff_4', 'apply_int_diff_4', 'approve_pdl_diff_4', 'approve_int_diff_4',
+                 'apply_pdl_diff_5', 'apply_int_diff_5', 'approve_pdl_diff_5', 'approve_int_diff_5',
+                 'apply_pdl_diff_6', 'apply_int_diff_6', 'approve_pdl_diff_6', 'approve_int_diff_6',
+                 'apply_pdl_diff_7', 'apply_int_diff_7', 'approve_pdl_diff_7', 'approve_int_diff_7',
+                 'apply_pdl_diff_8', 'apply_int_diff_8', 'approve_pdl_diff_8', 'approve_int_diff_8',
+                 'apply_pdl_diff_9', 'apply_int_diff_9', 'approve_pdl_diff_9', 'approve_int_diff_9',
+                 'apply_pdl_diff_10', 'apply_int_diff_10', 'approve_pdl_diff_10', 'approve_int_diff_10',
+                 'apply_pdl_diff_11', 'apply_int_diff_11', 'approve_pdl_diff_11', 'approve_int_diff_11',
+                 'apply_pdl_diff_12', 'apply_int_diff_12', 'approve_pdl_diff_12', 'approve_int_diff_12',
+
+                 'apply_mert_pdl_diff_1', 'apply_mert_int_diff_1', 'approve_mert_pdl_diff_1', 'approve_mert_int_diff_1',
+                 'apply_mert_pdl_diff_2', 'apply_mert_int_diff_2', 'approve_mert_pdl_diff_2','approve_mert_int_diff_2',
+                 'apply_mert_pdl_diff_3', 'apply_mert_int_diff_3', 'approve_mert_pdl_diff_3','approve_mert_int_diff_3',
+                 'apply_mert_pdl_diff_4', 'apply_mert_int_diff_4', 'approve_mert_pdl_diff_4', 'approve_mert_int_diff_4',
+                 'apply_mert_pdl_diff_5', 'apply_mert_int_diff_5', 'approve_mert_pdl_diff_5','approve_mert_int_diff_5',
+                 'apply_mert_pdl_diff_6', 'apply_mert_int_diff_6', 'approve_mert_pdl_diff_6','approve_mert_int_diff_6',
+                 'apply_mert_pdl_diff_7', 'apply_mert_int_diff_7', 'approve_mert_pdl_diff_7','approve_mert_int_diff_7',
+                 'apply_mert_pdl_diff_8', 'apply_mert_int_diff_8', 'approve_mert_pdl_diff_8','approve_mert_int_diff_8',
+                 'apply_mert_pdl_diff_9', 'apply_mert_int_diff_9', 'approve_mert_pdl_diff_9','approve_mert_int_diff_9',
+                 'apply_mert_pdl_diff_10', 'apply_mert_int_diff_10', 'approve_mert_pdl_diff_10','approve_mert_int_diff_10',
+                 'apply_mert_pdl_diff_11', 'apply_mert_int_diff_11', 'approve_mert_pdl_diff_11','approve_mert_int_diff_11',
+                 'apply_mert_pdl_diff_12', 'apply_mert_int_diff_12', 'approve_mert_pdl_diff_12','approve_mert_int_diff_12',
+                 'apply_mert_pdl_sum', 'apply_mert_int_sum', 'approve_mert_pdl_sum','approve_mert_int_sum']
+
+    train.drop(col_drop, axis=1, inplace=True)
+
 if __name__ == '__main__':
     starttime = time.time()
     # 是否通过预测
@@ -551,9 +589,16 @@ if __name__ == '__main__':
     # overdue_predict(file)
 
     # 新的一批样本，全部为通过样本 样本量46000，逾期用户4400，基本为paydayloan
-    file = 'new_approve_feature _clean.xlsx'
+    # file = 'new_approve_feature _clean.xlsx'
+    # overdue_predict(file)
+
+    # 重新计算了逾期情况 样本量46000，逾期用户8000多，基本为paydayloan
+    file = 'new_approve_feature _clean1.xlsx'
     overdue_predict(file)
 
+    # 新的一批样本，全部为通过样本 样本量85000，通过用户64000，为paydayloan
+    # file = 'zp_0425_SZZN_payday_feature.xlsx'
+    # approve_predict(file)
 
     endtime = time.time()
     print(' cost time: ', endtime - starttime)

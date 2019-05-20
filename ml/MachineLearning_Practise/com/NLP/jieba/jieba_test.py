@@ -279,79 +279,173 @@ def area_count(seg_list,addresses_map,all_dict):
         all_dict[d] = 1
 
 def risk_analysis(seg_list, addresses_map, all_dict,idnum,risk):
-    a = seg_list[0]
 
-    #
-    if risk:
-        short = addresses_map.get(a)
-        if short:
-            a = short
-        if all_dict.get(a) != None:
-            all_dict[a][0] += risk[0]
-            all_dict[a][1] += risk[1]
-            all_dict[a][2] += risk[2]
-            all_dict[a][3] += risk[3]
-            all_dict[a][4] += 1
-        else:
-            all_dict[a] = [0,0,0,0,0]
-            all_dict[a][0] += risk[0]
-            all_dict[a][1] += risk[1]
-            all_dict[a][2] += risk[2]
-            all_dict[a][3] += risk[3]
-            all_dict[a][4] += 1
+    if len(seg_list) < 3:
+        a = seg_list[0]
 
-        # print(all_dict.get(a))
-        # print(all_dict.get('广东省'))
-
-        b = seg_list[1]
-        short = addresses_map.get(b)
-        if short:
-            b = short
-        if all_dict.get(b) != None:
-            all_dict[b] += risk[0]
-        else:
-            all_dict[b] = [0,0, 0, 0, 0]
-            all_dict[b][0] += risk[0]
-            all_dict[b][1] += risk[1]
-            all_dict[b][2] += risk[2]
-            all_dict[b][3] += risk[3]
-            all_dict[b][4] += 1
-
-        c = seg_list[2]
-        short = addresses_map.get(c)
-        if short:
-            c = short
-        if all_dict.get(c) != None:
-            all_dict[c][0] += risk[0]
-            all_dict[c][1] += risk[1]
-            all_dict[c][2] += risk[2]
-            all_dict[c][3] += risk[3]
-            all_dict[c][4] += 1
-        else:
-            all_dict[c] = [0, 0, 0, 0, 0]
-            all_dict[c][0] += risk[0]
-            all_dict[c][1] += risk[1]
-            all_dict[c][2] += risk[2]
-            all_dict[c][3] += risk[3]
-            all_dict[c][4] += 1
         #
-        # d = seg_list[3]
-        # short = addresses_map.get(d)
-        # if short:
-        #     d = short
-        # if all_dict.get(d) != None:
-        #     all_dict[d][0] += risk[0]
-        #     all_dict[d][1] += risk[1]
-        #     all_dict[d][2] += risk[2]
-        #     all_dict[d][3] += risk[3]
-        #     all_dict[d][4] += 1
-        # else:
-        #     all_dict[d] = [0, 0, 0, 0, 0]
-        #     all_dict[d][0] += risk[0]
-        #     all_dict[d][1] += risk[1]
-        #     all_dict[d][2] += risk[2]
-        #     all_dict[d][3] += risk[3]
-        #     all_dict[d][4] += 1
+        if risk:
+            short = addresses_map.get(a)
+            if short:
+                a = short
+            if all_dict.get(a) != None:
+                all_dict[a][0] += risk[0]
+                all_dict[a][1] += risk[1]
+                all_dict[a][2] += risk[2]
+                all_dict[a][3] += risk[3]
+                all_dict[a][4] += 1
+            else:
+                all_dict[a] = [0,0,0,0,0]
+                all_dict[a][0] += risk[0]
+                all_dict[a][1] += risk[1]
+                all_dict[a][2] += risk[2]
+                all_dict[a][3] += risk[3]
+                all_dict[a][4] += 1
+
+            # print(all_dict.get(a))
+            # print(all_dict.get('广东省'))
+
+            b = seg_list[1]
+            short = addresses_map.get(b)
+            if short:
+                b = short
+            if all_dict.get(b) != None:
+                all_dict[b] += risk[0]
+            else:
+                all_dict[b] = [0,0, 0, 0, 0]
+                all_dict[b][0] += risk[0]
+                all_dict[b][1] += risk[1]
+                all_dict[b][2] += risk[2]
+                all_dict[b][3] += risk[3]
+                all_dict[b][4] += 1
+
+    elif len(seg_list) == 3:
+        a = seg_list[0]
+        if risk:
+            short = addresses_map.get(a)
+            if short:
+                a = short
+            if all_dict.get(a) != None:
+                all_dict[a][0] += risk[0]
+                all_dict[a][1] += risk[1]
+                all_dict[a][2] += risk[2]
+                all_dict[a][3] += risk[3]
+                all_dict[a][4] += 1
+            else:
+                all_dict[a] = [0, 0, 0, 0, 0]
+                all_dict[a][0] += risk[0]
+                all_dict[a][1] += risk[1]
+                all_dict[a][2] += risk[2]
+                all_dict[a][3] += risk[3]
+                all_dict[a][4] += 1
+
+            # print(all_dict.get(a))
+            # print(all_dict.get('广东省'))
+
+            b = seg_list[1]
+            short = addresses_map.get(b)
+            if short:
+                b = short
+            if all_dict.get(b) != None:
+                all_dict[b] += risk[0]
+            else:
+                all_dict[b] = [0, 0, 0, 0, 0]
+                all_dict[b][0] += risk[0]
+                all_dict[b][1] += risk[1]
+                all_dict[b][2] += risk[2]
+                all_dict[b][3] += risk[3]
+                all_dict[b][4] += 1
+
+            c = seg_list[2]
+            short = addresses_map.get(c)
+            if short:
+                c = short
+            if all_dict.get(c) != None:
+                all_dict[c][0] += risk[0]
+                all_dict[c][1] += risk[1]
+                all_dict[c][2] += risk[2]
+                all_dict[c][3] += risk[3]
+                all_dict[c][4] += 1
+            else:
+                all_dict[c] = [0, 0, 0, 0, 0]
+                all_dict[c][0] += risk[0]
+                all_dict[c][1] += risk[1]
+                all_dict[c][2] += risk[2]
+                all_dict[c][3] += risk[3]
+                all_dict[c][4] += 1
+
+    else:
+        a = seg_list[0]
+        if risk:
+            short = addresses_map.get(a)
+            if short:
+                a = short
+            if all_dict.get(a) != None:
+                all_dict[a][0] += risk[0]
+                all_dict[a][1] += risk[1]
+                all_dict[a][2] += risk[2]
+                all_dict[a][3] += risk[3]
+                all_dict[a][4] += 1
+            else:
+                all_dict[a] = [0, 0, 0, 0, 0]
+                all_dict[a][0] += risk[0]
+                all_dict[a][1] += risk[1]
+                all_dict[a][2] += risk[2]
+                all_dict[a][3] += risk[3]
+                all_dict[a][4] += 1
+
+            # print(all_dict.get(a))
+            # print(all_dict.get('广东省'))
+
+            b = seg_list[1]
+            short = addresses_map.get(b)
+            if short:
+                b = short
+            if all_dict.get(b) != None:
+                all_dict[b] += risk[0]
+            else:
+                all_dict[b] = [0, 0, 0, 0, 0]
+                all_dict[b][0] += risk[0]
+                all_dict[b][1] += risk[1]
+                all_dict[b][2] += risk[2]
+                all_dict[b][3] += risk[3]
+                all_dict[b][4] += 1
+
+            c = seg_list[2]
+            short = addresses_map.get(c)
+            if short:
+                c = short
+            if all_dict.get(c) != None:
+                all_dict[c][0] += risk[0]
+                all_dict[c][1] += risk[1]
+                all_dict[c][2] += risk[2]
+                all_dict[c][3] += risk[3]
+                all_dict[c][4] += 1
+            else:
+                all_dict[c] = [0, 0, 0, 0, 0]
+                all_dict[c][0] += risk[0]
+                all_dict[c][1] += risk[1]
+                all_dict[c][2] += risk[2]
+                all_dict[c][3] += risk[3]
+                all_dict[c][4] += 1
+
+            d = seg_list[3]
+            short = addresses_map.get(d)
+            if short:
+                d = short
+            if all_dict.get(d) != None:
+                all_dict[d][0] += risk[0]
+                all_dict[d][1] += risk[1]
+                all_dict[d][2] += risk[2]
+                all_dict[d][3] += risk[3]
+                all_dict[d][4] += 1
+            else:
+                all_dict[d] = [0, 0, 0, 0, 0]
+                all_dict[d][0] += risk[0]
+                all_dict[d][1] += risk[1]
+                all_dict[d][2] += risk[2]
+                all_dict[d][3] += risk[3]
+                all_dict[d][4] += 1
 
     # print(all_dict)
 
@@ -367,6 +461,8 @@ def order_dict():
     file1 = 'D:/特征提取/历史特征数据/value_list_1.txt'
     file2 = 'D:/特征提取/历史特征数据/value_list_2.txt'
     file3 = 'D:/特征提取/历史特征数据/value_list_3.txt'
+
+    file4 = 'D:/特征提取/历史特征数据/value_list_4.txt'
     history_dict = {}
     with open(file ,'r') as rf:
         for line in rf.readlines():
@@ -414,6 +510,21 @@ def order_dict():
             history_dict[idnum] = temp_list
 
     with open(file3 ,'r') as rf:
+        for line in rf.readlines():
+            line = eval(line)
+            idnum = line[0]
+            apply_sum_all = line[3]
+            approve_sum_all = line[6]
+            overdue_sum_all = line[9]
+            loanamount_sum_all = line[12]
+            maxOverdue_sum_all = line[15]
+            # print(line)
+            # print(idnum,apply_sum_all,approve_sum_all,overdue_sum_all,loanamount_sum_all,maxOverdue_sum_all)
+            temp_list = [apply_sum_all,approve_sum_all,overdue_sum_all,loanamount_sum_all,maxOverdue_sum_all]
+            # print(temp_list)
+            history_dict[idnum] = temp_list
+
+    with open(file4 ,'r') as rf:
         for line in rf.readlines():
             line = eval(line)
             idnum = line[0]
