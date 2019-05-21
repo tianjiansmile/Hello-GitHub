@@ -5,6 +5,7 @@ from pandas.plotting import scatter_matrix
 from sklearn.decomposition import PCA
 from sklearn.cluster import DBSCAN
 import numpy as np
+from mpl_toolkits.mplot3d import Axes3D as p3d
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from sklearn import metrics
@@ -31,10 +32,10 @@ def plot_3D(color_idx,new_df,centers,label_count):
 def kmeans(X,w):
 
     # 映射之后的维度
-    col = 3
+    col = 2
     node_pos = TSNE_handle(X,col)
 
-    label_count = 5
+    label_count = 3
 
     # 2类
     km = KMeans(n_clusters=label_count).fit(node_pos)
@@ -44,7 +45,7 @@ def kmeans(X,w):
     # beer.sort_values('cluster')
     beer['tn1'] = node_pos[:,0]
     beer['tn2'] = node_pos[:,1]
-    beer['tn3'] = node_pos[:,2]
+    # beer['tn3'] = node_pos[:,2]
 
     beer.drop(w, axis=1, inplace=True)
     centers = beer.groupby("cluster").mean().reset_index()
@@ -62,9 +63,9 @@ def kmeans(X,w):
 
     # print(color_idx)
 
-    # plot_2D(color_idx, node_pos, centers, label_count)
+    plot_2D(color_idx, node_pos, centers, label_count)
 
-    plot_3D(color_idx, node_pos, centers, label_count)
+    # plot_3D(color_idx, node_pos, centers, label_count)
 
 def dbscan(X):
 
@@ -114,14 +115,14 @@ def TSNE_handle(embeddings,col):
 # 对子图deepwalk训练得到的word2vec特征进行UML
 def word_vec_test(beer,w):
     feature = ['v' + str(i) for i in range(1, 301)]
-    print(feature)
+    # print(feature)
     X = beer[feature]
     kmeans(X,feature)
     # dbscan(X)
 
 
 if __name__ == '__main__':
-    beer = pd.read_csv('word_vec.txt', sep=' ')
+    beer = pd.read_csv('little_word_vec.txt', sep=' ')
 
     w,v = beer.shape
     print(w,v)

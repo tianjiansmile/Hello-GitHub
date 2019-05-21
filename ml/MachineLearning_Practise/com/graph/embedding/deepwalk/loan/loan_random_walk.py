@@ -32,7 +32,7 @@ def roulette(_datas, _ps):
 def node_vec(G,nodes):
     num = 10
     deep_num = 20 # 跳数
-    with open('loan_sentence1.txt','w') as f:
+    with open('little_sentence.txt','w') as f:
         k = 1
         for word in nodes:
             print(k)
@@ -60,7 +60,7 @@ def draw_graph(G):
 
 
 if __name__ == '__main__':
-    G = nx.read_edgelist('loan_edgelist1.txt',
+    G = nx.read_edgelist('little_edgelist.txt',
                          create_using=nx.Graph(), nodetype=None, data=[('type', str),('call_len', float),('times', int)])
     nodes = G.nodes
 
