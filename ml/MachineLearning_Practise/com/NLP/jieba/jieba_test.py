@@ -166,7 +166,7 @@ def mongo_read1():
     all_dict = {}
     null_count = 0
     risk_count = 0
-    results = coll.find({}, {'_id': 0, 'emergencer': 0,'calls': 0,'contacts': 0,'phone': 0,'carr_phone': 0 }).limit(12000000)
+    results = coll.find({}, {'_id': 0, 'emergencer': 0,'calls': 0,'contacts': 0,'phone': 0,'carr_phone': 0 }).limit(12750000)
     addresses_map = address_map()
     for d in results:
         try:
@@ -186,6 +186,14 @@ def mongo_read1():
                     # print(temp)
                     seg_list = jieba_split(temp)
                     # print(seg_list)
+                    # 去重
+                    seg_list = sorted(set(seg_list), key=seg_list.index)
+                    # 删除字符长度小于2的
+                    seg_list = [l for l in seg_list if len(l) > 1]
+                    # 只去前四个分词
+                    seg_list = [l for l in seg_list[:4]]
+
+                    # print(seg_list)
                     # 统计个地区词频
                     # area_count(seg_list, addresses_map, all_dict)
 
@@ -195,8 +203,8 @@ def mongo_read1():
                         risk_analysis(seg_list, addresses_map, all_dict,idnum,risk)
 
         except Exception as e:
-            # print(e)
-            continue
+            print(e)
+            # continue
 
     print('历史订单数量',len(history_dict),'地址不空',null_count,'有历史表现',risk_count)
     # print(all_dict)
@@ -208,32 +216,70 @@ def mongo_read1():
         overdue = all_dict[k][2]
         loanamount = all_dict[k][3]
         person_count = all_dict[k][4]
+        pd3 = all_dict[k][5]
+        pd7 = all_dict[k][6]
+        pd10 = all_dict[k][7]
+        pd14 = all_dict[k][8]
+        M1 = all_dict[k][9]
+        M2 = all_dict[k][10]
+        M3 = all_dict[k][11]
+
+        # 平均申请次数
+        avg_apply = 0
+        avg_approve = 0
+        avg_overdue = 0
+        # 平均放款金额
+        avg_loanamount = 0;avg_pd3 = 0;avg_pd7 = 0
+        avg_pd10 = 0;avg_pd14 = 0;avg_M1 = 0
+        avg_M2 = 0;avg_M3 = 0
+        if person_count != 0:
+            avg_apply = round(float(apply / person_count), 2)
+            avg_approve = round(float(approve / person_count), 2)
+            avg_overdue = round(float(overdue / person_count), 2)
+            avg_loanamount = round(float(loanamount / person_count),2)
+
+            avg_pd3 = round(float(pd3 / person_count), 2)
+            avg_pd7 = round(float(pd7 / person_count), 2)
+            avg_pd10 = round(float(pd10 / person_count), 2)
+            avg_pd14 = round(float(pd14 / person_count), 2)
+            avg_M1 = round(float(M1 / person_count), 2)
+            avg_M2 = round(float(M2 / person_count), 2)
+            avg_M3 = round(float(M3 / person_count), 2)
 
         # 通过率
         approve_rate = 0
         if apply != 0:
-            approve_rate = round(float(approve / apply),2)
+            approve_rate = round(float(approve / apply), 2)
 
         # 逾期率
         overdue_rate = 0
         if approve != 0:
-            overdue_rate = round(float(overdue / approve),2)
+            overdue_rate = round(float(overdue / approve), 2)
 
-        # 平均放款金额
-        avg_loanamount = 0
-        if person_count != 0:
-            avg_loanamount = round(float(loanamount / person_count),2)
-
-        # 平均申请次数
-        avg_apply = 0
-        avg_apply = round(float(apply / person_count),2)
+        pd3_rate = 0;pd7_rate =0;pd10_rate=0;pd14_rate=0
+        M1_rate = 0;M2_rate = 0;M3_rate = 0
+        if overdue != 0:
+            pd3_rate = round(pd3 / overdue, 2)
+            pd7_rate = round(pd7 / overdue, 2)
+            pd10_rate = round(pd10 / overdue, 2)
+            pd14_rate = round(pd14 / overdue, 2)
+            M1_rate = round(M1 / overdue, 2)
+            M2_rate = round(M2 / overdue, 2)
+            M3_rate = round(M3 / overdue, 2)
 
         # print(k,'通过率',approve_rate,'逾期率',overdue_rate,'平均放款金额',avg_loanamount,'平均申请',avg_apply)
-        final_dict[k] = (approve_rate,overdue_rate,avg_loanamount,avg_apply,person_count)
+        final_dict[k] = (approve_rate,overdue_rate,avg_apply,avg_approve,avg_overdue,avg_loanamount,
+                         avg_pd3,avg_pd7,avg_pd10,avg_pd14,avg_M1,avg_M2,avg_M3,
+                         pd3_rate,pd7_rate,pd10_rate, pd14_rate,M1_rate,M2_rate,M3_rate)
+        # final_dict[k].append(all_dict[k])
+        # final_dict[k].append((approve_rate,overdue_rate,avg_apply,avg_approve,avg_overdue,avg_loanamount,
+        #                  avg_pd3,avg_pd7,avg_pd10,avg_pd14,avg_M1,avg_M2,avg_M3,
+        #                  pd3_rate,pd7_rate,pd10_rate, pd14_rate,M1_rate,M2_rate,M3_rate))
 
+    #
     print(final_dict)
-
-
+    #
+    #
     # print(sorted(all_dict.items(),key=operator.itemgetter(1),reverse=True))
 
 # 各地区词频统计
@@ -279,173 +325,73 @@ def area_count(seg_list,addresses_map,all_dict):
         all_dict[d] = 1
 
 def risk_analysis(seg_list, addresses_map, all_dict,idnum,risk):
+    # print(seg_list)
+    # print(risk)
+    max_overdue = risk[4]
+    pd3 = 0
+    pd7 = 0
+    pd10 = 0
+    pd14 = 0
+    M1 = 0
+    M2 = 0
+    M3 = 0
 
-    if len(seg_list) < 3:
-        a = seg_list[0]
+    if max_overdue > 3:
+        pd3 = 1
+    if max_overdue >= 7:
+        pd7 = 1
+    if max_overdue >= 10:
+        pd10 = 1
 
-        #
-        if risk:
-            short = addresses_map.get(a)
-            if short:
-                a = short
-            if all_dict.get(a) != None:
-                all_dict[a][0] += risk[0]
-                all_dict[a][1] += risk[1]
-                all_dict[a][2] += risk[2]
-                all_dict[a][3] += risk[3]
-                all_dict[a][4] += 1
-            else:
-                all_dict[a] = [0,0,0,0,0]
-                all_dict[a][0] += risk[0]
-                all_dict[a][1] += risk[1]
-                all_dict[a][2] += risk[2]
-                all_dict[a][3] += risk[3]
-                all_dict[a][4] += 1
+    if max_overdue >= 14:
+        pd14 = 1
 
-            # print(all_dict.get(a))
-            # print(all_dict.get('广东省'))
+    if max_overdue >= 30:
+        M1 = 1
 
-            b = seg_list[1]
-            short = addresses_map.get(b)
-            if short:
-                b = short
-            if all_dict.get(b) != None:
-                all_dict[b] += risk[0]
-            else:
-                all_dict[b] = [0,0, 0, 0, 0]
-                all_dict[b][0] += risk[0]
-                all_dict[b][1] += risk[1]
-                all_dict[b][2] += risk[2]
-                all_dict[b][3] += risk[3]
-                all_dict[b][4] += 1
+    if max_overdue >= 60:
+        M2 = 1
 
-    elif len(seg_list) == 3:
-        a = seg_list[0]
-        if risk:
-            short = addresses_map.get(a)
-            if short:
-                a = short
-            if all_dict.get(a) != None:
-                all_dict[a][0] += risk[0]
-                all_dict[a][1] += risk[1]
-                all_dict[a][2] += risk[2]
-                all_dict[a][3] += risk[3]
-                all_dict[a][4] += 1
-            else:
-                all_dict[a] = [0, 0, 0, 0, 0]
-                all_dict[a][0] += risk[0]
-                all_dict[a][1] += risk[1]
-                all_dict[a][2] += risk[2]
-                all_dict[a][3] += risk[3]
-                all_dict[a][4] += 1
+    if max_overdue >= 90:
+        M3 = 1
 
-            # print(all_dict.get(a))
-            # print(all_dict.get('广东省'))
+    for a in seg_list:
+        short = addresses_map.get(a)
+        if short:
+            a = short
 
-            b = seg_list[1]
-            short = addresses_map.get(b)
-            if short:
-                b = short
-            if all_dict.get(b) != None:
-                all_dict[b] += risk[0]
-            else:
-                all_dict[b] = [0, 0, 0, 0, 0]
-                all_dict[b][0] += risk[0]
-                all_dict[b][1] += risk[1]
-                all_dict[b][2] += risk[2]
-                all_dict[b][3] += risk[3]
-                all_dict[b][4] += 1
 
-            c = seg_list[2]
-            short = addresses_map.get(c)
-            if short:
-                c = short
-            if all_dict.get(c) != None:
-                all_dict[c][0] += risk[0]
-                all_dict[c][1] += risk[1]
-                all_dict[c][2] += risk[2]
-                all_dict[c][3] += risk[3]
-                all_dict[c][4] += 1
-            else:
-                all_dict[c] = [0, 0, 0, 0, 0]
-                all_dict[c][0] += risk[0]
-                all_dict[c][1] += risk[1]
-                all_dict[c][2] += risk[2]
-                all_dict[c][3] += risk[3]
-                all_dict[c][4] += 1
+        if all_dict.get(a) != None:
+            all_dict[a][0] += risk[0]
+            all_dict[a][1] += risk[1]
+            all_dict[a][2] += risk[2]
+            all_dict[a][3] += risk[3]
+            all_dict[a][4] += 1
 
-    else:
-        a = seg_list[0]
-        if risk:
-            short = addresses_map.get(a)
-            if short:
-                a = short
-            if all_dict.get(a) != None:
-                all_dict[a][0] += risk[0]
-                all_dict[a][1] += risk[1]
-                all_dict[a][2] += risk[2]
-                all_dict[a][3] += risk[3]
-                all_dict[a][4] += 1
-            else:
-                all_dict[a] = [0, 0, 0, 0, 0]
-                all_dict[a][0] += risk[0]
-                all_dict[a][1] += risk[1]
-                all_dict[a][2] += risk[2]
-                all_dict[a][3] += risk[3]
-                all_dict[a][4] += 1
+            all_dict[a][5] += pd3
+            all_dict[a][6] += pd7
+            all_dict[a][7] += pd10
+            all_dict[a][8] += pd14
+            all_dict[a][9] += M1
+            all_dict[a][10] += M2
+            all_dict[a][11] += M2
 
-            # print(all_dict.get(a))
-            # print(all_dict.get('广东省'))
+        else:
+            all_dict[a] = [0, 0, 0, 0, 0,0, 0, 0, 0, 0,0,0]
+            all_dict[a][0] += risk[0]
+            all_dict[a][1] += risk[1]
+            all_dict[a][2] += risk[2]
+            all_dict[a][3] += risk[3]
+            all_dict[a][4] += 1
 
-            b = seg_list[1]
-            short = addresses_map.get(b)
-            if short:
-                b = short
-            if all_dict.get(b) != None:
-                all_dict[b] += risk[0]
-            else:
-                all_dict[b] = [0, 0, 0, 0, 0]
-                all_dict[b][0] += risk[0]
-                all_dict[b][1] += risk[1]
-                all_dict[b][2] += risk[2]
-                all_dict[b][3] += risk[3]
-                all_dict[b][4] += 1
+            all_dict[a][5] += pd3
+            all_dict[a][6] += pd7
+            all_dict[a][7] += pd10
+            all_dict[a][8] += pd14
+            all_dict[a][9] += M1
+            all_dict[a][10] += M2
+            all_dict[a][11] += M2
 
-            c = seg_list[2]
-            short = addresses_map.get(c)
-            if short:
-                c = short
-            if all_dict.get(c) != None:
-                all_dict[c][0] += risk[0]
-                all_dict[c][1] += risk[1]
-                all_dict[c][2] += risk[2]
-                all_dict[c][3] += risk[3]
-                all_dict[c][4] += 1
-            else:
-                all_dict[c] = [0, 0, 0, 0, 0]
-                all_dict[c][0] += risk[0]
-                all_dict[c][1] += risk[1]
-                all_dict[c][2] += risk[2]
-                all_dict[c][3] += risk[3]
-                all_dict[c][4] += 1
-
-            d = seg_list[3]
-            short = addresses_map.get(d)
-            if short:
-                d = short
-            if all_dict.get(d) != None:
-                all_dict[d][0] += risk[0]
-                all_dict[d][1] += risk[1]
-                all_dict[d][2] += risk[2]
-                all_dict[d][3] += risk[3]
-                all_dict[d][4] += 1
-            else:
-                all_dict[d] = [0, 0, 0, 0, 0]
-                all_dict[d][0] += risk[0]
-                all_dict[d][1] += risk[1]
-                all_dict[d][2] += risk[2]
-                all_dict[d][3] += risk[3]
-                all_dict[d][4] += 1
 
     # print(all_dict)
 

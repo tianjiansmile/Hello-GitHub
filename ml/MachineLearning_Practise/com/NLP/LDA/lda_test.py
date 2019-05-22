@@ -23,12 +23,10 @@ doc3 = "安徽省宣城市安徽省,宣城市,宣州区|美都新城25栋903"
 doc4 = "福建省龙岩市长汀县河田镇下修坊村水古岭路8号"
 doc5 = "广西壮族自治区柳州市柳北区北雀路十七区26 栋1单元201号"
 
-# doc1 = "Sugar is bad to consume. My sister likes to have sugar, but not my father."
-# doc2 = "My father spends a lot of time driving my sister around to dance practice."
-# doc3 = "Doctors suggest that driving may cause increased stress and blood pressure."
-# doc4 = "Sometimes I feel pressure to perform well at school, but my father never seems to drive my sister to do better."
-# doc5 = "Health experts say that Sugar is not good for your lifestyle."
-
+#  得到一篇文档，我们可以知道这个文档的单词概率分布，并且我们可以通过第三方库
+# 知道 每一个词的所属主题概率，我们最终的目的是知道一篇文章然后得到这个文档的所属主题
+# 通过贝叶斯公式可以推出每一个文档的主题分布,当然这个主题不是凭空造出来的，
+# 是利用统计从词袋中选出来的
 # 整合文档数据
 doc_complete = [doc1, doc2, doc3, doc4, doc5]
 
@@ -74,12 +72,14 @@ if __name__ == '__main__':
     dictionary = corpora.Dictionary(doc_clean)
 
     # 使用上面的词典，将转换文档列表（语料）变成 DT 矩阵
+    # 即给每一个词一个编号，并且给出这个词的词频
     doc_term_matrix = [dictionary.doc2bow(doc) for doc in doc_clean]
 
     # 使用 gensim 来创建 LDA 模型对象
     Lda = models.ldamodel.LdaModel
 
     # 在 DT 矩阵上运行和训练 LDA 模型
+    # num_topics 用来指定生成主题列表个数
     ldamodel = Lda(doc_term_matrix, num_topics=3, id2word=dictionary, passes=50)
 
     print(ldamodel.print_topics(num_topics=3, num_words=3))
