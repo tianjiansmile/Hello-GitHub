@@ -84,12 +84,29 @@ def train(trainData,testData,col):
     pyplot.show()
 
 def miaola_test():
-    allData = pd.read_excel('秒啦首贷_train.xlsx', sheetname='Sheet1')
+    allData = pd.read_excel('秒啦首贷_train_pd10.xlsx', sheetname='Sheet1')
     col = ['approve_rate_prov', 'approve_rate_city', 'approve_rate_country',
            'overdue_rate_prov', 'overdue_rate_city', 'overdue_rate_country',
-           'avg_loanamount_prov', 'avg_loanamount_city', 'avg_loanamount_country',
            'avg_apply_prov', 'avg_apply_city', 'avg_apply_country',
-           'person_count_prov', 'person_count_city', 'person_count_country']
+           'avg_approve_prov', 'avg_approve_city', 'avg_approve_country',
+           'avg_overdue_prov', 'avg_overdue_city', 'avg_overdue_country',
+           'avg_loanamount_prov', 'avg_loanamount_city', 'avg_loanamount_country',
+
+           'avg_pd3_prov', 'avg_pd3_city', 'avg_pd3_country',
+           'avg_pd7_prov', 'avg_pd7_city', 'avg_pd7_country',
+           'avg_pd10_prov', 'avg_pd10_city', 'avg_pd10_country',
+           'avg_pd14_prov', 'avg_pd14_city', 'avg_pd14_country',
+           'avg_M1_prov', 'avg_M1_city', 'avg_M1_country',
+           'avg_M2_prov', 'avg_M2_city', 'avg_M2_country',
+           'avg_M3_prov', 'avg_M3_city', 'avg_M3_country',
+
+           'pd3_rate_prov', 'pd3_rate_city', 'pd3_rate_country',
+           'pd7_rate_prov', 'pd7_rate_city', 'pd7_rate_country',
+           'pd10_rate_prov', 'pd10_rate_city', 'pd10_rate_country',
+           'pd14_rate_prov', 'pd14_rate_city', 'pd14_rate_country',
+           'M1_rate_prov', 'M1_rate_city', 'M1_rate_country',
+           'M2_rate_prov', 'M2_rate_city', 'M2_rate_country',
+           'M3_rate_prov', 'M3_rate_city', 'M3_rate_country']
 
     # 暂时删除有空数据的行
     allData.dropna(axis=0, how='any', inplace=True)
